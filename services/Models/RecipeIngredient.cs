@@ -19,5 +19,6 @@ namespace services.Models
         public float Quantity { get; set; }
 
         public Unit Unit { get; set; }
+
     }
 }

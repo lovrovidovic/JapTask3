@@ -17,6 +17,6 @@ namespace services.Models
 
         public Unit NormativeUnit { get; set; }
 
-        public int MyProperty { get; set; }
+        public IEnumerable<RecipeIngredient> RecipeIngredient { get; set; }
     }
 }
