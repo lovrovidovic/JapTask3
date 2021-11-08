@@ -12,8 +12,6 @@ namespace services.Models
 
         public string Description { get; set; }
 
-        public int TotalCost { get; set; }
-
         public DateTime CreatedAt { get; set; }
 
         public User User { get; set; }
