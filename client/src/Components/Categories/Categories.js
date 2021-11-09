@@ -32,7 +32,7 @@ export const Categories = () => {
 
   return (
     <div className={classes.container}>
-      {isLoading && (
+      {isLoading && !error && (
         <Box sx={{ display: "flex" }}>
           <CircularProgress />
         </Box>
