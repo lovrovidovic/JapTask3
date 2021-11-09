@@ -1,11 +1,11 @@
-﻿using services.Models.Base;
-using services.Models.Enums;
+﻿using RecipesAPI.Models.Base;
+using RecipesAPI.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace services.Models
+namespace RecipesAPI.Models
 {
     public class Ingredient : BaseEntity
     {

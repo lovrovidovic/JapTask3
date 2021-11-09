@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace services.Models.Enums
+namespace RecipesAPI.Models.Enums
 {
     public enum Unit
     {

@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Models.Base
+namespace RecipesAPI.Dtos
 {
-    public class BaseEntity
+    public class GetCategoriesDto
     {
         public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }
