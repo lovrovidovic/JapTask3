@@ -20,9 +20,9 @@ namespace RecipesAPI.Controllers
 
         // GET: api/Category
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetCategoriesDto>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<GetCategoriesDto>>> GetCategories([FromQuery] int n)
         {
-            return Ok(await _service.GetCategories());
+            return Ok(await _service.GetCategories(n));
         }
     }
 }

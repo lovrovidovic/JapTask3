@@ -21,11 +21,11 @@ namespace RecipesAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<GetCategoriesDto>>> GetCategories()
+        public async Task<ServiceResponse<IEnumerable<GetCategoriesDto>>> GetCategories(int n)
         {
             var response = new ServiceResponse<IEnumerable<GetCategoriesDto>>();
 
-            var categories = await _context.Categories.ToListAsync();
+            var categories = await _context.Categories.OrderByDescending(x => x.CreatedAt).Take(n).ToListAsync();
 
             response.Data = categories.Select(x => _mapper.Map<GetCategoriesDto>(x)).ToList();
 

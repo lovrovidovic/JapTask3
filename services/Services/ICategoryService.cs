@@ -9,6 +9,6 @@ namespace RecipesAPI.Services
 {
     public interface ICategoryService
     {
-        Task<ServiceResponse<IEnumerable<GetCategoriesDto>>> GetCategories();
+        Task<ServiceResponse<IEnumerable<GetCategoriesDto>>> GetCategories(int n);
     }
 }
