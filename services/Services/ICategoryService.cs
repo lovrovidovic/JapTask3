@@ -1,11 +1,11 @@
-﻿using services.Dtos;
-using services.Models;
+﻿using RecipesAPI.Dtos;
+using RecipesAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace services.Service
+namespace RecipesAPI.Services
 {
     public interface ICategoryService
     {

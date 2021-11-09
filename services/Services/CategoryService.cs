@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using services.Data;
-using services.Dtos;
-using services.Models;
+using RecipesAPI.Data;
+using RecipesAPI.Dtos;
+using RecipesAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace services.Service
+namespace RecipesAPI.Services
 {
     public class CategoryService : ICategoryService
     {

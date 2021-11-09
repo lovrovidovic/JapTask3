@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using services.Models;
-using services.Models.Enums;
+using RecipesAPI.Models;
+using RecipesAPI.Models.Enums;
 using System;
 
-namespace services.Data
+namespace RecipesAPI.Data
 {
     public class DataContext : DbContext
     {

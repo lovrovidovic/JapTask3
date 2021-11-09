@@ -1,4 +1,4 @@
-﻿namespace services.Dtos
+﻿namespace RecipesAPI.Dtos
 {
     public class ServiceResponse<T>
     {

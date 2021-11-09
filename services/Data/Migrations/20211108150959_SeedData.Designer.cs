@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using services.Data;
+using RecipesAPI.Data;
 
-namespace services.Data.Migrations
+namespace RecipesAPI.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
     [Migration("20211108150959_SeedData")]

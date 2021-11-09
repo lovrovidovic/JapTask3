@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using services.Dtos;
-using services.Models;
-using services.Service;
+using RecipesAPI.Dtos;
+using RecipesAPI.Models;
+using RecipesAPI.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace services.Controllers
+namespace RecipesAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

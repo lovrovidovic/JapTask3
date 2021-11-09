@@ -1,10 +1,10 @@
-﻿using services.Models.Base;
+﻿using RecipesAPI.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace services.Models
+namespace RecipesAPI.Models
 {
     public class User : BaseEntity
     {
