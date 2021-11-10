@@ -9,7 +9,7 @@ namespace RecipesAPI.Services
 {
     public interface IRecipeService
     {
-        Task<ServiceResponse<IEnumerable<GetRecipesDto>>> GetRecipes(string search, int n);
+        Task<ServiceResponse<IEnumerable<GetRecipesDto>>> GetRecipes(string search, int n, int categoryId);
 
         Task<ServiceResponse<GetRecipeDetailsDto>> GetRecipeDetails(int id);
 

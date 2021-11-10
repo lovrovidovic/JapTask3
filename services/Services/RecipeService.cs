@@ -22,26 +22,24 @@ namespace RecipesAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<GetRecipesDto>>> GetRecipes(string search, int n)
+        public async Task<ServiceResponse<IEnumerable<GetRecipesDto>>> GetRecipes(string search, int n, int categoryId)
         {
             var response = new ServiceResponse<IEnumerable<GetRecipesDto>>();
-
             var recipes = await _context.Recipes
                 .Include(x => x.RecipeIngredient)
                 .ThenInclude(y => y.Ingredient)
-                .Where(Filter(search))
+                .Where(Filter(search, categoryId))
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(n).ToListAsync();
 
             response.Data = recipes.Select(x => _mapper.Map<GetRecipesDto>(x)).ToList();
-
             return response;
         }
 
-        private static Expression<Func<Recipe, bool>> Filter(string search)
+        private static Expression<Func<Recipe, bool>> Filter(string search, int categoryId)
         {
             search = search?.Trim().ToLower();
-            return x => x.CategoryId == 7 && 
+            return x => x.CategoryId == categoryId && 
             (string.IsNullOrEmpty(search) 
             || x.Name.ToLower().Contains(search) 
             || x.Description.ToLower().Contains(search) 

@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RecipesAPI.Dtos;
-using RecipesAPI.Models;
 using RecipesAPI.Services;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RecipesAPI.Controllers
@@ -20,16 +17,16 @@ namespace RecipesAPI.Controllers
 
         // GET: api/Recipe
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetRecipesDto>>> GetRecipes([FromQuery] string search, int n)
+        public async Task<ActionResult> GetRecipes([FromQuery] string search, [FromQuery] int n, [FromQuery] int categoryId)
         {
-            return Ok( await _service.GetRecipes(search, n));
+            return Ok(await _service.GetRecipes(search, n, categoryId));
         }
 
         // GET: api/Recipe/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetRecipeDetailsDto>> GetRecipeDetails(int id)
+        public async Task<ActionResult> GetRecipeDetails(int id)
         {
-            return Ok( await _service.GetRecipeDetails(id));
+            return Ok(await _service.GetRecipeDetails(id));
         }
     }
 }
