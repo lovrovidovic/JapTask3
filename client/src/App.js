@@ -1,12 +1,11 @@
 import './App.css';
-import { Categories } from './Components/Categories/Categories';
 import { Header } from './Components/UI/Header';
+import { Router } from './Router/Router';
 
 function App() {
   return (
     <div className="App">
-      <Header title="Categories" />
-      <Categories />
+      <Router />
     </div>
   );
 }
