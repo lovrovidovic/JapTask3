@@ -1,9 +1,16 @@
-import React from 'react'
+import { Button } from "@mui/material";
+import { useHistory } from "react-router-dom";
+import React from "react";
 
 export const Login = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+  const history = useHistory();
+  const loginHandler = () => {
+    history.push("/categories");
+  };
+
+  return (
+    <div>
+      <Button onClick={loginHandler}>Log in</Button>
+    </div>
+  );
+};

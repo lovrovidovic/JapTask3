@@ -6,6 +6,7 @@ import Alert from "@mui/material/Alert";
 import classes from "./Categories.module.css";
 import { CategoryCard } from "./CategoryCard";
 import { Button } from "@mui/material";
+import { Header } from "../UI/Header"
 
 export const Categories = () => {
   const [displayed, setDisplayed] = useState(10);
@@ -31,11 +32,14 @@ export const Categories = () => {
   };
 
   return (
-    <div className={classes.container}>
-      {isLoading && !error && (
+    <>
+      <Header title="Categories" />
+      <div className={classes.container}>
+      {isLoading && !error && (<>
         <Box sx={{ display: "flex" }}>
           <CircularProgress />
         </Box>
+        </>
       )}
       {error && (
         <Alert severity="error">
@@ -54,5 +58,6 @@ export const Categories = () => {
         ""
       )}
     </div>
+    </>
   );
 };

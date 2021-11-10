@@ -19,13 +19,13 @@ const useHttp = () => {
       .then((response) => {
         //console.log(response.data.data);
         setResponseData(response.data.data);
-        return response.data.data;
+        setIsLoading(false);
       })
       .catch((e) => {
         setError(e.message || "Something went wrong!");
         console.error(e);
+        setIsLoading(false);
       });
-    setIsLoading(false);
   }, []);
 
   return {
