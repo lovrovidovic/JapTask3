@@ -9,6 +9,9 @@ namespace RecipesAPI
         public AutoMapperProfile()
         {
             CreateMap<Category, GetCategoriesDto>();
+            CreateMap<Recipe, GetRecipesDto>();
+            CreateMap<Recipe, GetRecipeDetailsDto>();
+            CreateMap<Ingredient, GetIngredientDto>();
         }
     }
 }
