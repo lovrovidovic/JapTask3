@@ -39,6 +39,8 @@ namespace RecipesAPI
 
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IRecipeService, RecipeService>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
