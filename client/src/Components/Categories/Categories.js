@@ -4,9 +4,10 @@ import Box from "@mui/material/Box";
 import useHttp from "../../Hooks/useHttp";
 import Alert from "@mui/material/Alert";
 import classes from "./Categories.module.css";
-import { CategoryCard } from "./CategoryCard";
+import { CustomCard } from "../UI/CustomCard";
 import { Button } from "@mui/material";
-import { Header } from "../UI/Header"
+import { Header } from "../UI/Header";
+import { routesConfiguration as routes } from "../../Router/routes";
 
 export const Categories = () => {
   const [displayed, setDisplayed] = useState(10);
@@ -35,29 +36,38 @@ export const Categories = () => {
     <>
       <Header title="Categories" />
       <div className={classes.container}>
-      {isLoading && !error && (<>
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
-        </>
-      )}
-      {error && (
-        <Alert severity="error">
-          Error! Cannot get list of recipe categories.
-        </Alert>
-      )}
-      <div className={classes.categoriesList}>
-        {categories?.map((category) => {
-          return <CategoryCard key={category.id} name={category.name} />;
-        })}
-      </div>
+        {isLoading && !error && (
+          <>
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress />
+            </Box>
+          </>
+        )}
+        {error && (
+          <Alert severity="error">
+            Error! Cannot get list of recipe categories.
+          </Alert>
+        )}
+        <div className={classes.categoriesList}>
+          {categories?.map((category) => {
+            return (
+              <CustomCard
+                key={category.id}
+                title={category.name}
+                linkRoute={routes.RECIPES}
+                id={category.id}
+                buttonText="Browse recipes"
+              />
+            );
+          })}
+        </div>
 
-      {categories.length >= displayed ? (
-        <Button onClick={loadMoreHandler}>Load more</Button>
-      ) : (
-        ""
-      )}
-    </div>
+        {categories.length >= displayed ? (
+          <Button onClick={loadMoreHandler}>Load more</Button>
+        ) : (
+          ""
+        )}
+      </div>
     </>
   );
 };
