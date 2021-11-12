@@ -41,6 +41,7 @@ namespace RecipesAPI
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IIngredientService, IngredientService>();
+            services.AddScoped<IConversionService, ConversionService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

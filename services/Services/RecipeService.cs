@@ -15,11 +15,13 @@ namespace RecipesAPI.Services
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IConversionService _convert;
 
-        public RecipeService(DataContext context, IMapper mapper)
+        public RecipeService(DataContext context, IMapper mapper, IConversionService convert )
         {
             _context = context;
             _mapper = mapper;
+            _convert = convert;
         }
 
         public async Task<ServiceResponse<IEnumerable<GetRecipesDto>>> GetRecipes(string search, int n, int categoryId)
@@ -32,7 +34,15 @@ namespace RecipesAPI.Services
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(n).ToListAsync();
 
-            response.Data = recipes.Select(x => _mapper.Map<GetRecipesDto>(x)).ToList();
+            response.Data = recipes.Select(x => new GetRecipesDto
+            {
+                Id= x.Id,
+                Name = x.Name,
+                CreatedAt = x.CreatedAt,
+                Description = x.Description,
+                Price = _convert.CalculateRecipeCost(x)
+            });
+
             return response;
         }
 
@@ -58,6 +68,7 @@ namespace RecipesAPI.Services
 
             var mappedIngredients = recipe.RecipeIngredient.Select(x => new GetIngredientOfRecipeDto
             {
+                Price = _convert.CalculateIngredientCost(x),
                 Name = x.Ingredient.Name,
                 Quantity = x.Quantity,
                 Unit = x.Unit,
@@ -67,8 +78,9 @@ namespace RecipesAPI.Services
             });
 
             response.Data = _mapper.Map<GetRecipeDetailsDto>(recipe);
-            response.Data.CategoryName = recipe.Category.Name;
+            response.Data.CategoryName = recipe.Category.Name; //TODO check if i need this
             response.Data.Ingredients = mappedIngredients;
+            response.Data.TotalPrice = _convert.CalculateRecipeCost(recipe);
 
             return response;
         }
