@@ -7,16 +7,17 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { generateLink } from "../../Router/routes";
 
-export const CustomCard = ({ linkRoute, id, title, buttonText }) => {
+export const CustomCard = ({ linkRoute, id, title, buttonText, text }) => {
   const history = useHistory();
 
   const clickHandler = () => {
     history.push(generateLink(linkRoute, { id: id }));
   };
   return (
-    <Card sx={{ maxWidth: 450, display: "inline-block", margin: "50px" }}>
+    <Card sx={{ maxWidth: 550, display: "inline-block", margin: "50px" }}>
       <CardContent>
-        <Typography variant="body2">{title}</Typography>
+        <Typography variant="body1">{title}</Typography>
+        <Typography variant="body2">{text}</Typography>
       </CardContent>
       <CardActions>
         <Button size="small" onClick={clickHandler}>

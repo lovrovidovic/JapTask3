@@ -35,6 +35,11 @@ export const Categories = () => {
   return (
     <>
       <Header title="Categories" />
+      {error && (
+        <Alert severity="error">
+          Error! Cannot get list of recipe categories.
+        </Alert>
+      )}
       <div className={classes.container}>
         {isLoading && !error && (
           <>
@@ -42,11 +47,6 @@ export const Categories = () => {
               <CircularProgress />
             </Box>
           </>
-        )}
-        {error && (
-          <Alert severity="error">
-            Error! Cannot get list of recipe categories.
-          </Alert>
         )}
         <div className={classes.categoriesList}>
           {categories?.map((category) => {

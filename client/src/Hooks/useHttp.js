@@ -18,7 +18,7 @@ const useHttp = () => {
     })
       .then((response) => {
         //TODO change to async await
-        //console.log(response.data.data);
+        console.log(response.data.data);
         setResponseData(response.data.data);
         setIsLoading(false);
       })

@@ -6,20 +6,16 @@ using System.Threading.Tasks;
 
 namespace RecipesAPI.Dtos
 {
-    public class GetIngredientOfRecipeDto
+    public class ConversionDto
     {
-        public string Name { get; set; }
+        public float StartingQuantity { get; set; }
 
-        public float Price { get; set; }
-
-        public float Quantity { get; set; }
-
-        public Unit Unit { get; set; }
-
-        public float NormativePrice { get; set; }
+        public Unit StartingUnit { get; set; }
 
         public float NormativeQuantity { get; set; }
 
         public Unit NormativeUnit { get; set; }
+
+        public float NormativePrice { get; set; }
     }
 }
