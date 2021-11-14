@@ -19,7 +19,7 @@ export const Categories = () => {
   } = useHttp();
 
   const requestObj = useMemo(() => {
-    return { url: "/category", params: { n: displayed } };
+    return { method: "GET", url: "/category", params: { n: displayed } };
   }, [displayed]);
 
   useEffect(() => {
@@ -42,11 +42,9 @@ export const Categories = () => {
       )}
       <div className={classes.container}>
         {isLoading && !error && (
-          <>
-            <Box sx={{ display: "flex" }}>
-              <CircularProgress />
-            </Box>
-          </>
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
         )}
         <div className={classes.categoriesList}>
           {categories?.map((category) => {

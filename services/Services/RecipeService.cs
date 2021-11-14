@@ -17,7 +17,7 @@ namespace RecipesAPI.Services
         private readonly IMapper _mapper;
         private readonly IConversionService _convert;
 
-        public RecipeService(DataContext context, IMapper mapper, IConversionService convert )
+        public RecipeService(DataContext context, IMapper mapper, IConversionService convert)
         {
             _context = context;
             _mapper = mapper;
@@ -36,7 +36,7 @@ namespace RecipesAPI.Services
 
             response.Data = recipes.Select(x => new GetRecipesDto
             {
-                Id= x.Id,
+                Id = x.Id,
                 Name = x.Name,
                 CreatedAt = x.CreatedAt,
                 Description = x.Description,
@@ -49,10 +49,10 @@ namespace RecipesAPI.Services
         private static Expression<Func<Recipe, bool>> Filter(string search, int categoryId)
         {
             search = search?.Trim().ToLower();
-            return x => x.CategoryId == categoryId && 
-            (string.IsNullOrEmpty(search) 
-            || x.Name.ToLower().Contains(search) 
-            || x.Description.ToLower().Contains(search) 
+            return x => x.CategoryId == categoryId &&
+            (string.IsNullOrEmpty(search)
+            || x.Name.ToLower().Contains(search)
+            || x.Description.ToLower().Contains(search)
             || x.RecipeIngredient.Any(y => y.Ingredient.Name.ToLower().Contains(search)));
         }
 
@@ -81,6 +81,33 @@ namespace RecipesAPI.Services
             response.Data.CategoryName = recipe.Category.Name; //TODO check if i need this
             response.Data.Ingredients = mappedIngredients;
             response.Data.TotalPrice = _convert.CalculateRecipeCost(recipe);
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<Recipe>> CreateRecipe(CreateRecipeDto newRecipe)
+        {
+            var response = new ServiceResponse<Recipe>();
+
+            var mappedRecipeIngredient = newRecipe.RecipeIngredient.Select(x => new RecipeIngredient
+            {
+                Quantity = x.Quantity,
+                Unit = x.Unit,
+                IngredientId = x.IngredientId
+            }).ToList();
+
+            var recipe = new Recipe
+            {
+                Name = newRecipe.Name,
+                Description = newRecipe.Description,
+                CreatedAt = DateTime.Now,
+                UserId = newRecipe.UserId,
+                CategoryId = newRecipe.CategoryId,
+                RecipeIngredient = mappedRecipeIngredient
+            };
+
+            await _context.Recipes.AddAsync(recipe);
+            await _context.SaveChangesAsync();
 
             return response;
         }

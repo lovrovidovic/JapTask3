@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RecipesAPI.Data;
 using RecipesAPI.Dtos;
+using RecipesAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,11 +23,18 @@ namespace RecipesAPI.Services
         public async Task<ServiceResponse<IEnumerable<GetCategoriesDto>>> GetCategories(int n)
         {
             var response = new ServiceResponse<IEnumerable<GetCategoriesDto>>();
+            List<Category> categories;
 
-            var categories = await _context.Categories.OrderByDescending(x => x.CreatedAt).Take(n).ToListAsync();
+            if(n != 0)
+            {
+                categories = await _context.Categories.OrderByDescending(x => x.CreatedAt).Take(n).ToListAsync();
+            }
+            else
+            {
+                categories = await _context.Categories.OrderByDescending(x => x.CreatedAt).ToListAsync();
+            }
 
             response.Data = categories.Select(x => _mapper.Map<GetCategoriesDto>(x)).ToList();
-
             return response;
         }
     }

@@ -13,5 +13,6 @@ namespace RecipesAPI.Services
 
         Task<ServiceResponse<GetRecipeDetailsDto>> GetRecipeDetails(int id);
 
+        Task<ServiceResponse<Recipe>> CreateRecipe(CreateRecipeDto newRecipe);
     }
 }

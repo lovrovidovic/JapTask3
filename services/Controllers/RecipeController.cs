@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RecipesAPI.Dtos;
 using RecipesAPI.Services;
 using System.Threading.Tasks;
 
@@ -27,6 +28,13 @@ namespace RecipesAPI.Controllers
         public async Task<ActionResult> GetRecipeDetails(int id)
         {
             return Ok(await _service.GetRecipeDetails(id));
+        }
+
+        // POST: api/Recipe
+        [HttpPost]
+        public async Task<ActionResult> CreateRecipe(CreateRecipeDto newRecipe)
+        {
+            return Ok(await _service.CreateRecipe(newRecipe));
         }
     }
 }

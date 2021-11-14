@@ -31,6 +31,7 @@ export const Recipes = () => {
 
   const requestObj = useMemo(() => {
     return {
+      method: "GET",
       url: "/recipe",
       params: { search: searchValue, n: displayed, categoryId },
     };
