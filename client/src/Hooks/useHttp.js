@@ -19,7 +19,9 @@ const useHttp = () => {
       .then((response) => {
         //TODO change to async await
         console.log(response.data.data);
-        setResponseData(response.data.data);
+        if (method === "GET") {
+          setResponseData(response.data.data);
+        }
         setIsLoading(false);
       })
       .catch((e) => {
@@ -33,7 +35,7 @@ const useHttp = () => {
     isLoading,
     error,
     sendRequest,
-    responseData
+    responseData,
   };
 };
 

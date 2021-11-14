@@ -8,6 +8,8 @@ namespace RecipesAPI.Dtos
 {
     public class GetIngredientDto
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public float NormativePrice { get; set; }
