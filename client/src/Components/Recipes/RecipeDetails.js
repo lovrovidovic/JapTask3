@@ -37,13 +37,10 @@ export const RecipeDetails = () => {
   return (
     <div>
       <Header title="Recipe" />
-
       {isLoading && !error && (
-        <>
-          <Box sx={{ display: "flex" }}>
-            <CircularProgress />
-          </Box>
-        </>
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
       )}
       {error && (
         <Alert severity="error">

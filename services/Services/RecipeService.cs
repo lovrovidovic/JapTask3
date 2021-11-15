@@ -31,7 +31,6 @@ namespace RecipesAPI.Services
                 .Include(x => x.RecipeIngredient)
                 .ThenInclude(y => y.Ingredient)
                 .Where(Filter(search, categoryId))
-                .OrderByDescending(x => x.CreatedAt)
                 .Take(n).ToListAsync();
 
             response.Data = recipes.Select(x => new GetRecipesDto
@@ -42,6 +41,7 @@ namespace RecipesAPI.Services
                 Description = x.Description,
                 Price = _convert.CalculateRecipeCost(x)
             });
+            response.Data = response.Data.OrderBy(x => x.Price);
 
             return response;
         }

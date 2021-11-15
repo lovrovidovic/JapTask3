@@ -10,12 +10,17 @@ import {
   generateLink,
   routesConfiguration as routes,
 } from "../../Router/routes";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 export const Header = ({ title }) => {
   const history = useHistory();
   const logoutHandler = () => {
     localStorage.removeItem("token");
     history.push(generateLink(routes.LOGIN));
+  };
+
+  const goBackHandler = () => {
+    history.goBack();
   };
 
   return (
@@ -27,7 +32,10 @@ export const Header = ({ title }) => {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-          ></IconButton>
+            onClick={goBackHandler}
+          >
+            <ArrowBackIosNewIcon />
+          </IconButton>
           <Typography
             variant="h6"
             component="div"
