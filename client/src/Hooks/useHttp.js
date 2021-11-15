@@ -6,30 +6,36 @@ const useHttp = () => {
   const [error, setError] = useState(null);
   const [responseData, setResponseData] = useState([]);
 
-  const sendRequest = useCallback(({ method, url, data, params }) => {
-    setIsLoading(true);
-    setError(null);
+  const sendRequest = useCallback(
+    ({ method, url, data, params, returnData }) => {
+      setIsLoading(true);
+      setError(null);
 
-    axios({
-      method: method ? method : "GET",
-      url: url,
-      data: data || null,
-      params: params,
-    })
-      .then((response) => {
-        //TODO change to async await
-        console.log(response.data.data);
-        if (method === "GET") {
-          setResponseData(response.data.data);
-        }
-        setIsLoading(false);
+      axios({
+        method: method ? method : "GET",
+        url: url,
+        data: data || null,
+        params: params,
       })
-      .catch((e) => {
-        setError(e.message || "Something went wrong!");
-        console.error(e);
-        setIsLoading(false);
-      });
-  }, []);
+        .then((response) => {
+          //TODO change to async await
+          console.log(response.data);
+          if (!returnData) {
+            setResponseData(response.data.data);
+          }
+          if (url === "/login") {
+            localStorage.setItem("token", JSON.stringify(response.data.data));
+          }
+          setIsLoading(false);
+        })
+        .catch((e) => {
+          setError(e.message || "Something went wrong!");
+          console.error(e);
+          setIsLoading(false);
+        });
+    },
+    []
+  );
 
   return {
     isLoading,

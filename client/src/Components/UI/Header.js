@@ -1,15 +1,22 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
+import { useHistory } from "react-router";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
+import {
+  generateLink,
+  routesConfiguration as routes,
+} from "../../Router/routes";
 
 export const Header = ({ title }) => {
+  const history = useHistory();
   const logoutHandler = () => {
-    console.log("logged out")
-  }
+    localStorage.removeItem("token");
+    history.push(generateLink(routes.LOGIN));
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -29,7 +36,9 @@ export const Header = ({ title }) => {
           >
             {title}
           </Typography>
-          <Button color="inherit" onClick={logoutHandler}>Logout</Button>
+          <Button color="inherit" onClick={logoutHandler}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>

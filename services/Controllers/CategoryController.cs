@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RecipesAPI.Dtos;
 using RecipesAPI.Models;
 using RecipesAPI.Services;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 namespace RecipesAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class CategoryController : ControllerBase
     {
