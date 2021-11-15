@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import useHttp from "../../Hooks/useHttp";
 import { Header } from "../UI/Header";
+import { AddIngredientModal } from "../Ingredients/AddIngredientModal";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { AddIngredientModal } from "../Ingredients/AddIngredientModal";
 import IconButton from "@mui/material/IconButton";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
@@ -83,7 +83,7 @@ export const AddRecipe = () => {
 
   const submitHandler = () => {
     console.log(values);
-    sendRequest({method:"POST", url: "/recipe", data: values})
+    sendRequest({ method: "POST", url: "/recipe", data: values, returnData: false });
   };
 
   return (
@@ -172,20 +172,3 @@ export const AddRecipe = () => {
     </div>
   );
 };
-
-/*
-{
-  "name": "string",
-  "description": "string",
-  "userId": 0,
-  "categoryId": 0,
-  "recipeIngredient": [
-    {
-      "ingredientId": 0,
-      "quantity": 0,
-      "unit": "kg"
-    }
-  ]
-}
-
-*/
