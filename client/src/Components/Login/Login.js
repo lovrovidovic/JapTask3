@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 import useHttp from "../../Hooks/useHttp";
-import { Button } from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { Button, Typography, Box, CircularProgress } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import isLoggedIn from "../../Hooks/isLoggedIn";
+import classes from "./Login.module.css";
+import {
+  generateLink,
+  routesConfiguration as routes,
+} from "../../Router/routes";
 
 export const Login = () => {
-  const [values, setValues] = useState({ username: "", password: "" });
   const history = useHistory();
-
+  const [values, setValues] = useState({ username: "", password: "" });
   const { isLoading, error, sendRequest, responseData } = useHttp();
 
   const handleFormChange = (e) => {
@@ -18,18 +21,26 @@ export const Login = () => {
     });
   };
 
-  const loginHandler = () => {
-    sendRequest({ method: "POST", url: "/login", data: values });
-    setTimeout(() => onLoginSuccess(), [1000])
+  const onLoginSuccess = (data) => {
+    localStorage.setItem("token", JSON.stringify(data));
+    history.push(generateLink(routes.CATEGORIES));
   };
 
-  const onLoginSuccess = () => {
-    if (isLoggedIn()) history.push("/categories");
+  const loginHandler = () => {
+    sendRequest({
+      method: "POST",
+      url: "/login",
+      data: values,
+      additionalFunc: onLoginSuccess,
+    });
   };
 
   return (
-    <Paper>
-      <form>
+    <Paper className={classes.paper}>
+      <form className={classes.form}>
+        <Typography variant="h5" sx={{ textAlign: "center" }}>
+          LOGIN
+        </Typography>
         <TextField
           label="Username: "
           variant="standard"
@@ -38,14 +49,28 @@ export const Login = () => {
           onChange={handleFormChange}
         />
         <TextField
+          type="password"
           label="Password: "
           variant="standard"
           name="password"
           value={values.password}
           onChange={handleFormChange}
         />
+        {error && (
+          <Typography
+            variant="body2"
+            sx={{ textAlign: "center", color: "red" }}
+          >
+            Invalid credentials
+          </Typography>
+        )}
         <Button onClick={loginHandler}>Log in</Button>
       </form>
+      {isLoading && !error && (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Paper>
   );
 };

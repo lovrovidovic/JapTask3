@@ -59,19 +59,17 @@ export const Recipes = () => {
           Error! Cannot get list of recipes for this category.
         </Alert>
       )}
-      <div>
+      <div className={classes.actions}> 
         <SearchContainer label="Search recipes" searchAction={setSearchValue} />
-        <IconButton onClick={addRecipeHandler}>
-          <AddCircleIcon />
+        <IconButton size="large" onClick={addRecipeHandler} >
+          <AddCircleIcon fontSize="large" />
         </IconButton>
       </div>
       <div className={classes.container}>
         {isLoading && !error && (
-          <>
-            <Box sx={{ display: "flex" }}>
-              <CircularProgress />
-            </Box>
-          </>
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
         )}
 
         <div className={classes.categoriesList}>

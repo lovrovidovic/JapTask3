@@ -7,7 +7,7 @@ const useHttp = () => {
   const [responseData, setResponseData] = useState([]);
 
   const sendRequest = useCallback(
-    ({ method, url, data, params, returnData }) => {
+    ({ method, url, data, params, returnData, additionalFunc }) => {
       setIsLoading(true);
       setError(null);
 
@@ -18,15 +18,11 @@ const useHttp = () => {
         params: params,
       })
         .then((response) => {
-          //TODO change to async await
-          console.log(response.data);
           if (!returnData) {
             setResponseData(response.data.data);
           }
-          if (url === "/login") {
-            localStorage.setItem("token", JSON.stringify(response.data.data));
-          }
           setIsLoading(false);
+          additionalFunc && additionalFunc(response.data.data);
         })
         .catch((e) => {
           setError(e.message || "Something went wrong!");

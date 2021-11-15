@@ -9,7 +9,6 @@ const isLoggedIn = () => {
       isVerified = false;
     }
   });
-  console.log(isVerified, "no verify")
   return isVerified;
 };
 
