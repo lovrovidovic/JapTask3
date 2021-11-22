@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using RecipesAPI.Data;
-using RecipesAPI.Dtos;
+using Recipes.Api.Data;
+using Recipes.Api.Dtos;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Services
+namespace Recipes.Api.Services
 {
     public class LoginService : ILoginService
     {

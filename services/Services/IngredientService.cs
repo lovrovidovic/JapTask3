@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using RecipesAPI.Data;
-using RecipesAPI.Dtos;
+using Recipes.Api.Data;
+using Recipes.Api.Dtos;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Services
+namespace Recipes.Api.Services
 {
     public class IngredientService : IIngredientService
     {

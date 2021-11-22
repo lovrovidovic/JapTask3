@@ -1,10 +1,10 @@
-﻿using RecipesAPI.Dtos;
+﻿using Recipes.Api.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Services
+namespace Recipes.Api.Services
 {
     public interface ILoginService
     {

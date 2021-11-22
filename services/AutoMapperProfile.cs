@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using RecipesAPI.Dtos;
-using RecipesAPI.Models;
+using Recipes.Api.Dtos;
+using Recipes.Api.Models;
 
-namespace RecipesAPI
+namespace Recipes.Api
 {
     public class AutoMapperProfile : Profile
     {

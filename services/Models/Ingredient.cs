@@ -1,8 +1,8 @@
-﻿using RecipesAPI.Models.Base;
-using RecipesAPI.Models.Enums;
+﻿using Recipes.Api.Models.Base;
+using Recipes.Api.Models.Enums;
 using System.Collections.Generic;
 
-namespace RecipesAPI.Models
+namespace Recipes.Api.Models
 {
     public class Ingredient : BaseEntity
     {

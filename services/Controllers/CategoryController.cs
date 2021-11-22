@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RecipesAPI.Dtos;
-using RecipesAPI.Models;
-using RecipesAPI.Services;
+using Recipes.Api.Dtos;
+using Recipes.Api.Models;
+using Recipes.Api.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Controllers
+namespace Recipes.Api.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]

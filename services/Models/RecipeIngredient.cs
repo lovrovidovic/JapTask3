@@ -1,10 +1,10 @@
-﻿using RecipesAPI.Models.Enums;
+﻿using Recipes.Api.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Models
+namespace Recipes.Api.Models
 {
     public class RecipeIngredient
     {

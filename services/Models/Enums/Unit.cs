@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Models.Enums
+namespace Recipes.Api.Models.Enums
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Unit

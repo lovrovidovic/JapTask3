@@ -1,11 +1,11 @@
-﻿using RecipesAPI.Models;
-using RecipesAPI.Models.Enums;
+﻿using Recipes.Api.Models;
+using Recipes.Api.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Services
+namespace Recipes.Api.Services
 {
     public interface IConversionService
     {

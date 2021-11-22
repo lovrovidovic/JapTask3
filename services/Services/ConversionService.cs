@@ -1,10 +1,10 @@
-﻿using RecipesAPI.Dtos;
-using RecipesAPI.Models;
-using RecipesAPI.Models.Enums;
+﻿using Recipes.Api.Dtos;
+using Recipes.Api.Models;
+using Recipes.Api.Models.Enums;
 using System;
 using System.Linq;
 
-namespace RecipesAPI.Services
+namespace Recipes.Api.Services
 {
     public class ConversionService : IConversionService
     {

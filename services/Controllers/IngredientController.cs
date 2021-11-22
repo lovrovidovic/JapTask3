@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RecipesAPI.Services;
+using Recipes.Api.Services;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Controllers
+namespace Recipes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

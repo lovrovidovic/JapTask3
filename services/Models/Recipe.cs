@@ -1,8 +1,8 @@
-﻿using RecipesAPI.Models.Base;
+﻿using Recipes.Api.Models.Base;
 using System;
 using System.Collections.Generic;
 
-namespace RecipesAPI.Models
+namespace Recipes.Api.Models
 {
     public class Recipe : BaseEntity
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace RecipesAPI.Data.Migrations
+namespace Recipes.Api.Data.Migrations
 {
     public partial class SeedData : Migration
     {

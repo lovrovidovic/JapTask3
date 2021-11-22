@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Dtos
+namespace Recipes.Api.Dtos
 {
     public class GetCategoriesDto
     {
