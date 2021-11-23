@@ -1,12 +1,8 @@
 ﻿using Recipes.Common.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Recipes.Core.Dtos
+namespace Recipes.Core.Responses
 {
-    public class GetIngredientDto
+    public class ResponseGetIngredient
     {
         public int Id { get; set; }
 

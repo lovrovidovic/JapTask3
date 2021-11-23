@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Recipes.Core.Dtos;
+using System;
 using System.Collections.Generic;
 
-namespace Recipes.Core.Dtos
+namespace Recipes.Core.Responses
 {
-    public class GetRecipeDetailsDto
+    public class ResponseGetRecipeDetails
     {
         public int Id { get; set; }
 

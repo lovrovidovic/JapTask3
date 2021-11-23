@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Recipes.Services.Interfaces;
-using Recipes.Core.Dtos;
+using Recipes.Core.Responses;
 
 namespace Recipes.Services.Services
 {
@@ -20,12 +20,12 @@ namespace Recipes.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<GetIngredientDto>>> GetIngredients()
+        public async Task<ServiceResponse<IEnumerable<ResponseGetIngredient>>> GetIngredients()
         {
-            var response = new ServiceResponse<IEnumerable<GetIngredientDto>>();
+            var response = new ServiceResponse<IEnumerable<ResponseGetIngredient>>();
             var ingredients = await _context.Ingredients.ToListAsync();
 
-            response.Data = ingredients.Select(x => _mapper.Map<GetIngredientDto>(x)).ToList();
+            response.Data = ingredients.Select(x => _mapper.Map<ResponseGetIngredient>(x)).ToList();
             return response;
         }
     }

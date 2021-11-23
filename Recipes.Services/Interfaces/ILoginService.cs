@@ -1,4 +1,4 @@
-﻿using Recipes.Core.Dtos;
+﻿using Recipes.Core.Responses;
 using System.Threading.Tasks;
 
 namespace Recipes.Services.Interfaces

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Recipes.Services.Interfaces;
-using Recipes.Core.Dtos;
 using AutoMapper;
+using Recipes.Core.Responses;
 
 namespace Recipes.Services.Services
 {
@@ -21,9 +21,9 @@ namespace Recipes.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<GetCategoriesDto>>> GetCategories(int n)
+        public async Task<ServiceResponse<IEnumerable<ResponseGetCategories>>> GetCategories(int n)
         {
-            var response = new ServiceResponse<IEnumerable<GetCategoriesDto>>();
+            var response = new ServiceResponse<IEnumerable<ResponseGetCategories>>();
             List<Category> categories;
 
             if (n != 0)
@@ -35,7 +35,7 @@ namespace Recipes.Services.Services
                 categories = await _context.Categories.OrderByDescending(x => x.CreatedAt).ToListAsync();
             }
 
-            response.Data = categories.Select(x => _mapper.Map<GetCategoriesDto>(x)).ToList();
+            response.Data = categories.Select(x => _mapper.Map<ResponseGetCategories>(x)).ToList();
             return response;
         }
     }

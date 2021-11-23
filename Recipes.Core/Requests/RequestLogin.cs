@@ -1,6 +1,6 @@
-﻿namespace Recipes.Core.Dtos
+﻿namespace Recipes.Core.Requests
 {
-    public class LoginDto
+    public class RequestLogin
     {
         public string Username { get; set; }
         public string Password { get; set; }

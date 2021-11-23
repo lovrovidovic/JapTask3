@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Recipes.Core.Dtos;
 using Recipes.Core.Entities;
+using Recipes.Core.Responses;
 
 namespace Recipes.Mapper
 {
@@ -8,10 +8,10 @@ namespace Recipes.Mapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<Category, GetCategoriesDto>();
-            CreateMap<Recipe, GetRecipesDto>();
-            CreateMap<Recipe, GetRecipeDetailsDto>();
-            CreateMap<Ingredient, GetIngredientDto>();
+            CreateMap<Category, ResponseGetCategories>();
+            CreateMap<Recipe, ResponseGetRecipes>();
+            CreateMap<Recipe, ResponseGetRecipeDetails>();
+            CreateMap<Ingredient, ResponseGetIngredient>();
         }
     }
 }

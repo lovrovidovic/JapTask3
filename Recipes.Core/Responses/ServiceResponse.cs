@@ -1,4 +1,4 @@
-﻿namespace Recipes.Core.Dtos
+﻿namespace Recipes.Core.Responses
 {
     public class ServiceResponse<T>
     {

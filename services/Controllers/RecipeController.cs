@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Recipes.Core.Dtos;
+using Recipes.Core.Requests;
 using Recipes.Services.Interfaces;
 using System.Threading.Tasks;
 
@@ -34,7 +34,7 @@ namespace Recipes.Api.Controllers
 
         // POST: api/Recipe
         [HttpPost]
-        public async Task<ActionResult> CreateRecipe(CreateRecipeDto newRecipe)
+        public async Task<ActionResult> CreateRecipe(RequestCreateRecipe newRecipe)
         {
             return Ok(await _service.CreateRecipe(newRecipe));
         }

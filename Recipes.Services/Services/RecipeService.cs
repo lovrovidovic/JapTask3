@@ -9,6 +9,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Recipes.Services.Interfaces;
 using Recipes.Core.Dtos;
+using Recipes.Core.Requests;
+using Recipes.Core.Responses;
 
 namespace Recipes.Services.Services
 {
@@ -25,16 +27,16 @@ namespace Recipes.Services.Services
             _convert = convert;
         }
 
-        public async Task<ServiceResponse<IEnumerable<GetRecipesDto>>> GetRecipes(string search, int n, int categoryId)
+        public async Task<ServiceResponse<IEnumerable<ResponseGetRecipes>>> GetRecipes(string search, int n, int categoryId)
         {
-            var response = new ServiceResponse<IEnumerable<GetRecipesDto>>();
+            var response = new ServiceResponse<IEnumerable<ResponseGetRecipes>>();
             var recipes = await _context.Recipes
                 .Include(x => x.RecipeIngredient)
                 .ThenInclude(y => y.Ingredient)
                 .Where(Filter(search, categoryId))
                 .Take(n).ToListAsync();
 
-            response.Data = recipes.Select(x => new GetRecipesDto
+            response.Data = recipes.Select(x => new ResponseGetRecipes
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -57,9 +59,9 @@ namespace Recipes.Services.Services
             || x.RecipeIngredient.Any(y => y.Ingredient.Name.ToLower().Contains(search)));
         }
 
-        public async Task<ServiceResponse<GetRecipeDetailsDto>> GetRecipeDetails(int id)
+        public async Task<ServiceResponse<ResponseGetRecipeDetails>> GetRecipeDetails(int id)
         {
-            var response = new ServiceResponse<GetRecipeDetailsDto>();
+            var response = new ServiceResponse<ResponseGetRecipeDetails>();
 
             var recipe = await _context.Recipes
                 .Include(x => x.RecipeIngredient)
@@ -78,7 +80,7 @@ namespace Recipes.Services.Services
                 NormativeUnit = x.Ingredient.NormativeUnit
             });
 
-            response.Data = _mapper.Map<GetRecipeDetailsDto>(recipe);
+            response.Data = _mapper.Map<ResponseGetRecipeDetails>(recipe);
             response.Data.CategoryName = recipe.Category.Name; //TODO check if i need this
             response.Data.Ingredients = mappedIngredients;
             response.Data.TotalPrice = _convert.CalculateRecipeCost(recipe);
@@ -86,7 +88,7 @@ namespace Recipes.Services.Services
             return response;
         }
 
-        public async Task<ServiceResponse<Recipe>> CreateRecipe(CreateRecipeDto newRecipe)
+        public async Task<ServiceResponse<Recipe>> CreateRecipe(RequestCreateRecipe newRecipe)
         {
             var response = new ServiceResponse<Recipe>();
 

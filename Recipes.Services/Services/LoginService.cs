@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Recipes.Core.Dtos;
+using Recipes.Core.Responses;
 using Recipes.Database;
 using Recipes.Services.Interfaces;
 using System;

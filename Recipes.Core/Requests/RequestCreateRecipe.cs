@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Recipes.Core.Dtos;
+using System.Collections.Generic;
 
-namespace Recipes.Core.Dtos
+namespace Recipes.Core.Requests
 {
-    public class CreateRecipeDto
+    public class RequestCreateRecipe
     {
         public string Name { get; set; }
 
