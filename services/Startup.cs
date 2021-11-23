@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Recipes.Api.Extensions;
+using Recipes.Api.Middlewares;
 
 namespace Recipes.Api
 {
@@ -23,7 +24,7 @@ namespace Recipes.Api
             services.ConfigureServiceInjection();
             services.ConfigureDbContext(Configuration);
             services.ConfigureAuthentication(Configuration);
-            services.AddAutoMapper(typeof(Startup));
+            services.ConfigureMapper();
             services.AddControllers();
             services.ConfigureSwagger();
         }
@@ -46,6 +47,7 @@ namespace Recipes.Api
             {
                 endpoints.MapControllers();
             });
+            app.UseExceptionMiddleware();
         }
     }
 }

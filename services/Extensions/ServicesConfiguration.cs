@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Recipes.Api.Services;
+using Recipes.Services.Interfaces;
+using Recipes.Services.Services;
 
 namespace Recipes.Api.Extensions
 {

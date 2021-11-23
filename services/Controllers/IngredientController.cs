@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Recipes.Api.Services;
+using Recipes.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace Recipes.Api.Controllers

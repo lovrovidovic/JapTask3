@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Recipes.Api.Dtos;
-using Recipes.Api.Services;
+using Recipes.Core.Dtos;
+using Recipes.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace Recipes.Api.Controllers
