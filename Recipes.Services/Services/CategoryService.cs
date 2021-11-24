@@ -7,35 +7,36 @@ using System.Threading.Tasks;
 using Recipes.Services.Interfaces;
 using AutoMapper;
 using Recipes.Core.Responses;
+using Recipes.Core.Requests;
 
 namespace Recipes.Services.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly DataContext _context;
+        private readonly RecipesDbContext _recipesDbContext;
         private readonly IMapper _mapper;
 
-        public CategoryService(DataContext context, IMapper mapper)
+        public CategoryService(RecipesDbContext recipesDbContext, IMapper mapper)
         {
-            _context = context;
+            _recipesDbContext = recipesDbContext;
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<ResponseGetCategories>>> GetCategories(int n)
+        public async Task<PagedResponse<IEnumerable<ResponseGetCategories>>> GetCategoriesAsync(BaseSearch searchObj)
         {
-            var response = new ServiceResponse<IEnumerable<ResponseGetCategories>>();
+            var response = new PagedResponse<IEnumerable<ResponseGetCategories>>();
             List<Category> categories;
 
-            if (n != 0)
+            var query = _recipesDbContext.Categories.OrderByDescending(x => x.CreatedAt).AsQueryable();
+            if (searchObj.TakeAmmount != 0)
             {
-                categories = await _context.Categories.OrderByDescending(x => x.CreatedAt).Take(n).ToListAsync();
-            }
-            else
-            {
-                categories = await _context.Categories.OrderByDescending(x => x.CreatedAt).ToListAsync();
+                query = query.Take(searchObj.TakeAmmount);
             }
 
-            response.Data = categories.Select(x => _mapper.Map<ResponseGetCategories>(x)).ToList();
+            categories = await query.ToListAsync();    
+
+            response.Data =_mapper.Map<List<ResponseGetCategories>>(categories);
+            response.Count = categories.Count;
             return response;
         }
     }

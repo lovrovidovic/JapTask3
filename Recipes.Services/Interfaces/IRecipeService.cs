@@ -8,10 +8,10 @@ namespace Recipes.Services.Interfaces
 {
     public interface IRecipeService
     {
-        Task<ServiceResponse<IEnumerable<ResponseGetRecipes>>> GetRecipes(string search, int n, int categoryId);
+        Task<PagedResponse<IEnumerable<ResponseGetRecipes>>> GetRecipesAsync(RequestSearchRecipe request);
 
-        Task<ServiceResponse<ResponseGetRecipeDetails>> GetRecipeDetails(int id);
+        Task<ServiceResponse<ResponseGetRecipeDetails>> GetRecipeDetailsAsync(int id);
 
-        Task<ServiceResponse<Recipe>> CreateRecipe(RequestCreateRecipe newRecipe);
+        Task<ServiceResponse<Recipe>> CreateRecipeAsync(RequestCreateRecipe newRecipe);
     }
 }

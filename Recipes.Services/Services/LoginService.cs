@@ -14,12 +14,12 @@ namespace Recipes.Services.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly DataContext _context;
+        private readonly RecipesDbContext _recipesDbContext;
         private readonly IConfiguration _config;
 
-        public LoginService(DataContext context, IConfiguration config)
+        public LoginService(RecipesDbContext recipesDbContext, IConfiguration config)
         {
-            _context = context;
+            _recipesDbContext = recipesDbContext;
             _config = config;
         }
 
@@ -42,11 +42,11 @@ namespace Recipes.Services.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<ServiceResponse<string>> LoginUser(string username, string password)
+        public async Task<ServiceResponse<string>> LoginUserAsync(string username, string password)
         {
             var response = new ServiceResponse<string>();
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            var user = await _recipesDbContext.Users.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
             if (user == null)
             {
                 return null;

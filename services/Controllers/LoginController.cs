@@ -19,7 +19,7 @@ namespace Recipes.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> LoginUser(RequestLogin request)
         {
-            var token = await _loginService.LoginUser(request.Username, request.Password);
+            var token = await _loginService.LoginUserAsync(request.Username, request.Password);
             if (token == null)
             {
                 return BadRequest();

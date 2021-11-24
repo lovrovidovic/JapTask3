@@ -9,7 +9,7 @@ using Recipes.Database;
 
 namespace Recipes.Database.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(RecipesDbContext))]
     [Migration("20211108135056_Initial")]
     partial class Initial
     {

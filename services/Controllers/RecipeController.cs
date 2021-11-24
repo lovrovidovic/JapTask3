@@ -11,32 +11,32 @@ namespace Recipes.Api.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
-        private readonly IRecipeService _service;
+        private readonly IRecipeService _recipeService;
 
-        public RecipeController(IRecipeService service)
+        public RecipeController(IRecipeService recipeService)
         {
-            _service = service;
+            _recipeService = recipeService;
         }
 
         // GET: api/Recipe
         [HttpGet]
-        public async Task<ActionResult> GetRecipes([FromQuery] string search, [FromQuery] int n, [FromQuery] int categoryId)
+        public async Task<ActionResult> GetRecipes([FromQuery] RequestSearchRecipe request)
         {
-            return Ok(await _service.GetRecipes(search, n, categoryId));
+            return Ok(await _recipeService.GetRecipesAsync(request));
         }
 
         // GET: api/Recipe/5
         [HttpGet("{id}")]
         public async Task<ActionResult> GetRecipeDetails(int id)
         {
-            return Ok(await _service.GetRecipeDetails(id));
+            return Ok(await _recipeService.GetRecipeDetailsAsync(id));
         }
 
         // POST: api/Recipe
         [HttpPost]
         public async Task<ActionResult> CreateRecipe(RequestCreateRecipe newRecipe)
         {
-            return Ok(await _service.CreateRecipe(newRecipe));
+            return Ok(await _recipeService.CreateRecipeAsync(newRecipe));
         }
     }
 }

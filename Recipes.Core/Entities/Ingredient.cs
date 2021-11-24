@@ -14,6 +14,8 @@ namespace Recipes.Core.Entities
 
         public Unit NormativeUnit { get; set; }
 
-        public IEnumerable<RecipeIngredient> RecipeIngredient { get; set; }
+        public float UnitPrice { get; set; }
+
+        public IEnumerable<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }

@@ -1,51 +1,52 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Recipes.Database;
+using Recipes.Core.Dtos;
 using Recipes.Core.Entities;
+using Recipes.Core.Requests;
+using Recipes.Core.Responses;
+using Recipes.Database;
+using Recipes.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Recipes.Services.Interfaces;
-using Recipes.Core.Dtos;
-using Recipes.Core.Requests;
-using Recipes.Core.Responses;
 
 namespace Recipes.Services.Services
 {
     public class RecipeService : IRecipeService
     {
-        private readonly DataContext _context;
+        private readonly RecipesDbContext _recipesDbContext;
         private readonly IMapper _mapper;
-        private readonly IConversionService _convert;
+        private readonly IConversionService _conversionService;
 
-        public RecipeService(DataContext context, IMapper mapper, IConversionService convert)
+        public RecipeService(RecipesDbContext recipesDbContext, IMapper mapper, IConversionService conversionService)
         {
-            _context = context;
+            _recipesDbContext = recipesDbContext;
             _mapper = mapper;
-            _convert = convert;
+            _conversionService = conversionService;
         }
 
-        public async Task<ServiceResponse<IEnumerable<ResponseGetRecipes>>> GetRecipes(string search, int n, int categoryId)
+        public async Task<PagedResponse<IEnumerable<ResponseGetRecipes>>> GetRecipesAsync(RequestSearchRecipe request)
         {
-            var response = new ServiceResponse<IEnumerable<ResponseGetRecipes>>();
-            var recipes = await _context.Recipes
-                .Include(x => x.RecipeIngredient)
+            var response = new PagedResponse<IEnumerable<ResponseGetRecipes>>();
+            var recipes = await _recipesDbContext.Recipes
+                .Include(x => x.RecipeIngredients)
                 .ThenInclude(y => y.Ingredient)
-                .Where(Filter(search, categoryId))
-                .Take(n).ToListAsync();
+                .Where(Filter(request.Search, request.CategoryId))
+                .Take(request.TakeAmmount)
+                .Select(x => new ResponseGetRecipes
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    CreatedAt = x.CreatedAt,
+                    Description = x.Description,
+                    Price = _conversionService.CalculateRecipeCost(x)
+                })
+                .ToListAsync();
 
-            response.Data = recipes.Select(x => new ResponseGetRecipes
-            {
-                Id = x.Id,
-                Name = x.Name,
-                CreatedAt = x.CreatedAt,
-                Description = x.Description,
-                Price = _convert.CalculateRecipeCost(x)
-            });
-            response.Data = response.Data.OrderBy(x => x.Price);
-
+            response.Data = recipes.OrderBy(x => x.Price);
+            response.Count = recipes.Count;
             return response;
         }
 
@@ -56,22 +57,22 @@ namespace Recipes.Services.Services
             (string.IsNullOrEmpty(search)
             || x.Name.ToLower().Contains(search)
             || x.Description.ToLower().Contains(search)
-            || x.RecipeIngredient.Any(y => y.Ingredient.Name.ToLower().Contains(search)));
+            || x.RecipeIngredients.Any(y => y.Ingredient.Name.ToLower().Contains(search)));
         }
 
-        public async Task<ServiceResponse<ResponseGetRecipeDetails>> GetRecipeDetails(int id)
+        public async Task<ServiceResponse<ResponseGetRecipeDetails>> GetRecipeDetailsAsync(int id)
         {
             var response = new ServiceResponse<ResponseGetRecipeDetails>();
 
-            var recipe = await _context.Recipes
-                .Include(x => x.RecipeIngredient)
+            var recipe = await _recipesDbContext.Recipes
+                .Include(x => x.RecipeIngredients)
                 .ThenInclude(y => y.Ingredient)
                 .Include(x => x.Category)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            var mappedIngredients = recipe.RecipeIngredient.Select(x => new GetIngredientOfRecipeDto
+            var mappedIngredients = recipe.RecipeIngredients.Select(x => new GetIngredientOfRecipeDto
             {
-                Price = _convert.CalculateIngredientCost(x),
+                Price = _conversionService.CalculateIngredientCost(x),
                 Name = x.Ingredient.Name,
                 Quantity = x.Quantity,
                 Unit = x.Unit,
@@ -83,34 +84,32 @@ namespace Recipes.Services.Services
             response.Data = _mapper.Map<ResponseGetRecipeDetails>(recipe);
             response.Data.CategoryName = recipe.Category.Name; //TODO check if i need this
             response.Data.Ingredients = mappedIngredients;
-            response.Data.TotalPrice = _convert.CalculateRecipeCost(recipe);
+            response.Data.TotalPrice = _conversionService.CalculateRecipeCost(recipe);
 
             return response;
         }
 
-        public async Task<ServiceResponse<Recipe>> CreateRecipe(RequestCreateRecipe newRecipe)
+        public async Task<ServiceResponse<Recipe>> CreateRecipeAsync(RequestCreateRecipe newRecipe)
         {
             var response = new ServiceResponse<Recipe>();
-
-            var mappedRecipeIngredient = newRecipe.RecipeIngredient.Select(x => new RecipeIngredient
-            {
-                Quantity = x.Quantity,
-                Unit = x.Unit,
-                IngredientId = x.IngredientId
-            }).ToList();
 
             var recipe = new Recipe
             {
                 Name = newRecipe.Name,
                 Description = newRecipe.Description,
                 CreatedAt = DateTime.Now,
-                UserId = newRecipe.UserId,
+                CreatedBy = newRecipe.UserId,
                 CategoryId = newRecipe.CategoryId,
-                RecipeIngredient = mappedRecipeIngredient
+                RecipeIngredients = newRecipe.RecipeIngredient.Select(x => new RecipeIngredient
+                {
+                    Quantity = x.Quantity,
+                    Unit = x.Unit,
+                    IngredientId = x.IngredientId
+                }).ToList()
             };
 
-            await _context.Recipes.AddAsync(recipe);
-            await _context.SaveChangesAsync();
+            await _recipesDbContext.Recipes.AddAsync(recipe);
+            await _recipesDbContext.SaveChangesAsync();
 
             return response;
         }

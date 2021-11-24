@@ -5,6 +5,6 @@ namespace Recipes.Services.Interfaces
 {
     public interface ILoginService
     {
-        Task<ServiceResponse<string>> LoginUser(string username, string password);
+        Task<ServiceResponse<string>> LoginUserAsync(string username, string password);
     }
 }

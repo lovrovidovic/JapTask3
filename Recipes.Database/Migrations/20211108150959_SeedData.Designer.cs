@@ -9,7 +9,7 @@ using Recipes.Database;
 
 namespace Recipes.Database.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(RecipesDbContext))]
     [Migration("20211108150959_SeedData")]
     partial class SeedData
     {

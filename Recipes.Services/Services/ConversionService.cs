@@ -20,7 +20,7 @@ namespace Recipes.Services.Services
 
         public float CalculateRecipeCost(Recipe recipe)
         {
-            var conversionObj = recipe.RecipeIngredient.Select(x => new ConversionDto
+            var conversionObj = recipe.RecipeIngredients.Select(x => new ConversionDto
             {
                 StartingQuantity = ConvertQuantity(x.Quantity, x.Unit),
                 StartingUnit = x.Unit,

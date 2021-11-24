@@ -8,8 +8,6 @@ namespace Recipes.Core.Entities
     {
         public string Name { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-
         public List<Recipe> Recipes { get; set; }
     }
 }

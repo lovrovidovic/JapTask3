@@ -6,6 +6,6 @@ namespace Recipes.Services.Interfaces
 {
     public interface IIngredientService
     {
-        Task<ServiceResponse<IEnumerable<ResponseGetIngredient>>> GetIngredients();
+        Task<ServiceResponse<IEnumerable<ResponseGetIngredient>>> GetIngredientsAsync();
     }
 }

@@ -10,16 +10,12 @@ namespace Recipes.Core.Entities
 
         public string Description { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-
         public User User { get; set; }
-
-        public int UserId { get; set; }
 
         public Category Category { get; set; }
 
         public int CategoryId { get; set; }
 
-        public IEnumerable<RecipeIngredient> RecipeIngredient { get; set; }
+        public IEnumerable<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace Recipes.Api.Extensions
     {
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<DataContext>(options =>
+            services.AddDbContext<RecipesDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DBConnection")));
         }
     }

@@ -11,21 +11,19 @@ namespace Recipes.Services.Services
 {
     public class IngredientService : IIngredientService
     {
-        private readonly DataContext _context;
+        private readonly RecipesDbContext _recipesDbContext;
         private readonly IMapper _mapper;
 
-        public IngredientService(DataContext context, IMapper mapper)
+        public IngredientService(RecipesDbContext recipesDbContext, IMapper mapper)
         {
-            _context = context;
+            _recipesDbContext = recipesDbContext;
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<ResponseGetIngredient>>> GetIngredients()
+        public async Task<ServiceResponse<IEnumerable<ResponseGetIngredient>>> GetIngredientsAsync()
         {
             var response = new ServiceResponse<IEnumerable<ResponseGetIngredient>>();
-            var ingredients = await _context.Ingredients.ToListAsync();
-
-            response.Data = ingredients.Select(x => _mapper.Map<ResponseGetIngredient>(x)).ToList();
+            response.Data = await _recipesDbContext.Ingredients.Select(x => _mapper.Map<ResponseGetIngredient>(x)).ToListAsync();
             return response;
         }
     }
