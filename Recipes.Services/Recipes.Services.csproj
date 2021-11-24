@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Recipes.Core\Recipes.Core.csproj" />
+    <ProjectReference Include="..\Recipes.Database\Recipes.Database.csproj" />
+    <ProjectReference Include="..\Recipes.Mapper\Recipes.Mapper.csproj" />
+  </ItemGroup>
+
+</Project>

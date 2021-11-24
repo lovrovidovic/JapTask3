@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RecipesAPI.Dtos;
-using RecipesAPI.Services;
+using Recipes.Core.Requests;
+using Recipes.Services.Interfaces;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Controllers
+namespace Recipes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,9 +17,9 @@ namespace RecipesAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> LoginUser(LoginDto request)
+        public async Task<ActionResult> LoginUser(RequestLogin request)
         {
-            var token = await _loginService.LoginUser(request.Username, request.Password);
+            var token = await _loginService.LoginUserAsync(request.Username, request.Password);
             if (token == null)
             {
                 return BadRequest();

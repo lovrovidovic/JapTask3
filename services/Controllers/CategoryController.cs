@@ -1,30 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RecipesAPI.Dtos;
-using RecipesAPI.Models;
-using RecipesAPI.Services;
-using System.Collections.Generic;
+using Recipes.Core.Requests;
+using Recipes.Services.Interfaces;
 using System.Threading.Tasks;
 
-namespace RecipesAPI.Controllers
+namespace Recipes.Api.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _service;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService service)
+        public CategoryController(ICategoryService categoryService)
         {
-            _service = service;
+            _categoryService = categoryService;
         }
 
         // GET: api/Category
         [HttpGet]
-        public async Task<ActionResult> GetCategories([FromQuery] int n)
+        public async Task<ActionResult> GetCategories([FromQuery] BaseSearch searchArgs)
         {
-            return Ok(await _service.GetCategories(n));
+            return Ok(await _categoryService.GetCategoriesAsync(searchArgs));
         }
     }
 }

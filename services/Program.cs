@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecipesAPI
+namespace Recipes.Api
 {
     public class Program
     {
