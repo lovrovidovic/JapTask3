@@ -36,7 +36,12 @@ namespace Recipes.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateRecipe(RequestCreateRecipe newRecipe)
         {
-            return Ok(await _recipeService.CreateRecipeAsync(newRecipe));
+            var response = await _recipeService.CreateRecipeAsync(newRecipe);
+            if (response)
+            {
+                return Ok();
+            }
+            return BadRequest("Must select ingredients for recipe!");
         }
     }
 }

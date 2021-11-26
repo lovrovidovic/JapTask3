@@ -1,9 +1,9 @@
-﻿using Recipes.Core.Dtos;
+﻿using Recipes.Common.Enums;
+using Recipes.Core.Dtos;
 using Recipes.Core.Entities;
-using Recipes.Common.Enums;
+using Recipes.Services.Interfaces;
 using System;
 using System.Linq;
-using Recipes.Services.Interfaces;
 
 namespace Recipes.Services.Services
 {
@@ -24,12 +24,10 @@ namespace Recipes.Services.Services
             {
                 StartingQuantity = ConvertQuantity(x.Quantity, x.Unit),
                 StartingUnit = x.Unit,
-                NormativeQuantity = ConvertQuantity(x.Ingredient.NormativeQuantity, x.Ingredient.NormativeUnit),
-                NormativeUnit = x.Ingredient.NormativeUnit,
-                NormativePrice = x.Ingredient.NormativePrice
+                UnitPrice = x.Ingredient.UnitPrice
             });
 
-            float totalCost = conversionObj.Sum(x => x.StartingQuantity * (x.NormativePrice / x.NormativeQuantity));
+            float totalCost = conversionObj.Sum(x => x.StartingQuantity * x.UnitPrice);
             return (float)Math.Round(totalCost, 2);
         }
 
@@ -39,13 +37,17 @@ namespace Recipes.Services.Services
             {
                 StartingQuantity = ConvertQuantity(ingredient.Quantity, ingredient.Unit),
                 StartingUnit = ingredient.Unit,
-                NormativeQuantity = ConvertQuantity(ingredient.Ingredient.NormativeQuantity, ingredient.Ingredient.NormativeUnit),
-                NormativeUnit = ingredient.Ingredient.NormativeUnit,
-                NormativePrice = ingredient.Ingredient.NormativePrice
+                UnitPrice = ingredient.Ingredient.UnitPrice
             };
 
-            float ingredientCost = conversionObj.StartingQuantity * (conversionObj.NormativePrice / conversionObj.NormativeQuantity);
+            float ingredientCost = conversionObj.StartingQuantity * conversionObj.UnitPrice;
             return (float)Math.Round(ingredientCost, 2);
+        }
+
+        public float CalculateIngredientUnitCost(Ingredient ingredient)
+        {
+            var convertedNormativeQuantity = ConvertQuantity(ingredient.NormativeQuantity, ingredient.NormativeUnit);
+            return ingredient.NormativePrice / convertedNormativeQuantity;
         }
     }
 }

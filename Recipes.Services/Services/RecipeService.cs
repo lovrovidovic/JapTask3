@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq;
 using Recipes.Core.Dtos;
 using Recipes.Core.Entities;
 using Recipes.Core.Requests;
@@ -72,7 +73,7 @@ namespace Recipes.Services.Services
 
             var mappedIngredients = recipe.RecipeIngredients.Select(x => new GetIngredientOfRecipeDto
             {
-                Price = _conversionService.CalculateIngredientCost(x),
+                Price = (float)_conversionService.CalculateIngredientCost(x),
                 Name = x.Ingredient.Name,
                 Quantity = x.Quantity,
                 Unit = x.Unit,
@@ -89,8 +90,13 @@ namespace Recipes.Services.Services
             return response;
         }
 
-        public async Task<ServiceResponse<Recipe>> CreateRecipeAsync(RequestCreateRecipe newRecipe)
+        public async Task<bool> CreateRecipeAsync(RequestCreateRecipe newRecipe)
         {
+            if (newRecipe.RecipeIngredient.Count() == 0)
+            {
+                return false;
+            }
+
             var response = new ServiceResponse<Recipe>();
 
             var recipe = new Recipe
@@ -105,13 +111,13 @@ namespace Recipes.Services.Services
                     Quantity = x.Quantity,
                     Unit = x.Unit,
                     IngredientId = x.IngredientId
-                }).ToList()
+                }).DistinctBy(x => x.IngredientId).ToList()
             };
 
             await _recipesDbContext.Recipes.AddAsync(recipe);
             await _recipesDbContext.SaveChangesAsync();
 
-            return response;
+            return true;
         }
     }
 }

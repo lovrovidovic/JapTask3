@@ -10,5 +10,7 @@ namespace Recipes.Services.Interfaces
         float CalculateRecipeCost(Recipe recipe);
 
         float CalculateIngredientCost(RecipeIngredient ingredient);
+
+        float CalculateIngredientUnitCost(Ingredient ingredient);
     }
 }

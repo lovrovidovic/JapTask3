@@ -12,16 +12,18 @@ namespace Recipes.Database.Configurations
         {
             Random rnd = new Random();
             List<String> categoryNames = new() { "Salata", "Palacinke", "Waffle", "Hamburger", "Sendvic", "Torta", "Kolac", "Pita", "Pizza", "Sladoled", "Jela s rostilja", "Peciva" };
-            List<Category> categories = new();
-            for (int i = 0; i <= 12; i++)
+            List<Category> categories = new ();
+            var startDate = new DateTime(2010, 1, 1, 0, 0, 0);
+            var endDate = new DateTime(2021, 12, 30, 0, 0, 0);
+            for (int i = 1; i <= 100; i++)
             {
                 categories.Add(new Category
                 {
                     Id = i,
-                    Name = categoryNames[i] + i.ToString(),
-                    CreatedAt = RandomDateGenerator.GenerateRandomDateTime(new DateTime(2010, 1, 1, 0, 0, 0), new DateTime(2021, 12, 30, 0, 0, 0)),
+                    Name = categoryNames[i%12] + i.ToString(),
+                    CreatedAt = RandomDateGenerator.GenerateRandomDateTime(startDate, endDate),
                     CreatedBy = rnd.Next(1, 4),
-                    ModifiedAt = RandomDateGenerator.GenerateRandomDateTime(new DateTime(2010, 1, 1, 0, 0, 0), new DateTime(2021, 12, 30, 0, 0, 0))
+                    ModifiedAt = RandomDateGenerator.GenerateRandomDateTime(startDate, endDate)
                 });
             }
             builder.Entity<Category>().HasData(categories);

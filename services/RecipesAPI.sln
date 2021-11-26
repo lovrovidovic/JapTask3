@@ -5,15 +5,17 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Api", "Recipes.Api.csproj", "{8872A859-68F7-4F67-B3CB-1A9455257270}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Common", "..\Recipes.Common\Recipes.Common.csproj", "{2B713E71-BACF-4832-80D1-E434C97AC4DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Common", "..\Recipes.Common\Recipes.Common.csproj", "{2B713E71-BACF-4832-80D1-E434C97AC4DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Core", "..\Recipes.Core\Recipes.Core.csproj", "{BECF1699-555E-4114-B984-F3D73D6C65C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Core", "..\Recipes.Core\Recipes.Core.csproj", "{BECF1699-555E-4114-B984-F3D73D6C65C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Database", "..\Recipes.Database\Recipes.Database.csproj", "{493B64F2-588A-4F08-9922-FB334DB5279C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Database", "..\Recipes.Database\Recipes.Database.csproj", "{493B64F2-588A-4F08-9922-FB334DB5279C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Mapper", "..\Recipes.Mapper\Recipes.Mapper.csproj", "{D3779CCE-558F-420E-B68A-AD9428095AB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Mapper", "..\Recipes.Mapper\Recipes.Mapper.csproj", "{D3779CCE-558F-420E-B68A-AD9428095AB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Services", "..\Recipes.Services\Recipes.Services.csproj", "{F1FEAECA-379E-4C93-981B-78A03EC5B635}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Services", "..\Recipes.Services\Recipes.Services.csproj", "{F1FEAECA-379E-4C93-981B-78A03EC5B635}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Services.Tests", "..\Recipes.Services.Tests\Recipes.Services.Tests.csproj", "{C4518CDF-8ED2-4A2E-BB14-8949A3D77DB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{F1FEAECA-379E-4C93-981B-78A03EC5B635}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1FEAECA-379E-4C93-981B-78A03EC5B635}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1FEAECA-379E-4C93-981B-78A03EC5B635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4518CDF-8ED2-4A2E-BB14-8949A3D77DB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4518CDF-8ED2-4A2E-BB14-8949A3D77DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4518CDF-8ED2-4A2E-BB14-8949A3D77DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4518CDF-8ED2-4A2E-BB14-8949A3D77DB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
