@@ -15,7 +15,7 @@ namespace Recipes.Database.Configurations
             Random rnd = new Random();
             List<RecipeIngredient> recipeIngredients = new();
             List<Unit> units = new() { Unit.kg, Unit.l, Unit.g, Unit.ml, Unit.kom };
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= 300; i++)
             {
                 for (int j = 0; j <= rnd.Next(2, 12); j++)
                 {

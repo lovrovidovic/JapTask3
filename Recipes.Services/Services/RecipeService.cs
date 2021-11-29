@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using MoreLinq;
 using Recipes.Core.Dtos;
@@ -118,6 +119,28 @@ namespace Recipes.Services.Services
             await _recipesDbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<ServiceResponse<IEnumerable<ResponseGetRecipeWith10Ing>>> GetRecipesWith10IngredientsAsync()
+        {
+            var response = new ServiceResponse<IEnumerable<ResponseGetRecipeWith10Ing>>();
+
+            var result = await _recipesDbContext.Database.GetDbConnection()
+                .QueryAsync<ResponseGetRecipeWith10Ing>("GetRecipesWith10Ing", commandType: System.Data.CommandType.StoredProcedure);
+
+            response.Data = result;
+            return response;
+        }
+
+        public async Task<ServiceResponse<IEnumerable<ResponseGetSortedRecipes>>> GetSortedRecipesAsync()
+        {
+            var response = new ServiceResponse<IEnumerable<ResponseGetSortedRecipes>>();
+
+            var result = await _recipesDbContext.Database.GetDbConnection()
+                .QueryAsync<ResponseGetSortedRecipes>("GetSortedRecipes", commandType: System.Data.CommandType.StoredProcedure);
+
+            response.Data = result;
+            return response;
         }
     }
 }

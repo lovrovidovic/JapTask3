@@ -43,5 +43,18 @@ namespace Recipes.Api.Controllers
             }
             return BadRequest("Must select ingredients for recipe!");
         }
+
+        // GET: api/Recipe/procedure
+        [HttpGet("procedure/1")]
+        public async Task<ActionResult> GetRecipeWith10Ing()
+        {
+            return Ok(await _recipeService.GetRecipesWith10IngredientsAsync());
+        }
+
+        [HttpGet("procedure/2")]
+        public async Task<ActionResult> GertSortedRecipes()
+        {
+            return Ok(await _recipeService.GetSortedRecipesAsync());
+        }
     }
 }

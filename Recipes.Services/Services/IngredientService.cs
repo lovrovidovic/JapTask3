@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Recipes.Services.Interfaces;
 using Recipes.Core.Responses;
+using Dapper;
+using Recipes.Common.Enums;
 
 namespace Recipes.Services.Services
 {
@@ -24,6 +26,21 @@ namespace Recipes.Services.Services
         {
             var response = new ServiceResponse<IEnumerable<ResponseGetIngredient>>();
             response.Data = await _recipesDbContext.Ingredients.Select(x => _mapper.Map<ResponseGetIngredient>(x)).ToListAsync();
+            return response;
+        }
+
+        public async Task<ServiceResponse<IEnumerable<ResponseGetMostUsedIngredients>>> GetMostUsedIngredientsAsync(Unit unit, int min, int max)
+        {
+            var response = new ServiceResponse<IEnumerable<ResponseGetMostUsedIngredients>>();
+            var parameters = new DynamicParameters();
+            parameters.Add("unit", unit);
+            parameters.Add("min", min);
+            parameters.Add("max", max);
+
+            var result = await _recipesDbContext.Database.GetDbConnection()
+                .QueryAsync<ResponseGetMostUsedIngredients>("GetMostUsedIngredients", parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+            response.Data = result;
             return response;
         }
     }
