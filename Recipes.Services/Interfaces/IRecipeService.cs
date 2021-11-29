@@ -13,5 +13,9 @@ namespace Recipes.Services.Interfaces
         Task<ServiceResponse<ResponseGetRecipeDetails>> GetRecipeDetailsAsync(int id);
 
         Task<bool> CreateRecipeAsync(RequestCreateRecipe newRecipe);
+
+        Task<ServiceResponse<IEnumerable<ResponseGetRecipeWith10Ing>>> GetRecipesWith10IngredientsAsync();
+
+        Task<ServiceResponse<IEnumerable<ResponseGetSortedRecipes>>> GetSortedRecipesAsync();
     }
 }
