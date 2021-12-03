@@ -5,9 +5,9 @@ import {
   generateLink,
   routesConfiguration as routes,
 } from "../../Router/routes";
-import { Header } from "../UI/Header";
-import { SearchContainer } from "../UI/SearchContainer";
-import { CustomCard } from "../UI/CustomCard";
+import { Header } from "../Shared/Header";
+import { Search } from "../Shared/Search";
+import { Card } from "../Shared/Card";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
@@ -33,7 +33,7 @@ export const Recipes = () => {
     return {
       method: "GET",
       url: "/recipe",
-      params: { search: searchValue, n: displayed, categoryId },
+      params: { search: searchValue, takeAmmount: displayed, categoryId },
     };
   }, [displayed, categoryId, searchValue]);
 
@@ -60,7 +60,7 @@ export const Recipes = () => {
         </Alert>
       )}
       <div className={classes.actions}> 
-        <SearchContainer label="Search recipes" searchAction={setSearchValue} />
+        <Search label="Search recipes" searchAction={setSearchValue} />
         <IconButton size="large" onClick={addRecipeHandler} >
           <AddCircleIcon fontSize="large" />
         </IconButton>
@@ -75,7 +75,7 @@ export const Recipes = () => {
         <div className={classes.categoriesList}>
           {recipes?.map((recipe) => {
             return (
-              <CustomCard
+              <Card
                 key={recipe.id}
                 title={recipe.name}
                 linkRoute={routes.RECIPE_DETAILS}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import useHttp from "../../Hooks/useHttp";
-import { Header } from "../UI/Header";
+import { Header } from "../Shared/Header";
 import { AddIngredientModal } from "../Ingredients/AddIngredientModal";
 import {
   TextField,

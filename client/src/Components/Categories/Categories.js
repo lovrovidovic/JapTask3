@@ -4,9 +4,9 @@ import Box from "@mui/material/Box";
 import useHttp from "../../Hooks/useHttp";
 import Alert from "@mui/material/Alert";
 import classes from "./Categories.module.css";
-import { CustomCard } from "../UI/CustomCard";
+import { Card } from "../Shared/Card";
 import { Button } from "@mui/material";
-import { Header } from "../UI/Header";
+import { Header } from "../Shared/Header";
 import { routesConfiguration as routes } from "../../Router/routes";
 
 export const Categories = () => {
@@ -19,7 +19,7 @@ export const Categories = () => {
   } = useHttp();
 
   const requestObj = useMemo(() => {
-    return { method: "GET", url: "/category", params: { n: displayed } };
+    return { method: "GET", url: "/category", params: { TakeAmmount: displayed } };
   }, [displayed]);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export const Categories = () => {
         <div className={classes.categoriesList}>
           {categories?.map((category) => {
             return (
-              <CustomCard
+              <Card
                 key={category.id}
                 title={category.name}
                 linkRoute={routes.RECIPES}

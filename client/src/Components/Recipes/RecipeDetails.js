@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import useHttp from "../../Hooks/useHttp";
-import { Header } from "../UI/Header";
+import { Header } from "../Shared/Header";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";

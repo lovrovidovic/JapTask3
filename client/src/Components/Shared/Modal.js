@@ -19,7 +19,7 @@ export const Modal = (
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>
-            <DialogContent style={{height: "50vh", width: "40vh"}}>
+            <DialogContent style={{height: "13em", width: "20em"}}>
                 {children}
             </DialogContent>
         </Dialog>

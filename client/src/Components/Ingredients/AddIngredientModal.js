@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Modal } from "../UI/Modal/Modal";
+import { Modal } from "../Shared/Modal";
 import {
   TextField,
   FormControl,
@@ -54,23 +54,28 @@ export const AddIngredientModal = ({
   };
 
   const handleAutoComplete = (e, value) => {
-    setIngredientValues((prevState) => {
-      return {
-        ...prevState,
-        name: value.label,
-        ingredientId: value.id,
-        normativePrice: value.normativePrice,
-        normativeQuantity: value.normativeQuantity,
-        normativeUnit: value.normativeUnit,
-        unit: "",
-      };
-    });
-    if (value.normativeUnit === "g" || value.normativeUnit === "kg") {
-      setUnits(["kg", "g"]);
-    } else if (value.normativeUnit === "l" || value.normativeUnit === "ml") {
-      setUnits(["l", "ml"]);
-    } else {
-      setUnits("kom");
+    if (value) {
+      setIngredientValues((prevState) => {
+        return {
+          ...prevState,
+          name: value?.label,
+          ingredientId: value?.id,
+          normativePrice: value?.normativePrice,
+          normativeQuantity: value?.normativeQuantity,
+          normativeUnit: value?.normativeUnit,
+          unit: "",
+        };
+      });
+      if (value?.normativeUnit === "g" || value?.normativeUnit === "kg") {
+        setUnits(["kg", "g"]);
+      } else if (
+        value?.normativeUnit === "l" ||
+        value?.normativeUnit === "ml"
+      ) {
+        setUnits(["l", "ml"]);
+      } else {
+        setUnits("kom");
+      }
     }
   };
 
@@ -93,43 +98,45 @@ export const AddIngredientModal = ({
         modalTitle="Create"
       >
         <form className={classes.form}>
-          {!error && !isLoading && (
-            <Autocomplete
-              style={{ width: "100%", marginTop: "10px" }}
-              onChange={handleAutoComplete}
-              options={ingredients.map((ingredient) => {
-                return {
-                  label: ingredient.name,
-                  id: ingredient.id,
-                  normativeUnit: ingredient.normativeUnit,
-                  normativePrice: ingredient.normativePrice,
-                  normativeQuantity: ingredient.normativeQuantity,
-                };
-              })}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              renderInput={(params) => (
-                <TextField {...params} label="Search for an ingredient" />
-              )}
-            />
-          )}
+          <div className={classes.formElementsContainer}>
+            {!error && !isLoading && (
+              <Autocomplete
+                style={{ width: "14em" }}
+                onChange={handleAutoComplete}
+                options={ingredients.map((ingredient) => {
+                  return {
+                    label: ingredient.name,
+                    id: ingredient.id,
+                    normativeUnit: ingredient.normativeUnit,
+                    normativePrice: ingredient.normativePrice,
+                    normativeQuantity: ingredient.normativeQuantity,
+                  };
+                })}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                renderInput={(params) => (
+                  <TextField {...params} label="Search for an ingredient" />
+                )}
+              />
+            )}
 
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 50 }}>
-            <InputLabel id="select">Unit</InputLabel>
-            <Select
-              name="unit"
-              value={ingredientValues.unit}
-              label="Select a measurement unit"
-              onChange={handleFormChange}
-            >
-              {units.map((unit) => {
-                return (
-                  <MenuItem key={unit} value={unit}>
-                    {unit}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 50 }}>
+              <InputLabel id="select">Unit</InputLabel>
+              <Select
+                name="unit"
+                value={ingredientValues.unit}
+                label="Select a measurement unit"
+                onChange={handleFormChange}
+              >
+                {units?.map((unit) => {
+                  return (
+                    <MenuItem key={unit} value={unit}>
+                      {unit}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </div>
           <TextField
             label="Ammount: "
             variant="standard"

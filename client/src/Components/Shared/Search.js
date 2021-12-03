@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
 import _ from "lodash";
 
-export const SearchContainer = ({
+export const Search = ({
   label,
   searchAction,
 }) => {
