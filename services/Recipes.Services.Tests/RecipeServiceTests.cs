@@ -20,7 +20,7 @@ namespace Recipes.Services.Tests
     {
         private RecipeService _recipeService;
         private Mock<IMapper> mapperMock;
-        private Mock<IConversionService> conversionServiceMock;
+        private Mock<ICalculationService> _calculationServiceMock;
         private DbContextOptions<RecipesDbContext> _options;
         private RecipesDbContext _recipesContext;
 
@@ -31,8 +31,8 @@ namespace Recipes.Services.Tests
                 .UseInMemoryDatabase(databaseName: "RecipesTests").Options;
             _recipesContext = new RecipesDbContext(_options);
             mapperMock = new Mock<IMapper>();
-            conversionServiceMock = new Mock<IConversionService>();
-            _recipeService = new RecipeService(_recipesContext, mapperMock.Object, conversionServiceMock.Object);
+            _calculationServiceMock = new Mock<ICalculationService>();
+            _recipeService = new RecipeService(_recipesContext, mapperMock.Object, _calculationServiceMock.Object);
 
             _recipesContext.Users.Add(new User
             {
@@ -99,12 +99,12 @@ namespace Recipes.Services.Tests
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 20,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     }
                 }
             };
@@ -130,22 +130,22 @@ namespace Recipes.Services.Tests
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 20,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                 }
             };
@@ -172,48 +172,48 @@ namespace Recipes.Services.Tests
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 20,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 3,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 4,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 3,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 4,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                 }
             };
@@ -273,7 +273,7 @@ namespace Recipes.Services.Tests
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     }
                 }
             };
@@ -290,7 +290,7 @@ namespace Recipes.Services.Tests
                 Assert.That(createdRecipe.CreatedBy, Is.EqualTo(request.UserId));
                 Assert.That(createdRecipe.RecipeIngredients.First().IngredientId, Is.EqualTo(request.RecipeIngredient.First().IngredientId));
                 Assert.That(createdRecipe.RecipeIngredients.First().Quantity, Is.EqualTo(request.RecipeIngredient.First().Quantity));
-                Assert.That(createdRecipe.RecipeIngredients.First().Unit, Is.EqualTo(request.RecipeIngredient.First().Unit));
+                Assert.That(createdRecipe.RecipeIngredients.First().UnitType, Is.EqualTo(request.RecipeIngredient.First().UnitType));
             });
         }
 

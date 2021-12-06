@@ -7,11 +7,11 @@ namespace Recipes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IngredientController : ControllerBase
+    public class IngredientsController : ControllerBase
     {
         private readonly IIngredientService _ingredientService;
 
-        public IngredientController(IIngredientService ingredientService)
+        public IngredientsController(IIngredientService ingredientService)
         {
             _ingredientService = ingredientService;
         }
@@ -24,7 +24,7 @@ namespace Recipes.Api.Controllers
         }
 
         [HttpGet("procedure/1")]
-        public async Task<ActionResult> GetMostUsedIngredients(Unit unit, int min, int max)
+        public async Task<ActionResult> GetMostUsedIngredients(UnitType unit, int min, int max)
         {
             return Ok(await _ingredientService.GetMostUsedIngredientsAsync(unit, min, max));
         }

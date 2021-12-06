@@ -5,12 +5,6 @@ namespace Recipes.Services.Interfaces
 {
     public interface IConversionService
     {
-        float ConvertQuantity(float quantity, Unit unit);
-
-        float CalculateRecipeCost(Recipe recipe);
-
-        float CalculateIngredientCost(RecipeIngredient ingredient);
-
-        float CalculateIngredientUnitCost(Ingredient ingredient);
+        float ConvertQuantity(float quantity, UnitType unit);
     }
 }

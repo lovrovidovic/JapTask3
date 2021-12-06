@@ -29,7 +29,7 @@ namespace Recipes.Services.Services
             return response;
         }
 
-        public async Task<ServiceResponse<IEnumerable<ResponseGetMostUsedIngredients>>> GetMostUsedIngredientsAsync(Unit unit, int min, int max)
+        public async Task<ServiceResponse<IEnumerable<ResponseGetMostUsedIngredients>>> GetMostUsedIngredientsAsync(UnitType unit, int min, int max)
         {
             var response = new ServiceResponse<IEnumerable<ResponseGetMostUsedIngredients>>();
             var parameters = new DynamicParameters();
