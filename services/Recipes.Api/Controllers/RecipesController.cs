@@ -36,6 +36,7 @@ namespace Recipes.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateRecipe(RequestCreateRecipe newRecipe)
         {
+            newRecipe.UserId = int.Parse(User.FindFirst("userId").Value);
             var response = await _recipeService.CreateRecipeAsync(newRecipe);
             if (response)
             {

@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import classes from "./AddRecipe.module.css";
-import getUserId from "../../Hooks/getUserId";
 import {
   generateLink,
   routesConfiguration as routes,
@@ -34,7 +33,7 @@ export const AddRecipe = () => {
   const [values, setValues] = useState({
     name: "",
     description: "",
-    userId: getUserId(),
+    userId: 0,
     categoryId: "",
     recipeIngredient: [],
   });

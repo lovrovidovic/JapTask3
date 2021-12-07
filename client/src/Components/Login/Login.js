@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { Button, Typography, Box, CircularProgress } from "@mui/material";
 import Paper from "@mui/material/Paper";
@@ -10,14 +11,16 @@ import {
 } from "../../Router/routes";
 import { useMutation } from "react-query";
 import { login } from "../../HttpRequests/LoginRequests";
+import { saveToken } from "../../Redux/Actions/auth/auth";
 
 export default function Login() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const [values, setValues] = useState({ username: "", password: "" });
 
   const submitLogin = useMutation(login, {
     onSuccess: (data) => {
-      localStorage.setItem("token", JSON.stringify(data.data));
+      dispatch(saveToken(data.data));
       history.push(generateLink(routes.CATEGORIES));
     },
   });

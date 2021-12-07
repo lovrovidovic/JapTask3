@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
+import { useSelector } from "react-redux";
 
-const isLoggedIn = () => {
+const useIsLoggedIn = () => {
+  const token = useSelector((state) => state.auth.token);
   let isVerified = true;
-  const token = JSON.parse(localStorage.getItem("token"));
-  if (!token) return false;
+  if (token == null) return false;
   jwt.verify(token, process.env.REACT_APP_SECRET, function (err, decoded) {
     if (err) {
       isVerified = false;
@@ -12,4 +13,4 @@ const isLoggedIn = () => {
   return isVerified;
 };
 
-export default isLoggedIn
+export default useIsLoggedIn;

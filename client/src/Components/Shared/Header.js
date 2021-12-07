@@ -1,6 +1,7 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
 import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,11 +12,13 @@ import {
   routesConfiguration as routes,
 } from "../../Router/routes";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { saveToken } from "../../Redux/Actions/auth/auth";
 
 export const Header = ({ title }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const logoutHandler = () => {
-    localStorage.removeItem("token");
+    dispatch(saveToken(null));
     history.push(generateLink(routes.LOGIN));
   };
 

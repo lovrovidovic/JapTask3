@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import isLoggedIn from "../Hooks/isLoggedIn";
+import useIsLoggedIn from "../Hooks/useIsLoggedIn";
 import Login from "../Components/Login/Login";
 import { Categories } from "../Components/Categories/Categories";
 import { AddRecipe } from "../Components/Recipes/AddRecipe";
@@ -10,13 +10,15 @@ import { generateLink, routesConfiguration as routes } from "./routes";
 import PrivateRoute from "./PrivateRoute";
 
 export const Router = () => {
+  const isLoggedIn = useIsLoggedIn();
+
   return (
     <Switch>
       <Route
         exact
         path="/"
         render={() => {
-          return isLoggedIn() ? (
+          return isLoggedIn ? (
             <Redirect to={generateLink(routes.CATEGORIES)} />
           ) : (
             <Login />
