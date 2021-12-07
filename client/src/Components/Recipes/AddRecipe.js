@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router";
-import useHttp from "../../Hooks/useHttp";
 import { Header } from "../Shared/Header";
 import { AddIngredientModal } from "../Ingredients/AddIngredientModal";
 import {
@@ -25,11 +24,13 @@ import {
   generateLink,
   routesConfiguration as routes,
 } from "../../Router/routes";
+import { useQuery, useMutation } from "react-query";
+import { getAllCategories } from "../../HttpRequests/CategoryRequests";
+import { createRecipe } from "../../HttpRequests/RecipeRequests";
 
 export const AddRecipe = () => {
   const history = useHistory();
   const [showModal, setShowModal] = useState(false);
-  const [ingredientValues, setIngredientValues] = useState([]);
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -39,21 +40,23 @@ export const AddRecipe = () => {
   });
 
   const {
-    isLoading: isLoadingCategory,
-    error: errorCategory,
-    sendRequest: getCategories,
-    responseData: categories,
-  } = useHttp();
-  const {
-    isLoading,
-    error,
-    sendRequest: postRecipe,
-    responseData: postedRecipe,
-  } = useHttp();
+    data: categories,
+    isError: categoryError,
+    isLoading: categoryLoading,
+  } = useQuery(["getAllCategories"], getAllCategories);
 
-  useEffect(() => {
-    getCategories({ method: "GET", url: "/category" });
-  }, [getCategories]);
+  const submitRecipe = useMutation(createRecipe, {
+    onMutate: (variables) => {
+      variables.recipeIngredient = variables.recipeIngredient.map(
+        ({ normativePrice, normativeQuantity, normativeUnit, ...attributes }) =>
+          attributes
+      );
+      return variables;
+    },
+    onSuccess: () => {
+      history.push(generateLink(routes.RECIPES, { id: values.categoryId }));
+    },
+  });
 
   const handleFormChange = (e) => {
     setValues((prevState) => {
@@ -66,30 +69,15 @@ export const AddRecipe = () => {
   };
 
   const addIngredient = (newIngredient) => {
-    setIngredientValues((prevState) => {
-      return [...prevState, newIngredient];
-    });
     setValues((prevState) => {
       return {
         ...prevState,
-        recipeIngredient: [
-          ...prevState.recipeIngredient,
-          {
-            ingredientId: newIngredient.ingredientId,
-            quantity: newIngredient.quantity,
-            unit: newIngredient.unit,
-          },
-        ],
+        recipeIngredient: [...prevState.recipeIngredient, newIngredient],
       };
     });
   };
 
   const deleteIngredient = (id) => {
-    setIngredientValues(
-      ingredientValues.filter((ingredient) => {
-        return ingredient.ingredientId !== id;
-      })
-    );
     setValues((prevState) => {
       return {
         ...prevState,
@@ -100,24 +88,10 @@ export const AddRecipe = () => {
     });
   };
 
-  const onSubmitSuccess = () => {
-    history.push(generateLink(routes.RECIPES, { id: values.categoryId }));
-  };
-
-  const submitHandler = () => {
-    postRecipe({
-      method: "POST",
-      url: "/recipe",
-      data: values,
-      returnData: false,
-      additionalFunc: onSubmitSuccess,
-    });
-  };
-
   return (
     <div>
       <Header title="Add new recipe" />
-      {error && (
+      {submitRecipe.isError && (
         <Alert severity="error">
           Error! Check if you have filled the entire form or if you are
           connected to the server.
@@ -130,7 +104,7 @@ export const AddRecipe = () => {
             handleShowModal={handleShowModal}
             handleAddIngredient={addIngredient}
           />
-          {!isLoadingCategory && !errorCategory && (
+          {!categoryError && !categoryLoading && (
             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
               <InputLabel id="select">Category</InputLabel>
               <Select
@@ -172,7 +146,7 @@ export const AddRecipe = () => {
             Add ingredient
           </Button>
 
-          {ingredientValues.length > 0 && (
+          {values?.recipeIngredient?.length > 0 && (
             <Table sx={{ maxWidth: 800 }} size="small">
               <TableHead sx={{ backgroundColor: "darkgrey" }}>
                 <TableRow>
@@ -183,7 +157,7 @@ export const AddRecipe = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {ingredientValues?.map((ingredient) => (
+                {values?.recipeIngredient?.map((ingredient) => (
                   <TableRow
                     key={ingredient?.ingredientId}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -192,7 +166,7 @@ export const AddRecipe = () => {
                       {ingredient.name}
                     </TableCell>
                     <TableCell>
-                      {ingredient.quantity} {ingredient.unit}
+                      {ingredient.quantity} {ingredient.unitType}
                     </TableCell>
                     <TableCell>
                       {ingredient.normativePrice}KM /
@@ -215,7 +189,7 @@ export const AddRecipe = () => {
           <Button
             variant="contained"
             sx={{ margin: "30px 0" }}
-            onClick={submitHandler}
+            onClick={() => submitRecipe.mutate(values)}
           >
             Submit
           </Button>

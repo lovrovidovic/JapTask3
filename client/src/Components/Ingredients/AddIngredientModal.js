@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal } from "../Shared/Modal";
 import {
   TextField,
@@ -9,8 +9,9 @@ import {
   Button,
   Autocomplete,
 } from "@mui/material";
-import useHttp from "../../Hooks/useHttp";
 import classes from "./AddIngredientModal.module.css";
+import { useQuery } from "react-query";
+import { getIngredients } from "../../HttpRequests/IngredientRequests";
 
 export const AddIngredientModal = ({
   showModal,
@@ -23,29 +24,17 @@ export const AddIngredientModal = ({
     ingredientId: 1,
     name: "",
     quantity: "",
-    unit: "",
+    unitType: "",
     normativePrice: 0,
     normativeQuantity: 0,
     normativeUnit: "",
   });
 
-  const ingredientsRequestObj = useMemo(() => {
-    return {
-      method: "GET",
-      url: "/ingredient",
-    };
-  }, []);
-
   const {
+    data: ingredients,
+    isError,
     isLoading,
-    error,
-    sendRequest: getIngredients,
-    responseData: ingredients,
-  } = useHttp();
-
-  useEffect(() => {
-    getIngredients(ingredientsRequestObj);
-  }, [getIngredients, ingredientsRequestObj]);
+  } = useQuery(["ingredients"], getIngredients);
 
   const handleFormChange = (e) => {
     setIngredientValues((prevState) => {
@@ -63,7 +52,7 @@ export const AddIngredientModal = ({
           normativePrice: value?.normativePrice,
           normativeQuantity: value?.normativeQuantity,
           normativeUnit: value?.normativeUnit,
-          unit: "",
+          unitType: "",
         };
       });
       if (value?.normativeUnit === "g" || value?.normativeUnit === "kg") {
@@ -74,7 +63,7 @@ export const AddIngredientModal = ({
       ) {
         setUnits(["l", "ml"]);
       } else {
-        setUnits("kom");
+        setUnits(["kom"]);
       }
     }
   };
@@ -82,7 +71,7 @@ export const AddIngredientModal = ({
   const submitHandler = () => {
     if (
       ingredientValues.name !== "" &&
-      ingredientValues.unit !== "" &&
+      ingredientValues.unitType !== "" &&
       ingredientValues.quantity !== ""
     ) {
       handleAddIngredient(ingredientValues);
@@ -99,11 +88,11 @@ export const AddIngredientModal = ({
       >
         <form className={classes.form}>
           <div className={classes.formElementsContainer}>
-            {!error && !isLoading && (
+            {!isError && !isLoading && (
               <Autocomplete
                 style={{ width: "14em" }}
                 onChange={handleAutoComplete}
-                options={ingredients.map((ingredient) => {
+                options={ingredients?.map((ingredient) => {
                   return {
                     label: ingredient.name,
                     id: ingredient.id,
@@ -122,8 +111,8 @@ export const AddIngredientModal = ({
             <FormControl variant="standard" sx={{ m: 1, minWidth: 50 }}>
               <InputLabel id="select">Unit</InputLabel>
               <Select
-                name="unit"
-                value={ingredientValues.unit}
+                name="unitType"
+                value={ingredientValues.unitType}
                 label="Select a measurement unit"
                 onChange={handleFormChange}
               >

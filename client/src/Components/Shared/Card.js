@@ -14,7 +14,7 @@ export const Card = ({ linkRoute, id, title, buttonText, text }) => {
     history.push(generateLink(linkRoute, { id: id }));
   };
   return (
-    <MaterialCard sx={{ maxWidth: 550, display: "inline-block", margin: "50px" }}>
+    <MaterialCard sx={{ maxWidth: 550, display: "inline-block", margin: "70px" }}>
       <CardContent>
         <Typography variant="body1">{title}</Typography>
         <Typography variant="body2">{text}</Typography>
