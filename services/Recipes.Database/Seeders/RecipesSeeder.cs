@@ -4,7 +4,7 @@ using Recipes.Core.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace Recipes.Database.Configurations
+namespace Recipes.Database.Seeders
 {
     public static class RecipesSeeder
     {
