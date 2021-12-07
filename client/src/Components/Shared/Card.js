@@ -5,16 +5,17 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { generateLink } from "../../Router/routes";
 
-export const Card = ({ linkRoute, id, title, buttonText, text }) => {
+export const Card = ({ linkRoute, title, buttonText, text }) => {
   const history = useHistory();
 
   const clickHandler = () => {
-    history.push(generateLink(linkRoute, { id: id }));
+    history.push(linkRoute);
   };
   return (
-    <MaterialCard sx={{ maxWidth: 550, display: "inline-block", margin: "70px" }}>
+    <MaterialCard
+      sx={{ maxWidth: 550, display: "inline-block", margin: "70px" }}
+    >
       <CardContent>
         <Typography variant="body1">{title}</Typography>
         <Typography variant="body2">{text}</Typography>

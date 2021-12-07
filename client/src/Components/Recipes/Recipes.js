@@ -68,8 +68,9 @@ export const Recipes = () => {
                     <Card
                       key={recipe.id}
                       title={recipe.name}
-                      linkRoute={routes.RECIPE_DETAILS}
-                      id={recipe.id}
+                      linkRoute={generateLink(routes.RECIPE_DETAILS, {
+                        id: recipe.id,
+                      })}
                       buttonText="Recipe details"
                       text={`Price: ${recipe.price} KM`}
                     />

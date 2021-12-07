@@ -6,7 +6,10 @@ import classes from "./Categories.module.css";
 import { Card } from "../Shared/Card";
 import { Button } from "@mui/material";
 import { Header } from "../Shared/Header";
-import { routesConfiguration as routes } from "../../Router/routes";
+import {
+  generateLink,
+  routesConfiguration as routes,
+} from "../../Router/routes";
 import { useInfiniteQuery } from "react-query";
 import { getCategories } from "../../HttpRequests/CategoryRequests";
 
@@ -45,8 +48,9 @@ export const Categories = () => {
                     <Card
                       key={category.id}
                       title={category.name}
-                      linkRoute={routes.RECIPES}
-                      id={category.id}
+                      linkRoute={generateLink(routes.RECIPES, {
+                        id: category.id,
+                      })}
                       buttonText="Browse recipes"
                     />
                   );

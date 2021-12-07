@@ -12,10 +12,11 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: Infinity,
       retry: 2,
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
     },
   },
 });
+
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

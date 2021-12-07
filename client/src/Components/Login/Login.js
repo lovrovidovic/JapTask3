@@ -11,7 +11,7 @@ import {
 import { useMutation } from "react-query";
 import { login } from "../../HttpRequests/LoginRequests";
 
-export const Login = () => {
+export default function Login() {
   const history = useHistory();
   const [values, setValues] = useState({ username: "", password: "" });
 
@@ -72,4 +72,4 @@ export const Login = () => {
       )}
     </Paper>
   );
-};
+}
