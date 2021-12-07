@@ -16,7 +16,7 @@ namespace Recipes.Database.Configurations
             string loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus in auctor enim, eget efficitur sem. Curabitur in suscipit est. In maximus tortor ac dignissim lobortis. Morbi viverra lorem sit amet aliquam hendrerit.";
             var startDate = new DateTime(2010, 1, 1, 0, 0, 0);
             var endDate = new DateTime(2021, 12, 30, 0, 0, 0);
-            for (int i = 1; i <= 300; i++)
+            for (int i = 1; i <= 400; i++)
             {
                 recipes.Add(new Recipe
                 {

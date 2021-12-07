@@ -15,9 +15,9 @@ namespace Recipes.Database.Configurations
             Random rnd = new Random();
             List<RecipeIngredient> recipeIngredients = new();
             List<UnitType> units = new() { UnitType.kg, UnitType.l, UnitType.g, UnitType.ml, UnitType.kom };
-            for (int i = 1; i <= 300; i++)
+            for (int i = 1; i <= 400; i++)
             {
-                for (int j = 0; j <= rnd.Next(2, 12); j++)
+                for (int j = 0; j <= rnd.Next(4, 15); j++)
                 {
                     recipeIngredients.Add(new RecipeIngredient
                     {
