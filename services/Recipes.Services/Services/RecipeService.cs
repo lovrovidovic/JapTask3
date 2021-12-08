@@ -50,7 +50,7 @@ namespace Recipes.Services.Services
                 .OrderBy(x => x.Price)
                 .Skip(request.Page * 10)
                 .Take(10);
-            response.Count = recipes.Count;
+            response.Count = response.Data.Count();
             response.NextPage = request.Page + 1;
             return response;
         }

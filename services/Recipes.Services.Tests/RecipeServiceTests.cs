@@ -52,7 +52,17 @@ namespace Recipes.Services.Tests
                     new Recipe { Id = 7 },
                     new Recipe { Id = 8 },
                     new Recipe { Id = 9 },
-                    new Recipe { Id = 10 }
+                    new Recipe { Id = 10 },
+                    new Recipe { Id = 11 },
+                    new Recipe { Id = 12 },
+                    new Recipe { Id = 13 },
+                    new Recipe { Id = 14 },
+                    new Recipe { Id = 15 },
+                    new Recipe { Id = 16 },
+                    new Recipe { Id = 17 },
+                    new Recipe { Id = 18 },
+                    new Recipe { Id = 19 },
+                    new Recipe { Id = 20 }
                 }
             });
             _recipesContext.Ingredients.AddRange(
@@ -184,7 +194,7 @@ namespace Recipes.Services.Tests
                         Quantity = 20,
                         UnitType = UnitType.kg
                     },
-                    
+
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
@@ -230,33 +240,56 @@ namespace Recipes.Services.Tests
         }
 
         //Load more tests
-        [TestCase(2, 4)]
-        [TestCase(4, 10)]
-        public async Task GetRecipesAsync_TakeLessAndMore_GetsLessAndMoreRecipes(int lowTakeAmmount, int highTakeAmmount)
+        [Test]
+        public async Task GetRecipesAsync_TakeDifferentPages_GetsDifferentPages()
         {
-            var lowRequest = new RequestSearchRecipe { TakeAmmount = lowTakeAmmount, CategoryId = 1 };
-            var highRequest = new RequestSearchRecipe { TakeAmmount = highTakeAmmount, CategoryId = 1 };
+            var firstRequest = new RequestSearchRecipe { Page = 0, CategoryId = 1 };
+            var secondRequest = new RequestSearchRecipe { Page = 1, CategoryId = 1 };
 
-            var lowResult = await _recipeService.GetRecipesAsync(lowRequest);
-            var highResult = await _recipeService.GetRecipesAsync(highRequest);
+            var firstResult = await _recipeService.GetRecipesAsync(firstRequest);
+            var firstIngredientIds = firstResult.Data.Select(x => x.Id).ToList();
+            var secondResult = await _recipeService.GetRecipesAsync(secondRequest);
+            var secondIngredientIds = secondResult.Data.Select(x => x.Id).ToList();
 
-            Assert.That(lowResult.Count, Is.EqualTo(lowTakeAmmount));
-            Assert.That(highResult.Count, Is.EqualTo(highTakeAmmount));
-            Assert.That(lowResult.Count, Is.LessThan(highResult.Count));
+            Assert.That(firstResult.Count, Is.EqualTo(10));
+            Assert.That(secondResult.Count, Is.EqualTo(10));
+            Assert.That(firstIngredientIds, Is.Not.EquivalentTo(secondIngredientIds));
+            Assert.That(firstIngredientIds.Intersect(secondIngredientIds), Is.Empty);
+            Assert.That(firstResult.Count, Is.EqualTo(secondResult.Count));
         }
 
-        [TestCase(200, 300)]
-        public async Task GetRecipesAsync_TakeMoreThanAvailable_GetsMaxRecipes(int lowTakeAmmount, int highTakeAmmount)
+        [Test]
+        public async Task GetRecipesAsync_TakeSamePage_GetSamePage()
         {
-            var lowRequest = new RequestSearchRecipe { TakeAmmount = lowTakeAmmount, CategoryId = 1 };
-            var highRequest = new RequestSearchRecipe { TakeAmmount = highTakeAmmount, CategoryId = 1 };
+            var firstRequest = new RequestSearchRecipe { Page = 0, CategoryId = 1 };
+            var secondRequest = new RequestSearchRecipe { Page = 0, CategoryId = 1 };
 
-            var lowResult = await _recipeService.GetRecipesAsync(lowRequest);
-            var highResult = await _recipeService.GetRecipesAsync(highRequest);
+            var firstResult = await _recipeService.GetRecipesAsync(firstRequest);
+            var firstIngredientIds = firstResult.Data.Select(x => x.Id).ToList();
+            var secondResult = await _recipeService.GetRecipesAsync(secondRequest);
+            var secondIngredientIds = secondResult.Data.Select(x => x.Id).ToList();
 
-            Assert.That(lowResult.Count, Is.LessThan(lowTakeAmmount));
-            Assert.That(highResult.Count, Is.LessThan(highTakeAmmount));
-            Assert.That(lowResult.Count, Is.EqualTo(highResult.Count));
+            Assert.That(firstResult.Count, Is.EqualTo(10));
+            Assert.That(secondResult.Count, Is.EqualTo(10));
+            Assert.That(firstIngredientIds, Is.EquivalentTo(secondIngredientIds));
+            Assert.That(firstResult.Count, Is.EqualTo(secondResult.Count));
+        }
+
+        [Test]
+        public async Task GetRecipesAsync_TakeNonExistantPage_GetsEmptyResult()
+        {
+            var firstRequest = new RequestSearchRecipe { Page = 100, CategoryId = 1 };
+            var secondRequest = new RequestSearchRecipe { Page = 200, CategoryId = 1 };
+
+            var firstResult = await _recipeService.GetRecipesAsync(firstRequest);
+            var firstIngredientIds = firstResult.Data.Select(x => x.Id).ToList();
+            var secondResult = await _recipeService.GetRecipesAsync(secondRequest);
+            var secondIngredientIds = secondResult.Data.Select(x => x.Id).ToList();
+
+            Assert.That(firstResult.Count, Is.EqualTo(0));
+            Assert.That(secondResult.Count, Is.EqualTo(0));
+            Assert.That(firstIngredientIds, Is.EquivalentTo(secondIngredientIds));
+            Assert.That(firstResult.Count, Is.EqualTo(secondResult.Count));
         }
 
         //Create recipe tests
@@ -303,7 +336,7 @@ namespace Recipes.Services.Tests
                 Description = "New Description",
                 CategoryId = 1,
                 UserId = 1,
-                RecipeIngredient = new List<CreateRecipeIngredientDto> {}
+                RecipeIngredient = new List<CreateRecipeIngredientDto> { }
             };
 
             var result = await _recipeService.CreateRecipeAsync(request);

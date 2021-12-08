@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace Recipes.Services.Tests
 {
     [TestFixture]
-    public class ConversionServiceTests
+    public class CalculationServiceTests
     {
         private CalculationService _calculationService;
         private Mock<IConversionService> _conversionServiceMock;
@@ -33,6 +33,9 @@ namespace Recipes.Services.Tests
                 NormativeQuantity = 10,
                 NormativeUnit = UnitType.g,
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.IsAny<UnitType>()))
+                .Returns((float quantity, UnitType unit) => { return quantity; });
+
 
             var result = _calculationService.CalculateIngredientUnitCost(ingredient);
             var expectedPrice = ingredient.NormativePrice / ingredient.NormativeQuantity;
@@ -50,6 +53,8 @@ namespace Recipes.Services.Tests
                 NormativeQuantity = 10,
                 NormativeUnit = UnitType.kg,
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.kg)))
+                .Returns((float quantity, UnitType unit) => { return quantity * 1000; });
 
             var result = _calculationService.CalculateIngredientUnitCost(ingredient);
             var expectedPrice = ingredient.NormativePrice / (ingredient.NormativeQuantity * 1000);
@@ -67,6 +72,8 @@ namespace Recipes.Services.Tests
                 NormativeQuantity = 33.333F,
                 NormativeUnit = UnitType.l,
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.l)))
+                .Returns((float quantity, UnitType unit) => { return quantity * 1000; });
 
             var result = _calculationService.CalculateIngredientUnitCost(ingredient);
             var expectedPrice = ingredient.NormativePrice / (ingredient.NormativeQuantity * 1000);
@@ -100,6 +107,8 @@ namespace Recipes.Services.Tests
                         }
                     }
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.ml || x == UnitType.g)))
+                .Returns((float quantity, UnitType unit) => { return quantity; });
 
             var result = _calculationService.CalculateRecipeCost(recipe);
 
@@ -159,6 +168,8 @@ namespace Recipes.Services.Tests
                         }
                     }
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.ml || x == UnitType.g)))
+                .Returns((float quantity, UnitType unit) => { return quantity; });
 
             var result = _calculationService.CalculateRecipeCost(recipe);
 
@@ -218,6 +229,10 @@ namespace Recipes.Services.Tests
                         }
                     }
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.l || x == UnitType.kg)))
+                .Returns((float quantity, UnitType unit) => { return quantity * 1000; });
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.ml || x == UnitType.g)))
+                .Returns((float quantity, UnitType unit) => { return quantity; });
 
             var result = _calculationService.CalculateRecipeCost(recipe);
             var expectedPrice = (float)Math.Round((((71 / 2000) * 378.4f) + ((787.6f / 500) * (3.5f * 1000)) + ((12.54f / (1.2f * 1000)) * (11.6f * 1000))), 2);

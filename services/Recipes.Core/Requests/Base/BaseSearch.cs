@@ -2,8 +2,6 @@
 {
     public class BaseSearch
     {
-        public int? TakeAmmount { get; set; }
-
         public int Page { get; set; }
     }
 }
