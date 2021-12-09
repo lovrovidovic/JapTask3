@@ -1,4 +1,5 @@
-﻿using Recipes.Core.Entities;
+﻿using Recipes.Common.Enums;
+using Recipes.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Recipes.Services.Interfaces
     {
         float CalculateRecipeCost(Recipe recipe);
 
-        float CalculateIngredientCost(RecipeIngredient ingredient);
+        float CalculateIngredientCost(float quantity, UnitType unit, float unitPrice);
 
         float CalculateIngredientUnitCost(Ingredient ingredient);
     }

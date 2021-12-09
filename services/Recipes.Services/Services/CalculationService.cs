@@ -1,4 +1,5 @@
-﻿using Recipes.Core.Dtos;
+﻿using Recipes.Common.Enums;
+using Recipes.Core.Dtos;
 using Recipes.Core.Entities;
 using Recipes.Services.Interfaces;
 using System;
@@ -20,24 +21,17 @@ namespace Recipes.Services.Services
 
         public float CalculateRecipeCost(Recipe recipe)
         {
-            var conversionObj = recipe.RecipeIngredients.Select(x => new ConversionDto
-            {
-                StartingQuantity = _conversionService.ConvertQuantity(x.Quantity, x.UnitType),
-                StartingUnit = x.UnitType,
-                UnitPrice = x.Ingredient.UnitPrice
-            });
-
-            float totalCost = conversionObj.Sum(x => x.StartingQuantity * x.UnitPrice);
+            float totalCost = recipe.RecipeIngredients.Sum(x => x.Price);
             return (float)Math.Round(totalCost, 2);
         }
 
-        public float CalculateIngredientCost(RecipeIngredient ingredient)
+        public float CalculateIngredientCost(float quantity, UnitType unit, float unitPrice)
         {
             var conversionObj = new ConversionDto
             {
-                StartingQuantity = _conversionService.ConvertQuantity(ingredient.Quantity, ingredient.UnitType),
-                StartingUnit = ingredient.UnitType,
-                UnitPrice = ingredient.Ingredient.UnitPrice
+                StartingQuantity = _conversionService.ConvertQuantity(quantity, unit),
+                StartingUnit = unit,
+                UnitPrice = unitPrice
             };
 
             float ingredientCost = conversionObj.StartingQuantity * conversionObj.UnitPrice;

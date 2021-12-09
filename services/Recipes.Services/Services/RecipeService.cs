@@ -77,7 +77,7 @@ namespace Recipes.Services.Services
 
             var mappedIngredients = recipe.RecipeIngredients.Select(x => new GetIngredientOfRecipeDto
             {
-                Price = (float)_calculationService.CalculateIngredientCost(x),
+                Price = x.Price,
                 Name = x.Ingredient.Name,
                 Quantity = x.Quantity,
                 UnitType = x.UnitType,
@@ -114,7 +114,8 @@ namespace Recipes.Services.Services
                 {
                     Quantity = x.Quantity,
                     UnitType = x.UnitType,
-                    IngredientId = x.IngredientId
+                    IngredientId = x.IngredientId,
+                    Price = _calculationService.CalculateIngredientCost(x.Quantity, x.UnitType, x.UnitPrice)
                 }).DistinctBy(x => x.IngredientId).ToList()
             };
 

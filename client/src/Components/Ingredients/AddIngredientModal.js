@@ -28,6 +28,7 @@ export const AddIngredientModal = ({
     normativePrice: 0,
     normativeQuantity: 0,
     normativeUnit: "",
+    unitPrice: 0,
   });
 
   const {
@@ -53,6 +54,7 @@ export const AddIngredientModal = ({
           normativeQuantity: value?.normativeQuantity,
           normativeUnit: value?.normativeUnit,
           unitType: "",
+          unitPrice: value?.unitPrice,
         };
       });
       if (value?.normativeUnit === "g" || value?.normativeUnit === "kg") {
@@ -99,6 +101,7 @@ export const AddIngredientModal = ({
                     normativeUnit: ingredient.normativeUnit,
                     normativePrice: ingredient.normativePrice,
                     normativeQuantity: ingredient.normativeQuantity,
+                    unitPrice: ingredient.unitPrice,
                   };
                 })}
                 isOptionEqualToValue={(option, value) => option.id === value.id}

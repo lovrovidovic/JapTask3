@@ -27,7 +27,6 @@ namespace Recipes.Database.Seeders
                     CreatedAt = RandomDateGenerator.GenerateRandomDateTime(startDate, endDate),
                     CreatedBy = rnd.Next(1, 4),
                     ModifiedAt = RandomDateGenerator.GenerateRandomDateTime(startDate, endDate),
-                    Cost = (float)(rnd.Next(1, 100) + rnd.NextDouble()),
                 });
             }
             builder.Entity<Recipe>().HasData(recipes);

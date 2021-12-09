@@ -97,6 +97,7 @@ namespace Recipes.Services.Tests
                             RecipeId = 1,
                             Quantity = 100,
                             UnitType = UnitType.g,
+                            Price = 100,
                             Ingredient = new Ingredient{
                                 Id = 1,
                                 NormativePrice = 10,
@@ -107,8 +108,6 @@ namespace Recipes.Services.Tests
                         }
                     }
             };
-            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.ml || x == UnitType.g)))
-                .Returns((float quantity, UnitType unit) => { return quantity; });
 
             var result = _calculationService.CalculateRecipeCost(recipe);
 
@@ -130,6 +129,7 @@ namespace Recipes.Services.Tests
                             RecipeId = 1,
                             Quantity = 100,
                             UnitType = UnitType.g,
+                            Price = 100,
                             Ingredient = new Ingredient{
                                 Id = 1,
                                 NormativePrice = 10,
@@ -144,6 +144,7 @@ namespace Recipes.Services.Tests
                             RecipeId = 1,
                             Quantity = 50,
                             UnitType = UnitType.g,
+                            Price = 100,
                             Ingredient = new Ingredient{
                                 Id = 2,
                                 NormativePrice = 20,
@@ -158,6 +159,7 @@ namespace Recipes.Services.Tests
                             RecipeId = 1,
                             Quantity = 20,
                             UnitType = UnitType.g,
+                            Price = 60,
                             Ingredient = new Ingredient{
                                 Id = 3,
                                 NormativePrice = 30,
@@ -168,8 +170,6 @@ namespace Recipes.Services.Tests
                         }
                     }
             };
-            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.ml || x == UnitType.g)))
-                .Returns((float quantity, UnitType unit) => { return quantity; });
 
             var result = _calculationService.CalculateRecipeCost(recipe);
 
@@ -191,6 +191,7 @@ namespace Recipes.Services.Tests
                             RecipeId = 1,
                             Quantity = 378.4f,
                             UnitType = UnitType.g,
+                            Price = 378.4f * (71/2000),
                             Ingredient = new Ingredient{
                                 Id = 1,
                                 NormativePrice = 71,
@@ -205,6 +206,7 @@ namespace Recipes.Services.Tests
                             RecipeId = 1,
                             Quantity = 3.5f,
                             UnitType = UnitType.kg,
+                            Price = ((787.6f / 500) * (3.5f * 1000)),
                             Ingredient = new Ingredient{
                                 Id = 2,
                                 NormativePrice = 787.6f,
@@ -219,6 +221,7 @@ namespace Recipes.Services.Tests
                             RecipeId = 1,
                             Quantity = 11.6f,
                             UnitType = UnitType.l,
+                            Price = ((12.54f / (1.2f * 1000)) * (11.6f * 1000)),
                             Ingredient = new Ingredient{
                                 Id = 3,
                                 NormativePrice = 12.54f,
@@ -229,10 +232,6 @@ namespace Recipes.Services.Tests
                         }
                     }
             };
-            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.l || x == UnitType.kg)))
-                .Returns((float quantity, UnitType unit) => { return quantity * 1000; });
-            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.ml || x == UnitType.g)))
-                .Returns((float quantity, UnitType unit) => { return quantity; });
 
             var result = _calculationService.CalculateRecipeCost(recipe);
             var expectedPrice = (float)Math.Round((((71 / 2000) * 378.4f) + ((787.6f / 500) * (3.5f * 1000)) + ((12.54f / (1.2f * 1000)) * (11.6f * 1000))), 2);

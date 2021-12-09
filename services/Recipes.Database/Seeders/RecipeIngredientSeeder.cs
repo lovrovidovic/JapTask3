@@ -24,7 +24,8 @@ namespace Recipes.Database.Seeders
                         RecipeId = i,
                         IngredientId = rnd.Next(1, 101),
                         Quantity = (float)Math.Round(rnd.Next(1, 50) + rnd.NextDouble(), 2),
-                        UnitType = units[rnd.Next(0, 5)]
+                        UnitType = units[rnd.Next(0, 5)],
+                        Price = (float)(rnd.Next(1, 20) + rnd.NextDouble()),
                     });
                 }
             }
