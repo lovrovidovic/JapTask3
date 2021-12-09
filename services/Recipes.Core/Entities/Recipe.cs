@@ -16,8 +16,6 @@ namespace Recipes.Core.Entities
 
         public int CategoryId { get; set; }
 
-        public float Cost { get; set; }
-
         public IEnumerable<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }

@@ -24,19 +24,23 @@ namespace Recipes.Services.Services
 
         public async Task<PagedResponse<IEnumerable<ResponseGetCategories>>> GetCategoriesAsync(BaseSearch searchObj)
         {
+            //var page = 10;
             var response = new PagedResponse<IEnumerable<ResponseGetCategories>>();
             List<Category> categories;
 
             var query = _recipesDbContext.Categories.OrderByDescending(x => x.CreatedAt).AsQueryable();
-            if (searchObj.TakeAmmount != 0)
+            if (searchObj.Page >= 0)
             {
-                query = query.Take(searchObj.TakeAmmount);
+                query = query
+                    .Skip(searchObj.Page * 10)
+                    .Take(10);
             }
 
             categories = await query.ToListAsync();    
 
             response.Data =_mapper.Map<List<ResponseGetCategories>>(categories);
             response.Count = categories.Count;
+            response.NextPage = searchObj.Page + 1;
             return response;
         }
     }

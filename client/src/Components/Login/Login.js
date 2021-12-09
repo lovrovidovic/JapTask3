@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import useHttp from "../../Hooks/useHttp";
 import { Button, Typography, Box, CircularProgress } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
@@ -9,29 +9,25 @@ import {
   generateLink,
   routesConfiguration as routes,
 } from "../../Router/routes";
+import { useMutation } from "react-query";
+import { login } from "../../HttpRequests/LoginRequests";
+import { saveToken } from "../../Redux/Actions/auth/auth";
 
-export const Login = () => {
+export default function Login() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const [values, setValues] = useState({ username: "", password: "" });
-  const { isLoading, error, sendRequest, responseData } = useHttp();
+
+  const submitLogin = useMutation(login, {
+    onSuccess: (data) => {
+      dispatch(saveToken(data.data));
+      history.push(generateLink(routes.CATEGORIES));
+    },
+  });
 
   const handleFormChange = (e) => {
     setValues((prevState) => {
       return { ...prevState, [e.target.name]: e.target.value };
-    });
-  };
-
-  const onLoginSuccess = (data) => {
-    localStorage.setItem("token", JSON.stringify(data));
-    history.push(generateLink(routes.CATEGORIES));
-  };
-
-  const loginHandler = () => {
-    sendRequest({
-      method: "POST",
-      url: "/login",
-      data: values,
-      additionalFunc: onLoginSuccess,
     });
   };
 
@@ -56,7 +52,7 @@ export const Login = () => {
           value={values.password}
           onChange={handleFormChange}
         />
-        {error && (
+        {submitLogin.isError && (
           <Typography
             variant="body2"
             sx={{ textAlign: "center", color: "red" }}
@@ -64,13 +60,19 @@ export const Login = () => {
             Invalid credentials
           </Typography>
         )}
-        <Button onClick={loginHandler}>Log in</Button>
+        <Button
+          onClick={() => {
+            submitLogin.mutate(values);
+          }}
+        >
+          Log in
+        </Button>
       </form>
-      {isLoading && !error && (
+      {submitLogin.isLoading && (
         <Box sx={{ display: "flex" }}>
           <CircularProgress />
         </Box>
       )}
     </Paper>
   );
-};
+}

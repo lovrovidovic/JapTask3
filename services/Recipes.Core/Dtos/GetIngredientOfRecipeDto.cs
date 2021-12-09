@@ -10,12 +10,12 @@ namespace Recipes.Core.Dtos
 
         public float Quantity { get; set; }
 
-        public Unit Unit { get; set; }
+        public UnitType UnitType { get; set; }
 
         public float NormativePrice { get; set; }
 
         public float NormativeQuantity { get; set; }
 
-        public Unit NormativeUnit { get; set; }
+        public UnitType NormativeUnit { get; set; }
     }
 }

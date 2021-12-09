@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recipes.Core.Entities;
 using Recipes.Database.Configurations;
+using Recipes.Database.Seeders;
 
 namespace Recipes.Database
 {

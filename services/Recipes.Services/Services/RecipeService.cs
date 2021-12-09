@@ -20,13 +20,13 @@ namespace Recipes.Services.Services
     {
         private readonly RecipesDbContext _recipesDbContext;
         private readonly IMapper _mapper;
-        private readonly IConversionService _conversionService;
+        private readonly ICalculationService _calculationService;
 
-        public RecipeService(RecipesDbContext recipesDbContext, IMapper mapper, IConversionService conversionService)
+        public RecipeService(RecipesDbContext recipesDbContext, IMapper mapper, ICalculationService calculationService)
         {
             _recipesDbContext = recipesDbContext;
             _mapper = mapper;
-            _conversionService = conversionService;
+            _calculationService = calculationService;
         }
 
         public async Task<PagedResponse<IEnumerable<ResponseGetRecipes>>> GetRecipesAsync(RequestSearchRecipe request)
@@ -36,19 +36,22 @@ namespace Recipes.Services.Services
                 .Include(x => x.RecipeIngredients)
                 .ThenInclude(y => y.Ingredient)
                 .Where(Filter(request.Search, request.CategoryId))
-                .Take(request.TakeAmmount)
                 .Select(x => new ResponseGetRecipes
                 {
                     Id = x.Id,
                     Name = x.Name,
                     CreatedAt = x.CreatedAt,
                     Description = x.Description,
-                    Price = _conversionService.CalculateRecipeCost(x)
+                    Price = _calculationService.CalculateRecipeCost(x)
                 })
                 .ToListAsync();
 
-            response.Data = recipes.OrderBy(x => x.Price);
-            response.Count = recipes.Count;
+            response.Data = recipes
+                .OrderBy(x => x.Price)
+                .Skip(request.Page * 10)
+                .Take(10);
+            response.Count = response.Data.Count();
+            response.NextPage = request.Page + 1;
             return response;
         }
 
@@ -74,10 +77,10 @@ namespace Recipes.Services.Services
 
             var mappedIngredients = recipe.RecipeIngredients.Select(x => new GetIngredientOfRecipeDto
             {
-                Price = (float)_conversionService.CalculateIngredientCost(x),
+                Price = x.Price,
                 Name = x.Ingredient.Name,
                 Quantity = x.Quantity,
-                Unit = x.Unit,
+                UnitType = x.UnitType,
                 NormativePrice = x.Ingredient.NormativePrice,
                 NormativeQuantity = x.Ingredient.NormativeQuantity,
                 NormativeUnit = x.Ingredient.NormativeUnit
@@ -86,7 +89,7 @@ namespace Recipes.Services.Services
             response.Data = _mapper.Map<ResponseGetRecipeDetails>(recipe);
             response.Data.CategoryName = recipe.Category.Name; //TODO check if i need this
             response.Data.Ingredients = mappedIngredients;
-            response.Data.TotalPrice = _conversionService.CalculateRecipeCost(recipe);
+            response.Data.TotalPrice = _calculationService.CalculateRecipeCost(recipe);
 
             return response;
         }
@@ -110,8 +113,9 @@ namespace Recipes.Services.Services
                 RecipeIngredients = newRecipe.RecipeIngredient.Select(x => new RecipeIngredient
                 {
                     Quantity = x.Quantity,
-                    Unit = x.Unit,
-                    IngredientId = x.IngredientId
+                    UnitType = x.UnitType,
+                    IngredientId = x.IngredientId,
+                    Price = _calculationService.CalculateIngredientCost(x.Quantity, x.UnitType, x.UnitPrice)
                 }).DistinctBy(x => x.IngredientId).ToList()
             };
 

@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import useHttp from "../../Hooks/useHttp";
-import { Header } from "../UI/Header";
+import { Header } from "../Shared/Header";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,47 +11,37 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import classes from "./RecipeDetails.module.css";
+import { useQuery } from "react-query";
+import { getRecipeDetails } from "../../HttpRequests/RecipeRequests";
 
 export const RecipeDetails = () => {
   const params = useParams();
   const recipeId = params.id;
-  const {
-    isLoading,
-    error,
-    sendRequest: getRecipeDetails,
-    responseData: recipe,
-  } = useHttp();
 
-  const requestObj = useMemo(() => {
-    return {
-      method: "GET",
-      url: `recipe/${recipeId}`,
-    };
-  }, [recipeId]);
-
-  useEffect(() => {
-    getRecipeDetails(requestObj);
-  }, [getRecipeDetails, requestObj]);
+  const { data, isError, isLoading } = useQuery(
+    ["recipeDetails", recipeId],
+    getRecipeDetails
+  );
 
   return (
     <div>
       <Header title="Recipe" />
-      {isLoading && !error && (
+      {isLoading && (
         <Box sx={{ display: "flex" }}>
           <CircularProgress />
         </Box>
       )}
-      {error && (
+      {isError && (
         <Alert severity="error">
           Error! Cannot get details for this recipe.
         </Alert>
       )}
-      {!isLoading && !error && (
+      {!isLoading && !isError && (
         <Box className={classes.content}>
           <Typography variant="h6">Name:</Typography>
-          <Typography variant="body1">{recipe.name}</Typography>
+          <Typography variant="body1">{data.name}</Typography>
           <Typography variant="h6">Description:</Typography>
-          <Typography variant="body1">{recipe.description}</Typography>
+          <Typography variant="body1">{data.description}</Typography>
 
           <Typography className={classes.tableLabel} variant="h6">
             Ingredients:
@@ -66,7 +55,7 @@ export const RecipeDetails = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {recipe.ingredients?.map((ingredient) => (
+              {data?.ingredients?.map((ingredient) => (
                 <TableRow
                   key={ingredient.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -74,15 +63,17 @@ export const RecipeDetails = () => {
                   <TableCell component="th" scope="row">
                     {ingredient.name}
                   </TableCell>
-                  <TableCell>{ingredient.quantity + ingredient.unit}</TableCell>
-                  <TableCell>{ingredient.price}KM</TableCell>
+                  <TableCell>
+                    {ingredient.quantity} {ingredient.unitType}
+                  </TableCell>
+                  <TableCell>{ingredient.price} KM</TableCell>
                 </TableRow>
               ))}
               <TableRow>
                 <TableCell className={classes.highlightedCell} colSpan={2}>
                   TOTAL PRICE OF INGREDIENTS
                 </TableCell>
-                <TableCell>{recipe.totalPrice}</TableCell>
+                <TableCell>{data.totalPrice} KM</TableCell>
               </TableRow>
             </TableBody>
           </Table>

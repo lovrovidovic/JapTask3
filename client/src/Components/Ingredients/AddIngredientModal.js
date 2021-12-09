@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { Modal } from "../UI/Modal/Modal";
+import React, { useState } from "react";
+import { Modal } from "../Shared/Modal";
 import {
   TextField,
   FormControl,
@@ -9,8 +9,9 @@ import {
   Button,
   Autocomplete,
 } from "@mui/material";
-import useHttp from "../../Hooks/useHttp";
 import classes from "./AddIngredientModal.module.css";
+import { useQuery } from "react-query";
+import { getIngredients } from "../../HttpRequests/IngredientRequests";
 
 export const AddIngredientModal = ({
   showModal,
@@ -23,29 +24,18 @@ export const AddIngredientModal = ({
     ingredientId: 1,
     name: "",
     quantity: "",
-    unit: "",
+    unitType: "",
     normativePrice: 0,
     normativeQuantity: 0,
     normativeUnit: "",
+    unitPrice: 0,
   });
 
-  const ingredientsRequestObj = useMemo(() => {
-    return {
-      method: "GET",
-      url: "/ingredient",
-    };
-  }, []);
-
   const {
+    data: ingredients,
+    isError,
     isLoading,
-    error,
-    sendRequest: getIngredients,
-    responseData: ingredients,
-  } = useHttp();
-
-  useEffect(() => {
-    getIngredients(ingredientsRequestObj);
-  }, [getIngredients, ingredientsRequestObj]);
+  } = useQuery(["ingredients"], getIngredients);
 
   const handleFormChange = (e) => {
     setIngredientValues((prevState) => {
@@ -54,30 +44,36 @@ export const AddIngredientModal = ({
   };
 
   const handleAutoComplete = (e, value) => {
-    setIngredientValues((prevState) => {
-      return {
-        ...prevState,
-        name: value.label,
-        ingredientId: value.id,
-        normativePrice: value.normativePrice,
-        normativeQuantity: value.normativeQuantity,
-        normativeUnit: value.normativeUnit,
-        unit: "",
-      };
-    });
-    if (value.normativeUnit === "g" || value.normativeUnit === "kg") {
-      setUnits(["kg", "g"]);
-    } else if (value.normativeUnit === "l" || value.normativeUnit === "ml") {
-      setUnits(["l", "ml"]);
-    } else {
-      setUnits("kom");
+    if (value) {
+      setIngredientValues((prevState) => {
+        return {
+          ...prevState,
+          name: value?.label,
+          ingredientId: value?.id,
+          normativePrice: value?.normativePrice,
+          normativeQuantity: value?.normativeQuantity,
+          normativeUnit: value?.normativeUnit,
+          unitType: "",
+          unitPrice: value?.unitPrice,
+        };
+      });
+      if (value?.normativeUnit === "g" || value?.normativeUnit === "kg") {
+        setUnits(["kg", "g"]);
+      } else if (
+        value?.normativeUnit === "l" ||
+        value?.normativeUnit === "ml"
+      ) {
+        setUnits(["l", "ml"]);
+      } else {
+        setUnits(["kom"]);
+      }
     }
   };
 
   const submitHandler = () => {
     if (
       ingredientValues.name !== "" &&
-      ingredientValues.unit !== "" &&
+      ingredientValues.unitType !== "" &&
       ingredientValues.quantity !== ""
     ) {
       handleAddIngredient(ingredientValues);
@@ -93,43 +89,46 @@ export const AddIngredientModal = ({
         modalTitle="Create"
       >
         <form className={classes.form}>
-          {!error && !isLoading && (
-            <Autocomplete
-              style={{ width: "100%", marginTop: "10px" }}
-              onChange={handleAutoComplete}
-              options={ingredients.map((ingredient) => {
-                return {
-                  label: ingredient.name,
-                  id: ingredient.id,
-                  normativeUnit: ingredient.normativeUnit,
-                  normativePrice: ingredient.normativePrice,
-                  normativeQuantity: ingredient.normativeQuantity,
-                };
-              })}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              renderInput={(params) => (
-                <TextField {...params} label="Search for an ingredient" />
-              )}
-            />
-          )}
+          <div className={classes.formElementsContainer}>
+            {!isError && !isLoading && (
+              <Autocomplete
+                style={{ width: "14em" }}
+                onChange={handleAutoComplete}
+                options={ingredients?.map((ingredient) => {
+                  return {
+                    label: ingredient.name,
+                    id: ingredient.id,
+                    normativeUnit: ingredient.normativeUnit,
+                    normativePrice: ingredient.normativePrice,
+                    normativeQuantity: ingredient.normativeQuantity,
+                    unitPrice: ingredient.unitPrice,
+                  };
+                })}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                renderInput={(params) => (
+                  <TextField {...params} label="Search for an ingredient" />
+                )}
+              />
+            )}
 
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 50 }}>
-            <InputLabel id="select">Unit</InputLabel>
-            <Select
-              name="unit"
-              value={ingredientValues.unit}
-              label="Select a measurement unit"
-              onChange={handleFormChange}
-            >
-              {units.map((unit) => {
-                return (
-                  <MenuItem key={unit} value={unit}>
-                    {unit}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 50 }}>
+              <InputLabel id="select">Unit</InputLabel>
+              <Select
+                name="unitType"
+                value={ingredientValues.unitType}
+                label="Select a measurement unit"
+                onChange={handleFormChange}
+              >
+                {units?.map((unit) => {
+                  return (
+                    <MenuItem key={unit} value={unit}>
+                      {unit}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </div>
           <TextField
             label="Ammount: "
             variant="standard"

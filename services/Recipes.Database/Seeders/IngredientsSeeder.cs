@@ -5,7 +5,7 @@ using Recipes.Core.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace Recipes.Database.Configurations
+namespace Recipes.Database.Seeders
 {
     public static class IngredientsSeeder
     {
@@ -14,7 +14,7 @@ namespace Recipes.Database.Configurations
             Random rnd = new Random();
             List<String> ingredientNames = new() { "Brasno", "Mlijeko", "Secer", "Maslac", "Mlijecna cokolada", "Crna cokolada", "Jaje", "Voda" };
             List<Ingredient> ingredients = new();
-            List<Unit> units = new() { Unit.kg, Unit.l, Unit.g, Unit.ml, Unit.kom };
+            List<UnitType> units = new() { UnitType.kg, UnitType.l, UnitType.g, UnitType.ml, UnitType.kom };
             var startDate = new DateTime(2010, 1, 1, 0, 0, 0);
             var endDate = new DateTime(2021, 12, 30, 0, 0, 0);
 
@@ -22,7 +22,7 @@ namespace Recipes.Database.Configurations
             {
                 float generatedPrice = (float)Math.Round(rnd.Next(1, 50) + rnd.NextDouble(), 2);
                 int generatedQuantity = rnd.Next(1, 50);
-                Unit generatedUnit = units[rnd.Next(0, 5)];
+                UnitType generatedUnit = units[rnd.Next(0, 5)];
                 ingredients.Add(new Ingredient
                 {
                     Id = i,
@@ -40,9 +40,9 @@ namespace Recipes.Database.Configurations
             builder.Entity<Ingredient>().HasData(ingredients);
         }
 
-        private static float GenerateUnitPrice(int quantity, float price, Unit unit)
+        private static float GenerateUnitPrice(int quantity, float price, UnitType unit)
         {
-            if (unit == Unit.kg || unit == Unit.l)
+            if (unit == UnitType.kg || unit == UnitType.l)
             {
                 quantity *= 1000;
             }

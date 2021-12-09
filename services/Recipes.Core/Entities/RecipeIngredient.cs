@@ -14,7 +14,8 @@ namespace Recipes.Core.Entities
 
         public float Quantity { get; set; }
 
-        public Unit Unit { get; set; }
+        public UnitType UnitType { get; set; }
 
+        public float Price { get; set; }
     }
 }

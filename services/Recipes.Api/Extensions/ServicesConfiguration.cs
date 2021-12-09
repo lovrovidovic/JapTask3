@@ -12,6 +12,7 @@ namespace Recipes.Api.Extensions
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IConversionService, ConversionService>();
+            services.AddScoped<ICalculationService, CalculationService>();
             services.AddScoped<ILoginService, LoginService>();
         }
     }

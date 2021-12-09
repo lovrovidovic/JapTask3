@@ -20,7 +20,7 @@ namespace Recipes.Services.Tests
     {
         private RecipeService _recipeService;
         private Mock<IMapper> mapperMock;
-        private Mock<IConversionService> conversionServiceMock;
+        private Mock<ICalculationService> _calculationServiceMock;
         private DbContextOptions<RecipesDbContext> _options;
         private RecipesDbContext _recipesContext;
 
@@ -31,8 +31,8 @@ namespace Recipes.Services.Tests
                 .UseInMemoryDatabase(databaseName: "RecipesTests").Options;
             _recipesContext = new RecipesDbContext(_options);
             mapperMock = new Mock<IMapper>();
-            conversionServiceMock = new Mock<IConversionService>();
-            _recipeService = new RecipeService(_recipesContext, mapperMock.Object, conversionServiceMock.Object);
+            _calculationServiceMock = new Mock<ICalculationService>();
+            _recipeService = new RecipeService(_recipesContext, mapperMock.Object, _calculationServiceMock.Object);
 
             _recipesContext.Users.Add(new User
             {
@@ -52,7 +52,17 @@ namespace Recipes.Services.Tests
                     new Recipe { Id = 7 },
                     new Recipe { Id = 8 },
                     new Recipe { Id = 9 },
-                    new Recipe { Id = 10 }
+                    new Recipe { Id = 10 },
+                    new Recipe { Id = 11 },
+                    new Recipe { Id = 12 },
+                    new Recipe { Id = 13 },
+                    new Recipe { Id = 14 },
+                    new Recipe { Id = 15 },
+                    new Recipe { Id = 16 },
+                    new Recipe { Id = 17 },
+                    new Recipe { Id = 18 },
+                    new Recipe { Id = 19 },
+                    new Recipe { Id = 20 }
                 }
             });
             _recipesContext.Ingredients.AddRange(
@@ -99,12 +109,12 @@ namespace Recipes.Services.Tests
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 20,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     }
                 }
             };
@@ -130,22 +140,22 @@ namespace Recipes.Services.Tests
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 20,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                 }
             };
@@ -172,48 +182,48 @@ namespace Recipes.Services.Tests
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 20,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
-                    
+
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 3,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 2,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 4,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 3,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                     new CreateRecipeIngredientDto {
                         IngredientId = 4,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     },
                 }
             };
@@ -230,33 +240,56 @@ namespace Recipes.Services.Tests
         }
 
         //Load more tests
-        [TestCase(2, 4)]
-        [TestCase(4, 10)]
-        public async Task GetRecipesAsync_TakeLessAndMore_GetsLessAndMoreRecipes(int lowTakeAmmount, int highTakeAmmount)
+        [Test]
+        public async Task GetRecipesAsync_TakeDifferentPages_GetsDifferentPages()
         {
-            var lowRequest = new RequestSearchRecipe { TakeAmmount = lowTakeAmmount, CategoryId = 1 };
-            var highRequest = new RequestSearchRecipe { TakeAmmount = highTakeAmmount, CategoryId = 1 };
+            var firstRequest = new RequestSearchRecipe { Page = 0, CategoryId = 1 };
+            var secondRequest = new RequestSearchRecipe { Page = 1, CategoryId = 1 };
 
-            var lowResult = await _recipeService.GetRecipesAsync(lowRequest);
-            var highResult = await _recipeService.GetRecipesAsync(highRequest);
+            var firstResult = await _recipeService.GetRecipesAsync(firstRequest);
+            var firstIngredientIds = firstResult.Data.Select(x => x.Id).ToList();
+            var secondResult = await _recipeService.GetRecipesAsync(secondRequest);
+            var secondIngredientIds = secondResult.Data.Select(x => x.Id).ToList();
 
-            Assert.That(lowResult.Count, Is.EqualTo(lowTakeAmmount));
-            Assert.That(highResult.Count, Is.EqualTo(highTakeAmmount));
-            Assert.That(lowResult.Count, Is.LessThan(highResult.Count));
+            Assert.That(firstResult.Count, Is.EqualTo(10));
+            Assert.That(secondResult.Count, Is.EqualTo(10));
+            Assert.That(firstIngredientIds, Is.Not.EquivalentTo(secondIngredientIds));
+            Assert.That(firstIngredientIds.Intersect(secondIngredientIds), Is.Empty);
+            Assert.That(firstResult.Count, Is.EqualTo(secondResult.Count));
         }
 
-        [TestCase(200, 300)]
-        public async Task GetRecipesAsync_TakeMoreThanAvailable_GetsMaxRecipes(int lowTakeAmmount, int highTakeAmmount)
+        [Test]
+        public async Task GetRecipesAsync_TakeSamePage_GetSamePage()
         {
-            var lowRequest = new RequestSearchRecipe { TakeAmmount = lowTakeAmmount, CategoryId = 1 };
-            var highRequest = new RequestSearchRecipe { TakeAmmount = highTakeAmmount, CategoryId = 1 };
+            var firstRequest = new RequestSearchRecipe { Page = 0, CategoryId = 1 };
+            var secondRequest = new RequestSearchRecipe { Page = 0, CategoryId = 1 };
 
-            var lowResult = await _recipeService.GetRecipesAsync(lowRequest);
-            var highResult = await _recipeService.GetRecipesAsync(highRequest);
+            var firstResult = await _recipeService.GetRecipesAsync(firstRequest);
+            var firstIngredientIds = firstResult.Data.Select(x => x.Id).ToList();
+            var secondResult = await _recipeService.GetRecipesAsync(secondRequest);
+            var secondIngredientIds = secondResult.Data.Select(x => x.Id).ToList();
 
-            Assert.That(lowResult.Count, Is.LessThan(lowTakeAmmount));
-            Assert.That(highResult.Count, Is.LessThan(highTakeAmmount));
-            Assert.That(lowResult.Count, Is.EqualTo(highResult.Count));
+            Assert.That(firstResult.Count, Is.EqualTo(10));
+            Assert.That(secondResult.Count, Is.EqualTo(10));
+            Assert.That(firstIngredientIds, Is.EquivalentTo(secondIngredientIds));
+            Assert.That(firstResult.Count, Is.EqualTo(secondResult.Count));
+        }
+
+        [Test]
+        public async Task GetRecipesAsync_TakeNonExistantPage_GetsEmptyResult()
+        {
+            var firstRequest = new RequestSearchRecipe { Page = 100, CategoryId = 1 };
+            var secondRequest = new RequestSearchRecipe { Page = 200, CategoryId = 1 };
+
+            var firstResult = await _recipeService.GetRecipesAsync(firstRequest);
+            var firstIngredientIds = firstResult.Data.Select(x => x.Id).ToList();
+            var secondResult = await _recipeService.GetRecipesAsync(secondRequest);
+            var secondIngredientIds = secondResult.Data.Select(x => x.Id).ToList();
+
+            Assert.That(firstResult.Count, Is.EqualTo(0));
+            Assert.That(secondResult.Count, Is.EqualTo(0));
+            Assert.That(firstIngredientIds, Is.EquivalentTo(secondIngredientIds));
+            Assert.That(firstResult.Count, Is.EqualTo(secondResult.Count));
         }
 
         //Create recipe tests
@@ -273,7 +306,7 @@ namespace Recipes.Services.Tests
                     new CreateRecipeIngredientDto {
                         IngredientId = 1,
                         Quantity = 10,
-                        Unit = Unit.kg
+                        UnitType = UnitType.kg
                     }
                 }
             };
@@ -290,7 +323,7 @@ namespace Recipes.Services.Tests
                 Assert.That(createdRecipe.CreatedBy, Is.EqualTo(request.UserId));
                 Assert.That(createdRecipe.RecipeIngredients.First().IngredientId, Is.EqualTo(request.RecipeIngredient.First().IngredientId));
                 Assert.That(createdRecipe.RecipeIngredients.First().Quantity, Is.EqualTo(request.RecipeIngredient.First().Quantity));
-                Assert.That(createdRecipe.RecipeIngredients.First().Unit, Is.EqualTo(request.RecipeIngredient.First().Unit));
+                Assert.That(createdRecipe.RecipeIngredients.First().UnitType, Is.EqualTo(request.RecipeIngredient.First().UnitType));
             });
         }
 
@@ -303,7 +336,7 @@ namespace Recipes.Services.Tests
                 Description = "New Description",
                 CategoryId = 1,
                 UserId = 1,
-                RecipeIngredient = new List<CreateRecipeIngredientDto> {}
+                RecipeIngredient = new List<CreateRecipeIngredientDto> { }
             };
 
             var result = await _recipeService.CreateRecipeAsync(request);

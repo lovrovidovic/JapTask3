@@ -6,7 +6,7 @@ namespace Recipes.Core.Dtos
     {
         public float StartingQuantity { get; set; }
 
-        public Unit StartingUnit { get; set; }
+        public UnitType StartingUnit { get; set; }
 
         public float UnitPrice { get; set; }
     }

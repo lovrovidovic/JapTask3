@@ -9,11 +9,11 @@ namespace Recipes.Api.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class RecipeController : ControllerBase
+    public class RecipesController : ControllerBase
     {
         private readonly IRecipeService _recipeService;
 
-        public RecipeController(IRecipeService recipeService)
+        public RecipesController(IRecipeService recipeService)
         {
             _recipeService = recipeService;
         }
@@ -36,6 +36,7 @@ namespace Recipes.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateRecipe(RequestCreateRecipe newRecipe)
         {
+            newRecipe.UserId = int.Parse(User.FindFirst("userId").Value);
             var response = await _recipeService.CreateRecipeAsync(newRecipe);
             if (response)
             {

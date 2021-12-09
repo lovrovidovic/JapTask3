@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using Recipes.Common.Enums;
 using Recipes.Core.Entities;
-using Recipes.Database;
 using Recipes.Services.Interfaces;
 using Recipes.Services.Services;
 using System;
@@ -12,16 +10,16 @@ using System.Collections.Generic;
 namespace Recipes.Services.Tests
 {
     [TestFixture]
-    public class ConversionServiceTests
+    public class CalculationServiceTests
     {
-        private ConversionService _conversionService;
-        private Mock<IConversionService> conversionServiceMock;
+        private CalculationService _calculationService;
+        private Mock<IConversionService> _conversionServiceMock;
 
         [SetUp]
         public void SetUp()
         {
-            conversionServiceMock = new Mock<IConversionService>();
-            _conversionService = new ConversionService();
+            _conversionServiceMock = new Mock<IConversionService>();
+            _calculationService = new CalculationService(_conversionServiceMock.Object);
         }
 
         //CalculateIngredientUnitCost tests
@@ -33,10 +31,13 @@ namespace Recipes.Services.Tests
                 Id = 1,
                 NormativePrice = 10,
                 NormativeQuantity = 10,
-                NormativeUnit = Unit.g,
+                NormativeUnit = UnitType.g,
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.IsAny<UnitType>()))
+                .Returns((float quantity, UnitType unit) => { return quantity; });
 
-            var result = _conversionService.CalculateIngredientUnitCost(ingredient);
+
+            var result = _calculationService.CalculateIngredientUnitCost(ingredient);
             var expectedPrice = ingredient.NormativePrice / ingredient.NormativeQuantity;
 
             Assert.That(result, Is.EqualTo(expectedPrice));
@@ -50,10 +51,12 @@ namespace Recipes.Services.Tests
                 Id = 1,
                 NormativePrice = 10,
                 NormativeQuantity = 10,
-                NormativeUnit = Unit.kg,
+                NormativeUnit = UnitType.kg,
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.kg)))
+                .Returns((float quantity, UnitType unit) => { return quantity * 1000; });
 
-            var result = _conversionService.CalculateIngredientUnitCost(ingredient);
+            var result = _calculationService.CalculateIngredientUnitCost(ingredient);
             var expectedPrice = ingredient.NormativePrice / (ingredient.NormativeQuantity * 1000);
 
             Assert.That(result, Is.EqualTo(expectedPrice));
@@ -67,10 +70,12 @@ namespace Recipes.Services.Tests
                 Id = 1,
                 NormativePrice = 42354.14F,
                 NormativeQuantity = 33.333F,
-                NormativeUnit = Unit.l,
+                NormativeUnit = UnitType.l,
             };
+            _conversionServiceMock.Setup(x => x.ConvertQuantity(It.IsAny<float>(), It.Is<UnitType>(x => x == UnitType.l)))
+                .Returns((float quantity, UnitType unit) => { return quantity * 1000; });
 
-            var result = _conversionService.CalculateIngredientUnitCost(ingredient);
+            var result = _calculationService.CalculateIngredientUnitCost(ingredient);
             var expectedPrice = ingredient.NormativePrice / (ingredient.NormativeQuantity * 1000);
 
             Assert.That(result, Is.EqualTo(expectedPrice));
@@ -91,19 +96,20 @@ namespace Recipes.Services.Tests
                             IngredientId = 1,
                             RecipeId = 1,
                             Quantity = 100,
-                            Unit = Unit.g,
+                            UnitType = UnitType.g,
+                            Price = 100,
                             Ingredient = new Ingredient{
                                 Id = 1,
                                 NormativePrice = 10,
                                 NormativeQuantity = 10,
-                                NormativeUnit = Unit.g,
+                                NormativeUnit = UnitType.g,
                                 UnitPrice = 1
                             }
                         }
                     }
             };
 
-            var result = _conversionService.CalculateRecipeCost(recipe);
+            var result = _calculationService.CalculateRecipeCost(recipe);
 
             Assert.That(result, Is.EqualTo(100));
         }
@@ -122,12 +128,13 @@ namespace Recipes.Services.Tests
                             IngredientId = 1,
                             RecipeId = 1,
                             Quantity = 100,
-                            Unit = Unit.g,
+                            UnitType = UnitType.g,
+                            Price = 100,
                             Ingredient = new Ingredient{
                                 Id = 1,
                                 NormativePrice = 10,
                                 NormativeQuantity = 10,
-                                NormativeUnit = Unit.g,
+                                NormativeUnit = UnitType.g,
                                 UnitPrice = 1
                             }
                         },
@@ -136,12 +143,13 @@ namespace Recipes.Services.Tests
                             IngredientId = 2,
                             RecipeId = 1,
                             Quantity = 50,
-                            Unit = Unit.g,
+                            UnitType = UnitType.g,
+                            Price = 100,
                             Ingredient = new Ingredient{
                                 Id = 2,
                                 NormativePrice = 20,
                                 NormativeQuantity = 10,
-                                NormativeUnit = Unit.g,
+                                NormativeUnit = UnitType.g,
                                 UnitPrice = 2
                             }
                         },
@@ -150,19 +158,20 @@ namespace Recipes.Services.Tests
                             IngredientId = 3,
                             RecipeId = 1,
                             Quantity = 20,
-                            Unit = Unit.g,
+                            UnitType = UnitType.g,
+                            Price = 60,
                             Ingredient = new Ingredient{
                                 Id = 3,
                                 NormativePrice = 30,
                                 NormativeQuantity = 10,
-                                NormativeUnit = Unit.g,
+                                NormativeUnit = UnitType.g,
                                 UnitPrice = 3
                             }
                         }
                     }
             };
 
-            var result = _conversionService.CalculateRecipeCost(recipe);
+            var result = _calculationService.CalculateRecipeCost(recipe);
 
             Assert.That(result, Is.EqualTo(260));
         }
@@ -181,12 +190,13 @@ namespace Recipes.Services.Tests
                             IngredientId = 1,
                             RecipeId = 1,
                             Quantity = 378.4f,
-                            Unit = Unit.g,
+                            UnitType = UnitType.g,
+                            Price = 378.4f * (71/2000),
                             Ingredient = new Ingredient{
                                 Id = 1,
                                 NormativePrice = 71,
                                 NormativeQuantity = 2,
-                                NormativeUnit = Unit.kg,
+                                NormativeUnit = UnitType.kg,
                                 UnitPrice = 71/2000
                             }
                         },
@@ -195,12 +205,13 @@ namespace Recipes.Services.Tests
                             IngredientId = 2,
                             RecipeId = 1,
                             Quantity = 3.5f,
-                            Unit = Unit.kg,
+                            UnitType = UnitType.kg,
+                            Price = ((787.6f / 500) * (3.5f * 1000)),
                             Ingredient = new Ingredient{
                                 Id = 2,
                                 NormativePrice = 787.6f,
                                 NormativeQuantity = 500,
-                                NormativeUnit = Unit.g,
+                                NormativeUnit = UnitType.g,
                                 UnitPrice = 787.6f/500
                             }
                         },
@@ -209,19 +220,20 @@ namespace Recipes.Services.Tests
                             IngredientId = 3,
                             RecipeId = 1,
                             Quantity = 11.6f,
-                            Unit = Unit.l,
+                            UnitType = UnitType.l,
+                            Price = ((12.54f / (1.2f * 1000)) * (11.6f * 1000)),
                             Ingredient = new Ingredient{
                                 Id = 3,
                                 NormativePrice = 12.54f,
                                 NormativeQuantity = 1.2f,
-                                NormativeUnit = Unit.l,
+                                NormativeUnit = UnitType.l,
                                 UnitPrice = 12.54f / (1.2f * 1000)
                             }
                         }
                     }
             };
 
-            var result = _conversionService.CalculateRecipeCost(recipe);
+            var result = _calculationService.CalculateRecipeCost(recipe);
             var expectedPrice = (float)Math.Round((((71 / 2000) * 378.4f) + ((787.6f / 500) * (3.5f * 1000)) + ((12.54f / (1.2f * 1000)) * (11.6f * 1000))), 2);
 
             Assert.AreEqual(expectedPrice, result);
