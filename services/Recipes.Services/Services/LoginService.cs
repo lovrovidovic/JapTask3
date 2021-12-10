@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Recipes.Common.Enums;
 using Recipes.Core.Responses;
 using Recipes.Database;
 using Recipes.Services.Interfaces;
@@ -23,14 +24,15 @@ namespace Recipes.Services.Services
             _config = config;
         }
 
-        private string GenerateJSONWebToken(string userName, int id)
+        private string GenerateJSONWebToken(string userName, int id, UserType type)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, userName),
-                new Claim("userId", id.ToString())
+                new Claim("userId", id.ToString()),
+                new Claim("Role", type.ToString())
             };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -51,7 +53,7 @@ namespace Recipes.Services.Services
             {
                 return null;
             }
-            var tokenString = GenerateJSONWebToken(user.Username, user.Id);
+            var tokenString = GenerateJSONWebToken(user.Username, user.Id, user.UserType);
             response.Data = tokenString;
 
             return response;

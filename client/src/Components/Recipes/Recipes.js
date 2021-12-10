@@ -16,9 +16,11 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import classes from "./Recipes.module.css";
 import { useInfiniteQuery } from "react-query";
 import { getRecipes } from "../../HttpRequests/RecipeRequests";
+import useIsAdmin from "../../Hooks/useIsAdmin";
 
 export const Recipes = () => {
   const params = useParams();
+  const isAdmin = useIsAdmin();
   const history = useHistory();
   const categoryId = params.id;
   const [search, setSearchValue] = useState("");
@@ -48,9 +50,13 @@ export const Recipes = () => {
       )}
       <div className={classes.actions}>
         <Search label="Search recipes" searchAction={setSearchValue} />
-        <IconButton size="large" onClick={addRecipeHandler}>
-          <AddCircleIcon fontSize="large" />
-        </IconButton>
+        {isAdmin ? (
+          <IconButton size="large" onClick={addRecipeHandler}>
+            <AddCircleIcon fontSize="large" />
+          </IconButton>
+        ) : (
+          <></>
+        )}
       </div>
       <div className={classes.container}>
         {isLoading && (

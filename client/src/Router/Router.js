@@ -36,6 +36,7 @@ export const Router = () => {
       <PrivateRoute
         path={generateLink(routes.RECIPE_CREATE)}
         component={AddRecipe}
+        isAdminRoute={true}
       />
       <PrivateRoute
         path={generateLink(routes.RECIPE_DETAILS, { id: ":id" })}

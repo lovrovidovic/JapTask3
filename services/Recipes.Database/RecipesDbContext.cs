@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Recipes.Common.Enums;
 using Recipes.Core.Entities;
 using Recipes.Database.Configurations;
 using Recipes.Database.Seeders;
@@ -23,9 +24,9 @@ namespace Recipes.Database
             builder.ConfigureUser();
 
             builder.Entity<User>().HasData(
-                new User { Id = 1, Username = "user", Password = "123" },
-                new User { Id = 2, Username = "Mark", Password = "sifra" },
-                new User { Id = 3, Username = "John", Password = "lozinka" }
+                new User { Id = 1, Username = "user", Password = "123", UserType = UserType.User },
+                new User { Id = 2, Username = "admin", Password = "123", UserType = UserType.Admin },
+                new User { Id = 3, Username = "John", Password = "lozinka", UserType = UserType.User }
                 );
 
             builder.SeedCategories();

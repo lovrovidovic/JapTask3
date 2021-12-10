@@ -8,6 +8,7 @@ using Recipes.Services.Interfaces;
 using Recipes.Core.Responses;
 using Dapper;
 using Recipes.Common.Enums;
+using Recipes.Core.Requests;
 
 namespace Recipes.Services.Services
 {
@@ -41,6 +42,20 @@ namespace Recipes.Services.Services
                 .QueryAsync<ResponseGetMostUsedIngredients>("GetMostUsedIngredients", parameters, commandType: System.Data.CommandType.StoredProcedure);
 
             response.Data = result;
+            return response;
+        }
+
+        public async Task<PagedResponse<IEnumerable<ResponseGetIngredient>>> GetPagedIngredientsAsync(RequestGetPagedIngredients request)
+        {
+            var response = new PagedResponse<IEnumerable<ResponseGetIngredient>>();
+            response.Data = await _recipesDbContext.Ingredients
+                .OrderBy(x => x.Id)
+                .Skip(request.Page * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => _mapper.Map<ResponseGetIngredient>(x))
+                .ToListAsync();
+            response.Count = response.Data.Count();
+            response.NextPage = request.Page + 1;
             return response;
         }
     }

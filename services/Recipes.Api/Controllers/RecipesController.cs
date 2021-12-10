@@ -34,6 +34,7 @@ namespace Recipes.Api.Controllers
 
         // POST: api/Recipe
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult> CreateRecipe(RequestCreateRecipe newRecipe)
         {
             newRecipe.UserId = int.Parse(User.FindFirst("userId").Value);

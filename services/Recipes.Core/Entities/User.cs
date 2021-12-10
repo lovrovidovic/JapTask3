@@ -1,4 +1,5 @@
-﻿using Recipes.Core.Entities.Base;
+﻿using Recipes.Common.Enums;
+using Recipes.Core.Entities.Base;
 using System.Collections.Generic;
 
 namespace Recipes.Core.Entities
@@ -8,6 +9,8 @@ namespace Recipes.Core.Entities
         public string Username { get; set; }
 
         public string Password { get; set; }
+
+        public UserType UserType { get; set; }
 
         public List<Recipe> Recipes { get; set; }
     }
