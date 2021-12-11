@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Recipes.Database;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Recipes.Core.Entities;
+using Recipes.Core.Requests;
+using Recipes.Core.Responses;
+using Recipes.Database;
+using Recipes.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Recipes.Services.Interfaces;
-using AutoMapper;
-using Recipes.Core.Responses;
-using Recipes.Core.Requests;
 
 namespace Recipes.Services.Services
 {
@@ -36,12 +37,61 @@ namespace Recipes.Services.Services
                     .Take(10);
             }
 
-            categories = await query.ToListAsync();    
+            categories = await query.ToListAsync();
 
-            response.Data =_mapper.Map<List<ResponseGetCategories>>(categories);
+            response.Data = _mapper.Map<List<ResponseGetCategories>>(categories);
             response.Count = categories.Count;
             response.NextPage = searchObj.Page + 1;
             return response;
+        }
+
+        public async Task<bool> CreateCategoryAsync(RequestCreateCategory request)
+        {
+            var category = new Category
+            {
+                Name = request.Name,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now,
+                CreatedBy = request.UserId
+            };
+
+            await _recipesDbContext.Categories.AddAsync(category);
+            await _recipesDbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateCategoryAsync(RequestUpdateCategory request)
+        {
+            var category = await _recipesDbContext.Categories.FirstOrDefaultAsync(x => x.Id == request.Id);
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            category.Name = request.Name;
+            category.CreatedAt = request.CreatedAt;
+            category.ModifiedAt = DateTime.Now;
+            category.CreatedBy = request.CreatedBy;
+
+            await _recipesDbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteCategoryAsync(int id)
+        {
+            var category = await _recipesDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            _recipesDbContext.Categories.Remove(category);
+            await _recipesDbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

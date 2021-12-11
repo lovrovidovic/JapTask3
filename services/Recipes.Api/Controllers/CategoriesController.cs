@@ -24,5 +24,36 @@ namespace Recipes.Api.Controllers
         {
             return Ok(await _categoryService.GetCategoriesAsync(searchArgs));
         }
+
+        // POST: api/Category
+        [HttpPost]
+        public async Task<ActionResult> CreateCategory([FromBody] RequestCreateCategory request)
+        {
+            return Ok(await _categoryService.CreateCategoryAsync(request));
+        }
+
+        // PUT: api/Category
+        [HttpPut]
+        public async Task<ActionResult> UpdateCategory([FromBody] RequestUpdateCategory request)
+        {
+            var response = await _categoryService.UpdateCategoryAsync(request);
+            if (!response)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
+        // DELETE: api/Category
+        [HttpDelete]
+        public async Task<ActionResult> DeleteCategory([FromQuery] int id)
+        {
+            var response = await _categoryService.DeleteCategoryAsync(id);
+            if (!response)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
     }
 }
