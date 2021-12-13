@@ -9,7 +9,6 @@ namespace Recipes.Services.Services
 {
     public class ConversionService : IConversionService
     {
-        //kalkulacije u drugi servis
         public float ConvertQuantity(float quantity, UnitType unit)
         {
             if (unit == UnitType.kg || unit == UnitType.l)

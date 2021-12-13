@@ -101,8 +101,6 @@ namespace Recipes.Services.Services
                 return false;
             }
 
-            var response = new ServiceResponse<Recipe>();
-
             var recipe = new Recipe
             {
                 Name = newRecipe.Name,
@@ -115,7 +113,10 @@ namespace Recipes.Services.Services
                     Quantity = x.Quantity,
                     UnitType = x.UnitType,
                     IngredientId = x.IngredientId,
-                    Price = _calculationService.CalculateIngredientCost(x.Quantity, x.UnitType, x.UnitPrice)
+                    Price = _calculationService.CalculateIngredientCost(
+                        x.Quantity,
+                        x.UnitType,
+                        _recipesDbContext.Ingredients.FirstOrDefault(y => y.Id == x.IngredientId).UnitPrice)
                 }).DistinctBy(x => x.IngredientId).ToList()
             };
 
@@ -145,6 +146,49 @@ namespace Recipes.Services.Services
 
             response.Data = result;
             return response;
+        }
+
+        public async Task<bool> UpdateRecipeAsync(RequestUpdateRecipe request)
+        {
+            var recipe = await _recipesDbContext.Recipes.Include(x => x.RecipeIngredients).FirstOrDefaultAsync(x => x.Id == request.Id);
+
+            var newIngredients = request.RecipeIngredient
+                .Select(x => new RecipeIngredient
+                {
+                    RecipeId = request.Id,
+                    IngredientId = x.IngredientId,
+                    UnitType = x.UnitType,
+                    Quantity = x.Quantity,
+                    Price = _calculationService.CalculateIngredientCost(
+                        x.Quantity,
+                        x.UnitType,
+                        _recipesDbContext.Ingredients.FirstOrDefault(y => y.Id == x.IngredientId).UnitPrice)
+                })
+                .ToList();
+
+            recipe.Name = request.Name;
+            recipe.Description = request.Description;
+            recipe.ModifiedAt = request.ModifiedAt;
+            recipe.CategoryId = request.CategoryId;
+            recipe.RecipeIngredients = newIngredients;
+
+            await _recipesDbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteRecipeAsync(int id)
+        {
+            var recipe = await _recipesDbContext.Recipes.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (recipe == null)
+            {
+                return false;
+            }
+
+            _recipesDbContext.Recipes.Remove(recipe);
+            await _recipesDbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

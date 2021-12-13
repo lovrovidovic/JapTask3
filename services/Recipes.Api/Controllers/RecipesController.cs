@@ -54,9 +54,21 @@ namespace Recipes.Api.Controllers
         }
 
         [HttpGet("procedure/2")]
-        public async Task<ActionResult> GertSortedRecipes()
+        public async Task<ActionResult> GetSortedRecipes()
         {
             return Ok(await _recipeService.GetSortedRecipesAsync());
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateRecipe(RequestUpdateRecipe request)
+        {
+            return Ok(await _recipeService.UpdateRecipeAsync(request));
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteRecipe(int id)
+        {
+            return Ok(await _recipeService.DeleteRecipeAsync(id));
         }
     }
 }
