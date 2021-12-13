@@ -9,7 +9,5 @@ namespace Recipes.Core.Dtos
         public float Quantity { get; set; }
 
         public UnitType UnitType { get; set; }
-
-        public float UnitPrice { get; set; }
     }
 }

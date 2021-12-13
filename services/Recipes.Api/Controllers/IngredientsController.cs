@@ -38,5 +38,29 @@ namespace Recipes.Api.Controllers
         {
             return Ok(await _ingredientService.GetPagedIngredientsAsync(request));
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetIngredientDetails(int id)
+        {
+            return Ok(await _ingredientService.GetIngredientDetailsAsync(id));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateIngredient(RequestCreateIngredient request)
+        {
+            return Ok(await _ingredientService.CreateIngredientAsync(request));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateIngredient(RequestUpdateIngredient request)
+        {
+            return Ok(await _ingredientService.UpdateIngredientAsync(request));
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteIngredient(int id)
+        {
+            return Ok(await _ingredientService.DeleteIngredientAsync(id));
+        }
     }
 }

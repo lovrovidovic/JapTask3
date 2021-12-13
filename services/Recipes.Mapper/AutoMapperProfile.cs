@@ -12,6 +12,7 @@ namespace Recipes.Mapper
             CreateMap<Recipe, ResponseGetRecipes>();
             CreateMap<Recipe, ResponseGetRecipeDetails>();
             CreateMap<Ingredient, ResponseGetIngredient>();
+            CreateMap<Ingredient, ResponseGetIngredientDetails>();
         }
     }
 }

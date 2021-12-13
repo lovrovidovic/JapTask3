@@ -10,8 +10,16 @@ namespace Recipes.Services.Interfaces
     {
         Task<ServiceResponse<IEnumerable<ResponseGetIngredient>>> GetIngredientsAsync();
 
-        Task<ServiceResponse<IEnumerable<ResponseGetMostUsedIngredients>>> GetMostUsedIngredientsAsync(UnitType unit, int min, int max);
+        Task<ServiceResponse<ResponseGetIngredientDetails>> GetIngredientDetailsAsync(int id);
 
         Task<PagedResponse<IEnumerable<ResponseGetIngredient>>> GetPagedIngredientsAsync(RequestGetPagedIngredients request);
+
+        Task<bool> CreateIngredientAsync(RequestCreateIngredient request);
+
+        Task<bool> UpdateIngredientAsync(RequestUpdateIngredient request);
+
+        Task<bool> DeleteIngredientAsync(int id);
+
+        Task<ServiceResponse<IEnumerable<ResponseGetMostUsedIngredients>>> GetMostUsedIngredientsAsync(UnitType unit, int min, int max);
     }
 }
