@@ -25,6 +25,13 @@ namespace Recipes.Api.Controllers
             return Ok(await _categoryService.GetCategoriesAsync(searchArgs));
         }
 
+        // GET: api/Category/id
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetCategoryDetails(int id)
+        {
+            return Ok(await _categoryService.GetCategoryDetailsAsync(id));
+        }
+
         // POST: api/Category
         [HttpPost]
         public async Task<ActionResult> CreateCategory([FromBody] RequestCreateCategory request)

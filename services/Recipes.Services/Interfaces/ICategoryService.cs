@@ -9,6 +9,8 @@ namespace Recipes.Services.Interfaces
     {
         Task<PagedResponse<IEnumerable<ResponseGetCategories>>> GetCategoriesAsync(BaseSearch searchArgs);
 
+        Task<ServiceResponse<ResponseGetCategoryDetails>> GetCategoryDetailsAsync(int id);
+
         Task<bool> CreateCategoryAsync(RequestCreateCategory request);
 
         Task<bool> UpdateCategoryAsync(RequestUpdateCategory request);

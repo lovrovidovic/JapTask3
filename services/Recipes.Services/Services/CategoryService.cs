@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Recipes.Core.Dtos;
 using Recipes.Core.Entities;
 using Recipes.Core.Requests;
 using Recipes.Core.Responses;
@@ -45,6 +46,29 @@ namespace Recipes.Services.Services
             return response;
         }
 
+        public async Task<ServiceResponse<ResponseGetCategoryDetails>> GetCategoryDetailsAsync(int id)
+        {
+            var response = new ServiceResponse<ResponseGetCategoryDetails>();
+            var category = await _recipesDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            //TODO use Mapper
+
+            List<GetRecipeOfCategoryDto> recipes = new();
+            if (category.Recipes != null)
+            {
+                recipes = category.Recipes.Select(x => new GetRecipeOfCategoryDto { Name = x.Name, }).ToList();
+            }
+            
+            response.Data = new ResponseGetCategoryDetails
+            {
+                Name = category.Name,
+                Recipes = recipes,
+                CreatedAt = category.CreatedAt,
+                CreatedBy = category.CreatedBy,
+                ModifiedAt = category.ModifiedAt
+            };
+            return response;
+        }
+
         public async Task<bool> CreateCategoryAsync(RequestCreateCategory request)
         {
             var category = new Category
@@ -71,9 +95,8 @@ namespace Recipes.Services.Services
             }
 
             category.Name = request.Name;
-            category.CreatedAt = request.CreatedAt;
+            category.ModifiedAt = request.ModifiedAt;
             category.ModifiedAt = DateTime.Now;
-            category.CreatedBy = request.CreatedBy;
 
             await _recipesDbContext.SaveChangesAsync();
 
