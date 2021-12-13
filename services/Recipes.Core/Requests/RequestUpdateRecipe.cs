@@ -20,6 +20,7 @@ namespace Recipes.Core.Requests
         public int CategoryId { get; set; }
 
         public IEnumerable<CreateRecipeIngredientDto> RecipeIngredient { get; set; }
-    
+
+        public float RecommendedPrice { get; set; }
     }
 }

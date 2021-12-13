@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Recipes.Api.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class RecipesController : ControllerBase
     {
@@ -34,7 +33,7 @@ namespace Recipes.Api.Controllers
 
         // POST: api/Recipe
         [HttpPost]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize]
         public async Task<ActionResult> CreateRecipe(RequestCreateRecipe newRecipe)
         {
             newRecipe.UserId = int.Parse(User.FindFirst("userId").Value);
@@ -48,24 +47,28 @@ namespace Recipes.Api.Controllers
 
         // GET: api/Recipe/procedure
         [HttpGet("procedure/1")]
+        [Authorize]
         public async Task<ActionResult> GetRecipeWith10Ing()
         {
             return Ok(await _recipeService.GetRecipesWith10IngredientsAsync());
         }
 
         [HttpGet("procedure/2")]
+        [Authorize]
         public async Task<ActionResult> GetSortedRecipes()
         {
             return Ok(await _recipeService.GetSortedRecipesAsync());
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult> UpdateRecipe(RequestUpdateRecipe request)
         {
             return Ok(await _recipeService.UpdateRecipeAsync(request));
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<ActionResult> DeleteRecipe(int id)
         {
             return Ok(await _recipeService.DeleteRecipeAsync(id));

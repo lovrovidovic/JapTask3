@@ -19,5 +19,7 @@ namespace Recipes.Core.Responses
         public DateTime CreatedAt { get; set; }
 
         public IEnumerable<GetIngredientOfRecipeDto> Ingredients { get; set; }
+
+        public float RecommendedPrice { get; set; }
     }
 }

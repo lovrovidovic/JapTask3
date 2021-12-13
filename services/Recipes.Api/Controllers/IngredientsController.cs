@@ -33,7 +33,6 @@ namespace Recipes.Api.Controllers
         }
 
         [HttpGet("paged")]
-        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult> GetPagedIngredients([FromQuery] RequestGetPagedIngredients request)
         {
             return Ok(await _ingredientService.GetPagedIngredientsAsync(request));

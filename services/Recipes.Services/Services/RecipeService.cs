@@ -108,6 +108,7 @@ namespace Recipes.Services.Services
                 CreatedAt = DateTime.Now,
                 CreatedBy = newRecipe.UserId,
                 CategoryId = newRecipe.CategoryId,
+                RecommendedPrice = newRecipe.RecommendedPrice,
                 RecipeIngredients = newRecipe.RecipeIngredient.Select(x => new RecipeIngredient
                 {
                     Quantity = x.Quantity,
@@ -170,6 +171,7 @@ namespace Recipes.Services.Services
             recipe.Description = request.Description;
             recipe.ModifiedAt = request.ModifiedAt;
             recipe.CategoryId = request.CategoryId;
+            recipe.RecommendedPrice = request.RecommendedPrice;
             recipe.RecipeIngredients = newIngredients;
 
             await _recipesDbContext.SaveChangesAsync();

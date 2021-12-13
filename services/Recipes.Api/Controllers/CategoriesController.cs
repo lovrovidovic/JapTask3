@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Recipes.Api.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
@@ -33,6 +32,7 @@ namespace Recipes.Api.Controllers
         }
 
         // POST: api/Category
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateCategory([FromBody] RequestCreateCategory request)
         {
@@ -40,6 +40,7 @@ namespace Recipes.Api.Controllers
         }
 
         // PUT: api/Category
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult> UpdateCategory([FromBody] RequestUpdateCategory request)
         {
@@ -52,6 +53,7 @@ namespace Recipes.Api.Controllers
         }
 
         // DELETE: api/Category
+        [Authorize]
         [HttpDelete]
         public async Task<ActionResult> DeleteCategory([FromQuery] int id)
         {
