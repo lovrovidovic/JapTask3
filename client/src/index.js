@@ -37,7 +37,7 @@ const persistor = persistStore(store);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: Infinity,
+      staleTime: 1,
       retry: 2,
       refetchOnWindowFocus: false,
     },

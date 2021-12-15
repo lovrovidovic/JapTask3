@@ -12,7 +12,7 @@ namespace Recipes.Core.Responses
 
         public string Description { get; set; }
 
-        public string CategoryName { get; set; }
+        public int CategoryId { get; set; }
 
         public float TotalPrice { get; set; }
 

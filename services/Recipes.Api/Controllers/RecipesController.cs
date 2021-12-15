@@ -67,7 +67,7 @@ namespace Recipes.Api.Controllers
             return Ok(await _recipeService.UpdateRecipeAsync(request));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteRecipe(int id)
         {

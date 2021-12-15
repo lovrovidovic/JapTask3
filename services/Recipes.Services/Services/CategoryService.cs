@@ -49,7 +49,7 @@ namespace Recipes.Services.Services
         public async Task<ServiceResponse<ResponseGetCategoryDetails>> GetCategoryDetailsAsync(int id)
         {
             var response = new ServiceResponse<ResponseGetCategoryDetails>();
-            var category = await _recipesDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            var category = await _recipesDbContext.Categories.Include(x => x.Recipes).FirstOrDefaultAsync(x => x.Id == id);
             //TODO use Mapper
 
             List<GetRecipeOfCategoryDto> recipes = new();
@@ -95,7 +95,6 @@ namespace Recipes.Services.Services
             }
 
             category.Name = request.Name;
-            category.ModifiedAt = request.ModifiedAt;
             category.ModifiedAt = DateTime.Now;
 
             await _recipesDbContext.SaveChangesAsync();

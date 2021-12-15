@@ -77,6 +77,7 @@ namespace Recipes.Services.Services
 
             var mappedIngredients = recipe.RecipeIngredients.Select(x => new GetIngredientOfRecipeDto
             {
+                IngredientId = x.IngredientId,
                 Price = x.Price,
                 Name = x.Ingredient.Name,
                 Quantity = x.Quantity,
@@ -87,7 +88,6 @@ namespace Recipes.Services.Services
             });
 
             response.Data = _mapper.Map<ResponseGetRecipeDetails>(recipe);
-            response.Data.CategoryName = recipe.Category.Name; //TODO check if i need this
             response.Data.Ingredients = mappedIngredients;
             response.Data.TotalPrice = _calculationService.CalculateRecipeCost(recipe);
 
@@ -169,7 +169,7 @@ namespace Recipes.Services.Services
 
             recipe.Name = request.Name;
             recipe.Description = request.Description;
-            recipe.ModifiedAt = request.ModifiedAt;
+            recipe.ModifiedAt = DateTime.Now;
             recipe.CategoryId = request.CategoryId;
             recipe.RecommendedPrice = request.RecommendedPrice;
             recipe.RecipeIngredients = newIngredients;

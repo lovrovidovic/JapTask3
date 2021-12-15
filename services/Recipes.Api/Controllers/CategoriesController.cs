@@ -36,7 +36,13 @@ namespace Recipes.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateCategory([FromBody] RequestCreateCategory request)
         {
-            return Ok(await _categoryService.CreateCategoryAsync(request));
+            request.UserId = int.Parse(User.FindFirst("userId").Value);
+            var response = await _categoryService.CreateCategoryAsync(request);
+            if (response)
+            {
+                return Ok();
+            }
+            return BadRequest("Must select ingredients for recipe!");
         }
 
         // PUT: api/Category
@@ -54,8 +60,8 @@ namespace Recipes.Api.Controllers
 
         // DELETE: api/Category
         [Authorize]
-        [HttpDelete]
-        public async Task<ActionResult> DeleteCategory([FromQuery] int id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCategory(int id)
         {
             var response = await _categoryService.DeleteCategoryAsync(id);
             if (!response)

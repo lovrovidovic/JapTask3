@@ -1,20 +1,31 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
+import { useHistory } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import classes from "./Categories.module.css";
-import { Card } from "../Shared/Card";
 import { Button } from "@mui/material";
 import { Header } from "../Shared/Header";
 import {
   generateLink,
   routesConfiguration as routes,
 } from "../../Router/routes";
-import { useInfiniteQuery } from "react-query";
-import { getCategories } from "../../HttpRequests/CategoryRequests";
+import { useInfiniteQuery, useMutation } from "react-query";
+import {
+  deleteCategory,
+  getCategories,
+} from "../../HttpRequests/CategoryRequests";
+import useIsLoggedIn from "../../Hooks/useIsLoggedIn";
+import IconButton from "@mui/material/IconButton";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { CategoryCard } from "./CategoryCard";
+import { SuccessToaster } from "../Shared/SuccessToaster";
 
 export const Categories = () => {
-  const { data, isError, fetchNextPage, hasNextPage, isLoading } =
+  const history = useHistory();
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+
+  const { data, isError, fetchNextPage, hasNextPage, isLoading, refetch } =
     useInfiniteQuery("categories", getCategories, {
       getNextPageParam: (lastPage) => {
         if (lastPage.count === 10) {
@@ -25,6 +36,25 @@ export const Categories = () => {
       },
     });
 
+  const deleteCategoryMutation = useMutation(deleteCategory, {
+    onSuccess: () => {
+      setSuccessAlertOpen(true);
+      refetch();
+    },
+  });
+
+  const isLoggedIn = useIsLoggedIn();
+
+  const addRecipeHandler = () => {
+    history.push(generateLink(routes.CATEGORY_CREATE));
+  };
+
+  const deleteHandler = (id) => {
+    if (window.confirm("Are you sure you want to delete this?")) {
+      deleteCategoryMutation.mutate(id);
+      refetch();
+    }
+  };
   return (
     <>
       <Header title="Categories" />
@@ -32,6 +62,13 @@ export const Categories = () => {
         <Alert severity="error">
           Error! Cannot get list of recipe categories.
         </Alert>
+      )}
+      {isLoggedIn ? (
+        <IconButton size="large" onClick={addRecipeHandler}>
+          <AddCircleIcon fontSize="large" />
+        </IconButton>
+      ) : (
+        <></>
       )}
       <div className={classes.container}>
         {isLoading && (
@@ -45,13 +82,11 @@ export const Categories = () => {
               <Fragment key={i}>
                 {group?.data?.map((category) => {
                   return (
-                    <Card
+                    <CategoryCard
                       key={category.id}
                       title={category.name}
-                      linkRoute={generateLink(routes.RECIPES, {
-                        id: category.id,
-                      })}
-                      buttonText="Browse recipes"
+                      id={category.id}
+                      deleteHandler={deleteHandler}
                     />
                   );
                 })}
@@ -66,6 +101,11 @@ export const Categories = () => {
           ""
         )}
       </div>
+      <SuccessToaster
+        open={successAlertOpen}
+        setOpen={setSuccessAlertOpen}
+        text={"Action successful!"}
+      />
     </>
   );
 };

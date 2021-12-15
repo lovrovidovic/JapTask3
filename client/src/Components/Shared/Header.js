@@ -13,10 +13,13 @@ import {
 } from "../../Router/routes";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { saveToken } from "../../Redux/Actions/auth/auth";
+import useIsLoggedIn from "../../Hooks/useIsLoggedIn";
 
 export const Header = ({ title }) => {
+  const isLoggedIn = useIsLoggedIn();
   const history = useHistory();
   const dispatch = useDispatch();
+
   const logoutHandler = () => {
     dispatch(saveToken(null));
     history.push(generateLink(routes.LOGIN));
@@ -40,15 +43,35 @@ export const Header = ({ title }) => {
             <ArrowBackIosNewIcon />
           </IconButton>
           <Typography
-            variant="h6"
+            variant="h5"
             component="div"
             edge="start"
             sx={{ flexGrow: 1 }}
           >
             {title}
           </Typography>
-          <Button color="inherit" onClick={logoutHandler}>
-            Logout
+          <Box sx={{ display: { xs: "none", md: "flex" }, mr: 3 }}>
+            <Button
+              onClick={() => history.push(generateLink(routes.CATEGORIES))}
+              sx={{ color: "white", display: "block" }}
+            >
+              Categories
+            </Button>
+
+            {isLoggedIn ? (
+              <Button
+                onClick={() => history.push(generateLink(routes.INGREDIENTS))}
+                sx={{ color: "white", display: "block" }}
+              >
+                Ingredients
+              </Button>
+            ) : (
+              <></>
+            )}
+          </Box>
+
+          <Button variant="outlined" color="inherit" onClick={logoutHandler}>
+            {isLoggedIn ? "Logout" : "Login"}
           </Button>
         </Toolbar>
       </AppBar>

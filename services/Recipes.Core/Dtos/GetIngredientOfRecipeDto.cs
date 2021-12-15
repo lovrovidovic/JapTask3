@@ -4,6 +4,8 @@ namespace Recipes.Core.Dtos
 {
     public class GetIngredientOfRecipeDto
     {
+        public int IngredientId { get; set; }
+
         public string Name { get; set; }
 
         public float Price { get; set; }

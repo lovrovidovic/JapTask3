@@ -47,6 +47,7 @@ namespace Recipes.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateIngredient(RequestCreateIngredient request)
         {
+            request.UserId = int.Parse(User.FindFirst("userId").Value);
             return Ok(await _ingredientService.CreateIngredientAsync(request));
         }
 
@@ -56,7 +57,7 @@ namespace Recipes.Api.Controllers
             return Ok(await _ingredientService.UpdateIngredientAsync(request));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteIngredient(int id)
         {
             return Ok(await _ingredientService.DeleteIngredientAsync(id));

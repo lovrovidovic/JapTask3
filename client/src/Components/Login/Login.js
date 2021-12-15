@@ -12,6 +12,7 @@ import {
 import { useMutation } from "react-query";
 import { login } from "../../HttpRequests/LoginRequests";
 import { saveToken } from "../../Redux/Actions/auth/auth";
+import { Header } from "../Shared/Header";
 
 export default function Login() {
   const history = useHistory();
@@ -32,47 +33,50 @@ export default function Login() {
   };
 
   return (
-    <Paper className={classes.paper}>
-      <form className={classes.form}>
-        <Typography variant="h5" sx={{ textAlign: "center" }}>
-          LOGIN
-        </Typography>
-        <TextField
-          label="Username: "
-          variant="standard"
-          name="username"
-          value={values.username}
-          onChange={handleFormChange}
-        />
-        <TextField
-          type="password"
-          label="Password: "
-          variant="standard"
-          name="password"
-          value={values.password}
-          onChange={handleFormChange}
-        />
-        {submitLogin.isError && (
-          <Typography
-            variant="body2"
-            sx={{ textAlign: "center", color: "red" }}
-          >
-            Invalid credentials
+    <>
+      <Header title="" />
+      <Paper className={classes.paper}>
+        <form className={classes.form}>
+          <Typography variant="h5" sx={{ textAlign: "center" }}>
+            LOGIN
           </Typography>
+          <TextField
+            label="Username: "
+            variant="standard"
+            name="username"
+            value={values.username}
+            onChange={handleFormChange}
+          />
+          <TextField
+            type="password"
+            label="Password: "
+            variant="standard"
+            name="password"
+            value={values.password}
+            onChange={handleFormChange}
+          />
+          {submitLogin.isError && (
+            <Typography
+              variant="body2"
+              sx={{ textAlign: "center", color: "red" }}
+            >
+              Invalid credentials
+            </Typography>
+          )}
+          <Button
+            onClick={() => {
+              submitLogin.mutate(values);
+            }}
+          >
+            Log in
+          </Button>
+        </form>
+        {submitLogin.isLoading && (
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
         )}
-        <Button
-          onClick={() => {
-            submitLogin.mutate(values);
-          }}
-        >
-          Log in
-        </Button>
-      </form>
-      {submitLogin.isLoading && (
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
-      )}
-    </Paper>
+      </Paper>
+    </>
   );
 }
