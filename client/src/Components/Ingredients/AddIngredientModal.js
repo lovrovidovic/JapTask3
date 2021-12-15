@@ -81,6 +81,17 @@ export const AddIngredientModal = ({
     }
   };
 
+  const autoCompleteOptions = ingredients?.map((ingredient) => {
+    return {
+      label: ingredient.name,
+      id: ingredient.id,
+      normativeUnit: ingredient.normativeUnit,
+      normativePrice: ingredient.normativePrice,
+      normativeQuantity: ingredient.normativeQuantity,
+      unitPrice: ingredient.unitPrice,
+    };
+  });
+
   return (
     <div>
       <Modal
@@ -94,16 +105,7 @@ export const AddIngredientModal = ({
               <Autocomplete
                 style={{ width: "14em" }}
                 onChange={handleAutoComplete}
-                options={ingredients?.map((ingredient) => {
-                  return {
-                    label: ingredient.name,
-                    id: ingredient.id,
-                    normativeUnit: ingredient.normativeUnit,
-                    normativePrice: ingredient.normativePrice,
-                    normativeQuantity: ingredient.normativeQuantity,
-                    unitPrice: ingredient.unitPrice,
-                  };
-                })}
+                options={autoCompleteOptions}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 renderInput={(params) => (
                   <TextField {...params} label="Search for an ingredient" />

@@ -8,8 +8,6 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Button,
-  Alert,
 } from "@mui/material";
 import {
   generateLink,
@@ -28,6 +26,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { SuccessToaster } from "../Shared/SuccessToaster";
+import classes from "./Ingredients.module.css";
 
 export const Ingredients = () => {
   const history = useHistory();
@@ -124,110 +123,126 @@ export const Ingredients = () => {
       <IconButton size="large" onClick={addIngredientHandler}>
         <AddCircleIcon fontSize="large" />
       </IconButton>
-      <IconButton size="small" onClick={previousPage}>
-        <NavigateBeforeIcon />
-      </IconButton>
-      {values.page + 1}
-      <IconButton size="small" onClick={nextPage}>
-        <NavigateNextIcon />
-      </IconButton>
-
-      <Select
-        label="Page size: "
-        value={values.pageSize}
-        name="pageSize"
-        items={pageSizes}
-        onChange={increasePageSize}
-      />
-      <Select
-        label="Sort by: "
-        value={values.sortBy}
-        name="sortBy"
-        items={sortBy}
-        onChange={handleChange}
-      />
-      <Select
-        label="Sort order: "
-        value={values.sortOrder}
-        name="sortOrder"
-        items={sortOrder}
-        onChange={handleChange}
-      />
-
-      <TextField
-        size="large"
-        label="Name: "
-        variant="standard"
-        name="name"
-        value={values.filters.name}
-        onChange={handleFiltersChange}
-      />
-      <TextField
-        size="large"
-        label="Min Quantity: "
-        variant="standard"
-        name="minQuantity"
-        value={values.filters.minQuantity}
-        onChange={handleFiltersChange}
-      />
-      <TextField
-        size="large"
-        label="Max Quantity: "
-        variant="standard"
-        name="maxQuantity"
-        value={values.filters.maxQuantity}
-        onChange={handleFiltersChange}
-      />
-      <Select
-        label="Unit type: "
-        value={values.filters.unitType}
-        name="unitType"
-        items={units}
-        onChange={handleFiltersChange}
-      />
-
-      <Table sx={{ maxWidth: 800 }} size="small">
-        <TableHead sx={{ backgroundColor: "darkgrey" }}>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Normative price</TableCell>
-            <TableCell>Normative quantity</TableCell>
-            <TableCell>Normative unit</TableCell>
-            <TableCell>Unit price</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data?.map((ingredient) => (
-            <TableRow
-              key={ingredient?.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {ingredient.name}
-              </TableCell>
-              <TableCell>{ingredient.normativePrice}</TableCell>
-              <TableCell>{ingredient.normativeQuantity}</TableCell>
-              <TableCell>{ingredient.normativeUnit}</TableCell>
-              <TableCell>{ingredient.unitPrice}</TableCell>
-              <TableCell>
-                <IconButton
-                  size="small"
-                  onClick={() => editIngredientHandler(ingredient.id)}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  onClick={() => deleteIngredientHandler(ingredient.id)}
-                >
-                  <DeleteForeverIcon fontSize="small" />
-                </IconButton>
-              </TableCell>
+      <div className={classes.form}>
+        <div className={classes.container}>
+          <div>
+            <div className={classes.pages}>
+              Pages:
+              <IconButton size="small" onClick={previousPage}>
+                <NavigateBeforeIcon />
+              </IconButton>
+              {values.page + 1}
+              <IconButton size="small" onClick={nextPage}>
+                <NavigateNextIcon />
+              </IconButton>
+            </div>
+            <div>
+              <Select
+                label="Page size: "
+                value={values.pageSize}
+                name="pageSize"
+                items={pageSizes}
+                onChange={increasePageSize}
+              />
+            </div>
+          </div>
+          <div>
+            <div>
+              <Select
+                label="Sort by: "
+                value={values.sortBy}
+                name="sortBy"
+                items={sortBy}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <Select
+                label="Sort order: "
+                value={values.sortOrder}
+                name="sortOrder"
+                items={sortOrder}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <TextField
+            sx={{ m: 1 }}
+            label="Name: "
+            variant="standard"
+            name="name"
+            value={values.filters.name}
+            onChange={handleFiltersChange}
+          />
+          <TextField
+            sx={{ m: 1 }}
+            label="Min Quantity: "
+            variant="standard"
+            name="minQuantity"
+            value={values.filters.minQuantity}
+            onChange={handleFiltersChange}
+          />
+          <TextField
+            sx={{ m: 1 }}
+            label="Max Quantity: "
+            variant="standard"
+            name="maxQuantity"
+            value={values.filters.maxQuantity}
+            onChange={handleFiltersChange}
+          />
+          <Select
+            label="Unit type: "
+            value={values.filters.unitType}
+            name="unitType"
+            items={units}
+            onChange={handleFiltersChange}
+          />
+        </div>
+        <Table sx={{ maxWidth: 850 }} size="small">
+          <TableHead sx={{ backgroundColor: "darkgrey" }}>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Normative price</TableCell>
+              <TableCell>Normative quantity</TableCell>
+              <TableCell>Normative unit</TableCell>
+              <TableCell>Unit price</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {data?.map((ingredient) => (
+              <TableRow
+                key={ingredient?.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {ingredient.name}
+                </TableCell>
+                <TableCell>{ingredient.normativePrice}</TableCell>
+                <TableCell>{ingredient.normativeQuantity}</TableCell>
+                <TableCell>{ingredient.normativeUnit}</TableCell>
+                <TableCell>{ingredient.unitPrice}</TableCell>
+                <TableCell>
+                  <IconButton
+                    size="small"
+                    onClick={() => editIngredientHandler(ingredient.id)}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={() => deleteIngredientHandler(ingredient.id)}
+                  >
+                    <DeleteForeverIcon fontSize="small" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
       <SuccessToaster
         open={successAlertOpen}
         setOpen={setSuccessAlertOpen}

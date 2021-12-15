@@ -18,13 +18,15 @@ import {
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useQuery, useMutation } from "react-query";
 import { getAllCategories } from "../../HttpRequests/CategoryRequests";
-import { Form, Formik } from "formik";
+import { Form, Formik, ErrorMessage } from "formik";
 import {
   getRecipeDetails,
   updateRecipe,
 } from "../../HttpRequests/RecipeRequests";
 import { SuccessToaster } from "../Shared/SuccessToaster";
 import { Header } from "../Shared/Header";
+import classes from "./AddRecipe.module.css";
+import { RecipeSchema } from "../../validationSchemas/ValidationSchemas";
 
 export const EditRecipe = () => {
   const params = useParams();
@@ -33,7 +35,7 @@ export const EditRecipe = () => {
   const recipeId = params.id;
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
 
-  const { data, isError, isLoading } = useQuery(
+  const { data, refetch, isLoading } = useQuery(
     ["recipeDetails", recipeId],
     getRecipeDetails
   );
@@ -46,13 +48,10 @@ export const EditRecipe = () => {
 
   const submitRecipe = useMutation(updateRecipe, {
     onMutate: (variables) => {
-      console.log("a", variables.recipeIngredient);
-      console.log("new", newIngredients);
       variables.recipeIngredient = [
         ...variables.recipeIngredient,
         ...newIngredients,
       ];
-      console.log("b", variables.recipeIngredient);
 
       variables.recipeIngredient = variables.recipeIngredient.map(
         ({
@@ -65,12 +64,13 @@ export const EditRecipe = () => {
           ...attributes
         }) => attributes
       );
-      console.log("c", variables.recipeIngredient);
 
       return variables;
     },
     onSuccess: () => {
       setSuccessAlertOpen(true);
+      refetch();
+      setNewIngredients([]);
     },
   });
 
@@ -102,6 +102,16 @@ export const EditRecipe = () => {
     setFieldValue("recipeIngredient", filteredIngredients);
   };
 
+  const deleteNewIngredient = (id) => {
+    setNewIngredients((prevState) => {
+      return [
+        ...prevState.filter((ingredient) => {
+          return ingredient.ingredientId !== id;
+        }),
+      ];
+    });
+  };
+
   return (
     <>
       <Header title="Edit recipe" />
@@ -110,115 +120,166 @@ export const EditRecipe = () => {
           enableReinitialize
           initialValues={initialValues}
           onSubmit={(values) => submitRecipe.mutate(values)}
+          validationSchema={RecipeSchema}
         >
           {({ values, handleChange, setFieldValue }) => (
             <Form>
-              <AddIngredientModal
-                showModal={showModal}
-                handleShowModal={handleShowModal}
-                handleAddIngredient={addIngredient}
-              />
+              <div className={classes.form}>
+                <AddIngredientModal
+                  showModal={showModal}
+                  handleShowModal={handleShowModal}
+                  handleAddIngredient={addIngredient}
+                />
 
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="select">Category</InputLabel>
-                <Select
-                  name="categoryId"
-                  value={values?.categoryId}
-                  label="Category"
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="select">Category</InputLabel>
+                  <Select
+                    name="categoryId"
+                    value={values?.categoryId}
+                    label="Category"
+                    onChange={handleChange}
+                  >
+                    {categories?.map((category) => {
+                      return (
+                        <MenuItem key={category.id} value={category.id}>
+                          {category.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                <ErrorMessage name="categoryId" />
+
+                <TextField
+                  label="Name: "
+                  variant="standard"
+                  name="name"
+                  value={values.name}
                   onChange={handleChange}
-                >
-                  {categories?.map((category) => {
-                    return (
-                      <MenuItem key={category.id} value={category.id}>
-                        {category.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+                />
+                <ErrorMessage name="name" />
 
-              <TextField
-                size="large"
-                label="Name: "
-                variant="standard"
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-              />
-              <TextField
-                label="Description: "
-                variant="standard"
-                name="description"
-                multiline
-                minRows={2}
-                value={values.description}
-                onChange={handleChange}
-              />
-              <TextField
-                size="large"
-                label="Recommended price: "
-                variant="standard"
-                name="recommendedPrice"
-                value={values.recommendedPrice}
-                onChange={handleChange}
-              />
+                <TextField
+                  label="Recommended price: "
+                  variant="standard"
+                  name="recommendedPrice"
+                  value={values.recommendedPrice}
+                  onChange={handleChange}
+                />
+                <ErrorMessage name="recommendedPrice" />
 
-              <Button sx={{ margin: "30px 0" }} onClick={handleShowModal}>
-                Add ingredient
-              </Button>
+                <TextField
+                  sx={{ m: 1, width: "40%" }}
+                  label="Description: "
+                  variant="standard"
+                  name="description"
+                  multiline
+                  minRows={2}
+                  value={values.description}
+                  onChange={handleChange}
+                />
+                <ErrorMessage name="description" />
 
-              <Table sx={{ maxWidth: 800 }} size="small">
-                <TableHead sx={{ backgroundColor: "darkgrey" }}>
-                  <TableRow>
-                    <TableCell>Ingredient</TableCell>
-                    <TableCell>Ammount</TableCell>
-                    <TableCell>Price per unit</TableCell>
-                    <TableCell>Remove</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {values?.recipeIngredient?.map((ingredient) => (
-                    <TableRow
-                      key={ingredient?.ingredientId}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {ingredient.name}
-                      </TableCell>
-                      <TableCell>
-                        {ingredient.quantity} {ingredient.unitType}
-                      </TableCell>
-                      <TableCell>
-                        {ingredient.normativePrice}KM /
-                        {ingredient.normativeQuantity}{" "}
-                        {ingredient.normativeUnit}
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          onClick={() =>
-                            deleteIngredient(
-                              ingredient.ingredientId,
-                              values.recipeIngredient,
-                              setFieldValue
-                            )
-                          }
-                        >
-                          <DeleteForeverIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
-              <div className="detailsButtons">
-                <Button
-                  variant="contained"
-                  sx={{ margin: "30px 0" }}
-                  type="submit"
-                >
-                  Submit
+                <Button sx={{ margin: "30px 0" }} onClick={handleShowModal}>
+                  Add ingredient
                 </Button>
+                <Table sx={{ maxWidth: 800 }} size="small">
+                  <TableHead sx={{ backgroundColor: "darkgrey" }}>
+                    <TableRow>
+                      <TableCell>Ingredient</TableCell>
+                      <TableCell>Ammount</TableCell>
+                      <TableCell>Price per unit</TableCell>
+                      <TableCell>Remove</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {values?.recipeIngredient?.map((ingredient) => (
+                      <TableRow
+                        key={ingredient?.ingredientId}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {ingredient.name}
+                        </TableCell>
+                        <TableCell>
+                          {ingredient.quantity} {ingredient.unitType}
+                        </TableCell>
+                        <TableCell>
+                          {ingredient.normativePrice}KM /
+                          {ingredient.normativeQuantity}{" "}
+                          {ingredient.normativeUnit}
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            onClick={() =>
+                              deleteIngredient(
+                                ingredient.ingredientId,
+                                values.recipeIngredient,
+                                setFieldValue
+                              )
+                            }
+                          >
+                            <DeleteForeverIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                {newIngredients.length > 0 && (
+                  <Table sx={{ maxWidth: 800 }} size="small">
+                    <TableHead sx={{ backgroundColor: "darkgrey" }}>
+                      <TableRow>
+                        <TableCell>Ingredient</TableCell>
+                        <TableCell>Ammount</TableCell>
+                        <TableCell>Price per unit</TableCell>
+                        <TableCell>Remove</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {newIngredients.map((ingredient) => (
+                        <TableRow
+                          key={ingredient?.ingredientId}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {ingredient.name}
+                          </TableCell>
+                          <TableCell>
+                            {ingredient.quantity} {ingredient.unitType}
+                          </TableCell>
+                          <TableCell>
+                            {ingredient.normativePrice}KM /
+                            {ingredient.normativeQuantity}{" "}
+                            {ingredient.normativeUnit}
+                          </TableCell>
+                          <TableCell>
+                            <IconButton
+                              onClick={() =>
+                                deleteNewIngredient(ingredient.ingredientId)
+                              }
+                            >
+                              <DeleteForeverIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+                <div className="detailsButtons">
+                  <Button
+                    variant="contained"
+                    sx={{ margin: "30px 0" }}
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                </div>
               </div>
             </Form>
           )}

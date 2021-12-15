@@ -96,6 +96,7 @@ export const AddRecipe = () => {
           connected to the server.
         </Alert>
       )}
+      
       <div className={classes.container}>
         <form className={classes.form}>
           <AddIngredientModal

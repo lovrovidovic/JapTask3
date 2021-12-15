@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Header } from "../Shared/Header";
-import { Form, Formik } from "formik";
+import { Form, Formik, ErrorMessage } from "formik";
 import { TextField, Button } from "@mui/material";
 import { useMutation } from "react-query";
 import { createCategory } from "../../HttpRequests/CategoryRequests";
 import { SuccessToaster } from "../Shared/SuccessToaster";
+import { CategorySchema } from "../../validationSchemas/ValidationSchemas";
+import classes from "./AddCategory.module.css";
 
 export const AddCategory = () => {
   const initialValues = { name: "" };
@@ -24,25 +26,29 @@ export const AddCategory = () => {
           enableReinitialize
           initialValues={initialValues}
           onSubmit={(values) => submitCategory.mutate(values)}
+          validationSchema={CategorySchema}
         >
           {({ values, handleChange }) => (
             <Form>
-              <TextField
-                size="large"
-                label="Name: "
-                variant="standard"
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-              />
-              <div className="detailsButtons">
-                <Button
-                  variant="contained"
-                  sx={{ margin: "30px 0" }}
-                  type="submit"
-                >
-                  Submit
-                </Button>
+              <div className={classes.form}>
+                <TextField
+                  label="Name: "
+                  variant="standard"
+                  name="name"
+                  value={values.name}
+                  onChange={handleChange}
+                />
+                <ErrorMessage name="name" />
+
+                <div className="detailsButtons">
+                  <Button
+                    variant="contained"
+                    sx={{ margin: "30px 0" }}
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                </div>
               </div>
             </Form>
           )}

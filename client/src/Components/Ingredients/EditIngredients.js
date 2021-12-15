@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Header } from "../Shared/Header";
 import { useParams } from "react-router-dom";
-import { Form, Formik, Field } from "formik";
+import { Form, Formik, ErrorMessage } from "formik";
 import { useQuery, useMutation } from "react-query";
 import { TextField, Button } from "@mui/material";
 import {
@@ -10,6 +10,8 @@ import {
 } from "../../HttpRequests/IngredientRequests";
 import { Select } from "../Shared/Select";
 import { SuccessToaster } from "../Shared/SuccessToaster";
+import { IngredientSchema } from "../../validationSchemas/ValidationSchemas";
+import classes from "./CreateIngredient.module.css";
 
 export const EditIngredient = () => {
   const params = useParams();
@@ -40,54 +42,62 @@ export const EditIngredient = () => {
 
   return (
     <>
-      <Header title="Create ingredient" />
+      <Header title="Edit ingredient" />
       {!isLoading && (
         <Formik
           enableReinitialize
           initialValues={initialValues}
           onSubmit={(values) => submitIngredient.mutate(values)}
+          validationSchema={IngredientSchema}
         >
           {({ values, handleChange }) => (
             <Form>
-              <TextField
-                size="large"
-                label="Name: "
-                variant="standard"
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-              />
-              <TextField
-                size="large"
-                label="Normative quantity: "
-                variant="standard"
-                name="normativeQuantity"
-                value={values.normativeQuantity}
-                onChange={handleChange}
-              />
-              <TextField
-                size="large"
-                label="Normative price: "
-                variant="standard"
-                name="normativePrice"
-                value={values.normativePrice}
-                onChange={handleChange}
-              />
-              <Select
-                label="Unit type: "
-                value={values.normativeUnit}
-                name="normativeUnit"
-                items={units}
-                onChange={handleChange}
-              />
-              <div className="detailsButtons">
-                <Button
-                  variant="contained"
-                  sx={{ margin: "30px 0" }}
-                  type="submit"
-                >
-                  Submit
-                </Button>
+              <div className={classes.form}>
+                <TextField
+                  label="Name: "
+                  variant="standard"
+                  name="name"
+                  value={values.name}
+                  onChange={handleChange}
+                />
+                <ErrorMessage name="name" />
+
+                <TextField
+                  label="Normative quantity: "
+                  variant="standard"
+                  name="normativeQuantity"
+                  value={values.normativeQuantity}
+                  onChange={handleChange}
+                />
+                <ErrorMessage name="normativeQuantity" />
+
+                <TextField
+                  label="Normative price: "
+                  variant="standard"
+                  name="normativePrice"
+                  value={values.normativePrice}
+                  onChange={handleChange}
+                />
+                <ErrorMessage name="normativePrice" />
+
+                <Select
+                  label="Unit type: "
+                  value={values.normativeUnit}
+                  name="normativeUnit"
+                  items={units}
+                  onChange={handleChange}
+                />
+                <ErrorMessage name="normativeUnit" />
+
+                <div className="detailsButtons">
+                  <Button
+                    variant="contained"
+                    sx={{ margin: "30px 0" }}
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                </div>
               </div>
             </Form>
           )}

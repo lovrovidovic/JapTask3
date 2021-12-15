@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Header } from "../Shared/Header";
 import { useParams } from "react-router-dom";
-import { Form, Formik } from "formik";
+import { Form, Formik, ErrorMessage } from "formik";
 import { TextField, Button, Typography, Alert } from "@mui/material";
 import { useQuery, useMutation } from "react-query";
 import {
@@ -11,6 +11,8 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { SuccessToaster } from "../Shared/SuccessToaster";
+import { CategorySchema } from "../../validationSchemas/ValidationSchemas";
+import classes from "./AddCategory.module.css";
 
 export const CategoryDetails = () => {
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
@@ -55,46 +57,51 @@ export const CategoryDetails = () => {
           onSubmit={(values) =>
             submitCategory.mutate({ id: categoryId, name: values.name })
           }
+          validationSchema={CategorySchema}
         >
           {({ values, handleChange }) => (
             <Form>
-              <TextField
-                size="large"
-                label="Name: "
-                variant="standard"
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-              />
-              <TextField
-                size="large"
-                label="Created at: "
-                variant="standard"
-                name="createdAt"
-                value={values.createdAt}
-                disabled
-              />
-              <TextField
-                size="large"
-                label="Modified at: "
-                variant="standard"
-                name="modifiedAt"
-                value={values.modifiedAt}
-                disabled
-              />
+              <div className={classes.form}>
+                <TextField
+                  label="Name: "
+                  variant="standard"
+                  name="name"
+                  value={values.name}
+                  onChange={handleChange}
+                />
+                <ErrorMessage name="name" />
 
-              {data?.recipes?.map((recipe) => {
-                return <Typography key={recipe}>{recipe.name}</Typography>;
-              })}
+                <TextField
+                  label="Created at: "
+                  variant="standard"
+                  name="createdAt"
+                  value={values.createdAt}
+                  disabled
+                />
+                <TextField
+                  label="Modified at: "
+                  variant="standard"
+                  name="modifiedAt"
+                  value={values.modifiedAt}
+                  disabled
+                />
+                
+                Recipes:
+                {data?.recipes?.map((recipe) => {
+                  return (
+                    <Typography key={recipe.name}>{recipe.name}</Typography>
+                  );
+                })}
 
-              <div className="detailsButtons">
-                <Button
-                  variant="contained"
-                  sx={{ margin: "30px 0" }}
-                  type="submit"
-                >
-                  Submit
-                </Button>
+                <div className="detailsButtons">
+                  <Button
+                    variant="contained"
+                    sx={{ margin: "30px 0" }}
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                </div>
               </div>
             </Form>
           )}
