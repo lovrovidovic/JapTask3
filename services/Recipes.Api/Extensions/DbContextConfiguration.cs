@@ -11,6 +11,9 @@ namespace Recipes.Api.Extensions
         {
             services.AddDbContext<RecipesDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DBConnection")));
+
+            services.AddDbContext<LoggingDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("LogDBConnection")));
         }
     }
 }
