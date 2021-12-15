@@ -33,7 +33,10 @@ export const CreateIngredient = () => {
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          onSubmit={(values) => submitIngredient.mutate(values)}
+          onSubmit={(values, { resetForm }) => {
+            submitIngredient.mutate(values);
+            resetForm();
+          }}
           validationSchema={IngredientSchema}
         >
           {({ values, handleChange }) => (

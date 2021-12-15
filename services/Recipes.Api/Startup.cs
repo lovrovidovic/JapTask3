@@ -27,6 +27,7 @@ namespace Recipes.Api
             services.ConfigureMapper();
             services.AddControllers();
             services.ConfigureSwagger();
+            services.ConfigureFluentValidation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

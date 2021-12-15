@@ -13,7 +13,5 @@ namespace Recipes.Core.Requests
         public float NormativeQuantity { get; set; }
 
         public UnitType NormativeUnit { get; set; }
-
-        public float UnitPrice { get; set; }
     }
 }

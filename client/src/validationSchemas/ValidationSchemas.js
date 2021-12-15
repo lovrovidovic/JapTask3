@@ -33,3 +33,13 @@ export const RecipeSchema = Yup.object().shape({
         .min(0)
 });
 
+export const IngredientModalSchema = Yup.object().shape({
+    name: Yup.string()
+        .required('Name is required')
+        .min(3),
+    unitType: Yup.string()
+        .required('Unit type is required'),
+    quantity: Yup.number()
+        .required('Normative quantity is required')
+        .min(1),
+});

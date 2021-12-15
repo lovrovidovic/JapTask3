@@ -25,7 +25,10 @@ export const AddCategory = () => {
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          onSubmit={(values) => submitCategory.mutate(values)}
+          onSubmit={(values, { resetForm }) => {
+            submitCategory.mutate(values);
+            resetForm();
+          }}
           validationSchema={CategorySchema}
         >
           {({ values, handleChange }) => (
