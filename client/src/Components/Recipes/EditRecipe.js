@@ -19,10 +19,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useQuery, useMutation } from "react-query";
 import { getAllCategories } from "../../HttpRequests/CategoryRequests";
 import { Form, Formik, ErrorMessage } from "formik";
-import {
-  getRecipeDetails,
-  updateRecipe,
-} from "../../HttpRequests/RecipeRequests";
+import { getRecipeDetails, updateRecipe } from "../../HttpRequests/RecipeRequests";
 import { SuccessToaster } from "../Shared/SuccessToaster";
 import { Header } from "../Shared/Header";
 import classes from "./AddRecipe.module.css";
@@ -35,10 +32,7 @@ export const EditRecipe = () => {
   const recipeId = params.id;
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
 
-  const { data, refetch, isLoading } = useQuery(
-    ["recipeDetails", recipeId],
-    getRecipeDetails
-  );
+  const { data, refetch, isLoading } = useQuery(["recipeDetails", recipeId], getRecipeDetails);
 
   const {
     data: categories,
@@ -48,10 +42,7 @@ export const EditRecipe = () => {
 
   const submitRecipe = useMutation(updateRecipe, {
     onMutate: (variables) => {
-      variables.recipeIngredient = [
-        ...variables.recipeIngredient,
-        ...newIngredients,
-      ];
+      variables.recipeIngredient = [...variables.recipeIngredient, ...newIngredients];
 
       variables.recipeIngredient = variables.recipeIngredient.map(
         ({
@@ -64,7 +55,6 @@ export const EditRecipe = () => {
           ...attributes
         }) => attributes
       );
-
       return variables;
     },
     onSuccess: () => {
@@ -120,8 +110,7 @@ export const EditRecipe = () => {
           enableReinitialize
           initialValues={initialValues}
           onSubmit={(values) => submitRecipe.mutate(values)}
-          validationSchema={RecipeSchema}
-        >
+          validationSchema={RecipeSchema}>
           {({ values, handleChange, setFieldValue }) => (
             <Form>
               <div className={classes.form}>
@@ -137,8 +126,7 @@ export const EditRecipe = () => {
                     name="categoryId"
                     value={values?.categoryId}
                     label="Category"
-                    onChange={handleChange}
-                  >
+                    onChange={handleChange}>
                     {categories?.map((category) => {
                       return (
                         <MenuItem key={category.id} value={category.id}>
@@ -198,8 +186,7 @@ export const EditRecipe = () => {
                         key={ingredient?.ingredientId}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
+                        }}>
                         <TableCell component="th" scope="row">
                           {ingredient.name}
                         </TableCell>
@@ -207,8 +194,7 @@ export const EditRecipe = () => {
                           {ingredient.quantity} {ingredient.unitType}
                         </TableCell>
                         <TableCell>
-                          {ingredient.normativePrice}KM /
-                          {ingredient.normativeQuantity}{" "}
+                          {ingredient.normativePrice}KM /{ingredient.normativeQuantity}{" "}
                           {ingredient.normativeUnit}
                         </TableCell>
                         <TableCell>
@@ -219,8 +205,7 @@ export const EditRecipe = () => {
                                 values.recipeIngredient,
                                 setFieldValue
                               )
-                            }
-                          >
+                            }>
                             <DeleteForeverIcon />
                           </IconButton>
                         </TableCell>
@@ -244,8 +229,7 @@ export const EditRecipe = () => {
                           key={ingredient?.ingredientId}
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
+                          }}>
                           <TableCell component="th" scope="row">
                             {ingredient.name}
                           </TableCell>
@@ -253,16 +237,12 @@ export const EditRecipe = () => {
                             {ingredient.quantity} {ingredient.unitType}
                           </TableCell>
                           <TableCell>
-                            {ingredient.normativePrice}KM /
-                            {ingredient.normativeQuantity}{" "}
+                            {ingredient.normativePrice}KM /{ingredient.normativeQuantity}{" "}
                             {ingredient.normativeUnit}
                           </TableCell>
                           <TableCell>
                             <IconButton
-                              onClick={() =>
-                                deleteNewIngredient(ingredient.ingredientId)
-                              }
-                            >
+                              onClick={() => deleteNewIngredient(ingredient.ingredientId)}>
                               <DeleteForeverIcon />
                             </IconButton>
                           </TableCell>
@@ -272,11 +252,7 @@ export const EditRecipe = () => {
                   </Table>
                 )}
                 <div className="detailsButtons">
-                  <Button
-                    variant="contained"
-                    sx={{ margin: "30px 0" }}
-                    type="submit"
-                  >
+                  <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
                     Submit
                   </Button>
                 </div>

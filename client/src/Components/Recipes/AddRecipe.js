@@ -41,8 +41,7 @@ export const AddRecipe = () => {
     onMutate: (variables) => {
       console.log(variables);
       variables.recipeIngredient = recipeIngredients.map(
-        ({ normativePrice, normativeQuantity, normativeUnit, ...attributes }) =>
-          attributes
+        ({ normativePrice, normativeQuantity, normativeUnit, ...attributes }) => attributes
       );
       return variables;
     },
@@ -83,8 +82,7 @@ export const AddRecipe = () => {
       <Header title="Add new recipe" />
       {submitRecipe.isError && (
         <Alert severity="error">
-          Error! Check if you have filled the entire form or if you are
-          connected to the server.
+          Error! Check if you have filled the entire form or if you are connected to the server.
         </Alert>
       )}
       <Formik
@@ -94,8 +92,7 @@ export const AddRecipe = () => {
           submitRecipe.mutate(values);
           resetForm();
         }}
-        validationSchema={RecipeSchema}
-      >
+        validationSchema={RecipeSchema}>
         {({ values, handleChange }) => (
           <Form>
             <div className={classes.container}>
@@ -113,8 +110,7 @@ export const AddRecipe = () => {
                       name="categoryId"
                       value={values.categoryId}
                       label="Category"
-                      onChange={handleChange}
-                    >
+                      onChange={handleChange}>
                       {categories?.map((category) => {
                         return (
                           <MenuItem key={category.id} value={category.id}>
@@ -177,8 +173,7 @@ export const AddRecipe = () => {
                           key={ingredient?.ingredientId}
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
+                          }}>
                           <TableCell component="th" scope="row">
                             {ingredient.name}
                           </TableCell>
@@ -186,16 +181,11 @@ export const AddRecipe = () => {
                             {ingredient.quantity} {ingredient.unitType}
                           </TableCell>
                           <TableCell>
-                            {ingredient.normativePrice}KM /
-                            {ingredient.normativeQuantity}{" "}
+                            {ingredient.normativePrice}KM /{ingredient.normativeQuantity}{" "}
                             {ingredient.normativeUnit}
                           </TableCell>
                           <TableCell>
-                            <IconButton
-                              onClick={() =>
-                                deleteIngredient(ingredient.ingredientId)
-                              }
-                            >
+                            <IconButton onClick={() => deleteIngredient(ingredient.ingredientId)}>
                               <DeleteForeverIcon />
                             </IconButton>
                           </TableCell>
@@ -204,11 +194,7 @@ export const AddRecipe = () => {
                     </TableBody>
                   </Table>
                 )}
-                <Button
-                  variant="contained"
-                  sx={{ margin: "30px 0" }}
-                  type="submit"
-                >
+                <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
                   Submit
                 </Button>
               </div>

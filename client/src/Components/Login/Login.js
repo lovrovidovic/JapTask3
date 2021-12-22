@@ -5,10 +5,7 @@ import { Button, Typography, Box, CircularProgress } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import classes from "./Login.module.css";
-import {
-  generateLink,
-  routesConfiguration as routes,
-} from "../../Router/routes";
+import { generateLink, routesConfiguration as routes } from "../../Router/routes";
 import { useMutation } from "react-query";
 import { login } from "../../HttpRequests/LoginRequests";
 import { saveToken } from "../../Redux/Actions/auth/auth";
@@ -56,18 +53,14 @@ export default function Login() {
             onChange={handleFormChange}
           />
           {submitLogin.isError && (
-            <Typography
-              variant="body2"
-              sx={{ textAlign: "center", color: "red" }}
-            >
+            <Typography variant="body2" sx={{ textAlign: "center", color: "red" }}>
               Invalid credentials
             </Typography>
           )}
           <Button
             onClick={() => {
               submitLogin.mutate(values);
-            }}
-          >
+            }}>
             Log in
           </Button>
         </form>

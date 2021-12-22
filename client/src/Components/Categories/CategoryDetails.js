@@ -4,10 +4,7 @@ import { useParams } from "react-router-dom";
 import { Form, Formik, ErrorMessage } from "formik";
 import { TextField, Button, Typography, Alert } from "@mui/material";
 import { useQuery, useMutation } from "react-query";
-import {
-  getCategoryDetails,
-  updateCategory,
-} from "../../HttpRequests/CategoryRequests";
+import { getCategoryDetails, updateCategory } from "../../HttpRequests/CategoryRequests";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { SuccessToaster } from "../Shared/SuccessToaster";
@@ -46,19 +43,15 @@ export const CategoryDetails = () => {
       )}
       {isError && (
         <Alert severity="error">
-          Error! Check if you have filled the entire form or if you are
-          connected to the server.
+          Error! Check if you have filled the entire form or if you are connected to the server.
         </Alert>
       )}
       {!isLoading && (
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          onSubmit={(values) =>
-            submitCategory.mutate({ id: categoryId, name: values.name })
-          }
-          validationSchema={CategorySchema}
-        >
+          onSubmit={(values) => submitCategory.mutate({ id: categoryId, name: values.name })}
+          validationSchema={CategorySchema}>
           {({ values, handleChange }) => (
             <Form>
               <div className={classes.form}>
@@ -70,7 +63,6 @@ export const CategoryDetails = () => {
                   onChange={handleChange}
                 />
                 <ErrorMessage name="name" />
-
                 <TextField
                   label="Created at: "
                   variant="standard"
@@ -85,20 +77,12 @@ export const CategoryDetails = () => {
                   value={values.modifiedAt}
                   disabled
                 />
-                
                 Recipes:
                 {data?.recipes?.map((recipe) => {
-                  return (
-                    <Typography key={recipe.name}>{recipe.name}</Typography>
-                  );
+                  return <Typography key={recipe.name}>{recipe.name}</Typography>;
                 })}
-
                 <div className="detailsButtons">
-                  <Button
-                    variant="contained"
-                    sx={{ margin: "30px 0" }}
-                    type="submit"
-                  >
+                  <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
                     Submit
                   </Button>
                 </div>

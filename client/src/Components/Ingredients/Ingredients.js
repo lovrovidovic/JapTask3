@@ -9,14 +9,8 @@ import {
   TableRow,
   IconButton,
 } from "@mui/material";
-import {
-  generateLink,
-  routesConfiguration as routes,
-} from "../../Router/routes";
-import {
-  deleteIngredient,
-  getPagedIngredients,
-} from "../../HttpRequests/IngredientRequests";
+import { generateLink, routesConfiguration as routes } from "../../Router/routes";
+import { deleteIngredient, getPagedIngredients } from "../../HttpRequests/IngredientRequests";
 import { useQuery, useMutation } from "react-query";
 import { Header } from "../Shared/Header";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -44,11 +38,9 @@ export const Ingredients = () => {
     },
   });
 
-  const { refetch, data } = useQuery(
-    ["ingredients", values],
-    () => getPagedIngredients(values),
-    { keepPreviousData: true }
-  );
+  const { refetch, data } = useQuery(["ingredients", values], () => getPagedIngredients(values), {
+    keepPreviousData: true,
+  });
 
   const deleteRecipe = useMutation(deleteIngredient, {
     onSuccess: () => {
@@ -107,13 +99,7 @@ export const Ingredients = () => {
   };
 
   const pageSizes = [5, 10, 15, 25, 50, 100];
-  const sortBy = [
-    "name",
-    "normativePrice",
-    "normativeUnit",
-    "normativeQuantity",
-    "unitPrice",
-  ];
+  const sortBy = ["name", "normativePrice", "normativeUnit", "normativeQuantity", "unitPrice"];
   const sortOrder = ["ASC", "DESC"];
   const units = ["g", "kg", "ml", "l", "kom"];
 
@@ -215,8 +201,7 @@ export const Ingredients = () => {
             {data?.map((ingredient) => (
               <TableRow
                 key={ingredient?.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell component="th" scope="row">
                   {ingredient.name}
                 </TableCell>
@@ -225,16 +210,10 @@ export const Ingredients = () => {
                 <TableCell>{ingredient.normativeUnit}</TableCell>
                 <TableCell>{ingredient.unitPrice}</TableCell>
                 <TableCell>
-                  <IconButton
-                    size="small"
-                    onClick={() => editIngredientHandler(ingredient.id)}
-                  >
+                  <IconButton size="small" onClick={() => editIngredientHandler(ingredient.id)}>
                     <EditIcon fontSize="small" />
                   </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => deleteIngredientHandler(ingredient.id)}
-                  >
+                  <IconButton size="small" onClick={() => deleteIngredientHandler(ingredient.id)}>
                     <DeleteForeverIcon fontSize="small" />
                   </IconButton>
                 </TableCell>

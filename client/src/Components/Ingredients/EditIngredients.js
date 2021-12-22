@@ -4,10 +4,7 @@ import { useParams } from "react-router-dom";
 import { Form, Formik, ErrorMessage } from "formik";
 import { useQuery, useMutation } from "react-query";
 import { TextField, Button } from "@mui/material";
-import {
-  getIngredientDetails,
-  updateIngredient,
-} from "../../HttpRequests/IngredientRequests";
+import { getIngredientDetails, updateIngredient } from "../../HttpRequests/IngredientRequests";
 import { Select } from "../Shared/Select";
 import { SuccessToaster } from "../Shared/SuccessToaster";
 import { IngredientSchema } from "../../validationSchemas/ValidationSchemas";
@@ -19,9 +16,8 @@ export const EditIngredient = () => {
 
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
 
-  const { isLoading, data } = useQuery(
-    ["ingredientsDetails", ingredientId],
-    () => getIngredientDetails(ingredientId)
+  const { isLoading, data } = useQuery(["ingredientsDetails", ingredientId], () =>
+    getIngredientDetails(ingredientId)
   );
 
   const submitIngredient = useMutation(updateIngredient, {
@@ -48,8 +44,7 @@ export const EditIngredient = () => {
           enableReinitialize
           initialValues={initialValues}
           onSubmit={(values) => submitIngredient.mutate(values)}
-          validationSchema={IngredientSchema}
-        >
+          validationSchema={IngredientSchema}>
           {({ values, handleChange }) => (
             <Form>
               <div className={classes.form}>
@@ -90,11 +85,7 @@ export const EditIngredient = () => {
                 <ErrorMessage name="normativeUnit" />
 
                 <div className="detailsButtons">
-                  <Button
-                    variant="contained"
-                    sx={{ margin: "30px 0" }}
-                    type="submit"
-                  >
+                  <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
                     Submit
                   </Button>
                 </div>

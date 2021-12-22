@@ -37,8 +37,7 @@ export const CreateIngredient = () => {
             submitIngredient.mutate(values);
             resetForm();
           }}
-          validationSchema={IngredientSchema}
-        >
+          validationSchema={IngredientSchema}>
           {({ values, handleChange }) => (
             <Form>
               <div className={classes.form}>
@@ -79,11 +78,7 @@ export const CreateIngredient = () => {
                 <ErrorMessage name="normativeUnit" />
 
                 <div className="detailsButtons">
-                  <Button
-                    variant="contained"
-                    sx={{ margin: "30px 0" }}
-                    type="submit"
-                  >
+                  <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
                     Submit
                   </Button>
                 </div>

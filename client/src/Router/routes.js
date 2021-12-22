@@ -75,9 +75,7 @@ function generateLink(routeOrRouteId, params) {
     route = routesConfiguration[routeOrRouteId.id];
   }
   if (!route) {
-    console.error(
-      `Route not found error. Can't generate link for unknown route ${routeOrRouteId}`
-    );
+    console.error(`Route not found error. Can't generate link for unknown route ${routeOrRouteId}`);
     return "#";
   }
   return generatePath(route.path, params);

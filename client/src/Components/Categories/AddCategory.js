@@ -29,8 +29,7 @@ export const AddCategory = () => {
             submitCategory.mutate(values);
             resetForm();
           }}
-          validationSchema={CategorySchema}
-        >
+          validationSchema={CategorySchema}>
           {({ values, handleChange }) => (
             <Form>
               <div className={classes.form}>
@@ -44,11 +43,7 @@ export const AddCategory = () => {
                 <ErrorMessage name="name" />
 
                 <div className="detailsButtons">
-                  <Button
-                    variant="contained"
-                    sx={{ margin: "30px 0" }}
-                    type="submit"
-                  >
+                  <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
                     Submit
                   </Button>
                 </div>

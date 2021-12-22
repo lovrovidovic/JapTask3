@@ -1,9 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import {
-  generateLink,
-  routesConfiguration as routes,
-} from "../../Router/routes";
+import { generateLink, routesConfiguration as routes } from "../../Router/routes";
 import { Header } from "../Shared/Header";
 import { Search } from "../Shared/Search";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -27,8 +24,10 @@ export const Recipes = () => {
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
   const [search, setSearchValue] = useState("");
 
-  const { data, isError, fetchNextPage, hasNextPage, isLoading, refetch } =
-    useInfiniteQuery(["recipes", categoryId, search], getRecipes, {
+  const { data, isError, fetchNextPage, hasNextPage, isLoading, refetch } = useInfiniteQuery(
+    ["recipes", categoryId, search],
+    getRecipes,
+    {
       getNextPageParam: (lastPage) => {
         if (lastPage.count === 10) {
           return lastPage.nextPage;
@@ -36,7 +35,8 @@ export const Recipes = () => {
           return false;
         }
       },
-    });
+    }
+  );
 
   const deleteRecipeMutation = useMutation(deleteRecipe, {
     onSuccess: () => {
@@ -60,9 +60,7 @@ export const Recipes = () => {
     <>
       <Header title="Recipes" />
       {isError && (
-        <Alert severity="error">
-          Error! Cannot get list of recipes for this category.
-        </Alert>
+        <Alert severity="error">Error! Cannot get list of recipes for this category.</Alert>
       )}
       <div className={classes.actions}>
         <Search label="Search recipes" searchAction={setSearchValue} />
@@ -102,11 +100,7 @@ export const Recipes = () => {
           })}
         </div>
 
-        {hasNextPage ? (
-          <Button onClick={() => fetchNextPage()}>Load more</Button>
-        ) : (
-          ""
-        )}
+        {hasNextPage ? <Button onClick={() => fetchNextPage()}>Load more</Button> : ""}
       </div>
       <SuccessToaster
         open={successAlertOpen}

@@ -6,15 +6,9 @@ import Alert from "@mui/material/Alert";
 import classes from "./Categories.module.css";
 import { Button } from "@mui/material";
 import { Header } from "../Shared/Header";
-import {
-  generateLink,
-  routesConfiguration as routes,
-} from "../../Router/routes";
+import { generateLink, routesConfiguration as routes } from "../../Router/routes";
 import { useInfiniteQuery, useMutation } from "react-query";
-import {
-  deleteCategory,
-  getCategories,
-} from "../../HttpRequests/CategoryRequests";
+import { deleteCategory, getCategories } from "../../HttpRequests/CategoryRequests";
 import useIsLoggedIn from "../../Hooks/useIsLoggedIn";
 import IconButton from "@mui/material/IconButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -25,8 +19,10 @@ export const Categories = () => {
   const history = useHistory();
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
 
-  const { data, isError, fetchNextPage, hasNextPage, isLoading, refetch } =
-    useInfiniteQuery("categories", getCategories, {
+  const { data, isError, fetchNextPage, hasNextPage, isLoading, refetch } = useInfiniteQuery(
+    "categories",
+    getCategories,
+    {
       getNextPageParam: (lastPage) => {
         if (lastPage.count === 10) {
           return lastPage.nextPage;
@@ -34,7 +30,8 @@ export const Categories = () => {
           return false;
         }
       },
-    });
+    }
+  );
 
   const deleteCategoryMutation = useMutation(deleteCategory, {
     onSuccess: () => {
@@ -58,11 +55,7 @@ export const Categories = () => {
   return (
     <>
       <Header title="Categories" />
-      {isError && (
-        <Alert severity="error">
-          Error! Cannot get list of recipe categories.
-        </Alert>
-      )}
+      {isError && <Alert severity="error">Error! Cannot get list of recipe categories.</Alert>}
       {isLoggedIn ? (
         <IconButton size="large" onClick={addRecipeHandler}>
           <AddCircleIcon fontSize="large" />
@@ -95,11 +88,7 @@ export const Categories = () => {
           })}
         </div>
 
-        {hasNextPage ? (
-          <Button onClick={() => fetchNextPage()}>Load more</Button>
-        ) : (
-          ""
-        )}
+        {hasNextPage ? <Button onClick={() => fetchNextPage()}>Load more</Button> : ""}
       </div>
       <SuccessToaster
         open={successAlertOpen}

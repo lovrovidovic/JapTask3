@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  FormControl,
-  MenuItem,
-  Select as MaterialSelect,
-  InputLabel,
-} from "@mui/material";
+import { FormControl, MenuItem, Select as MaterialSelect, InputLabel } from "@mui/material";
 
 export const Select = ({ size = 100, label, value, name, items, onChange }) => {
   return (

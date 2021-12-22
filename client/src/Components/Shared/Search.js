@@ -2,10 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
 import _ from "lodash";
 
-export const Search = ({
-  label,
-  searchAction,
-}) => {
+export const Search = ({ label, searchAction }) => {
   const inputValue = useRef();
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");

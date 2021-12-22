@@ -18,10 +18,7 @@ export const RecipeDetails = () => {
   const params = useParams();
   const recipeId = params.id;
 
-  const { data, isError, isLoading } = useQuery(
-    ["recipeDetails", recipeId],
-    getRecipeDetails
-  );
+  const { data, isError, isLoading } = useQuery(["recipeDetails", recipeId], getRecipeDetails);
 
   return (
     <div>
@@ -31,11 +28,7 @@ export const RecipeDetails = () => {
           <CircularProgress />
         </Box>
       )}
-      {isError && (
-        <Alert severity="error">
-          Error! Cannot get details for this recipe.
-        </Alert>
-      )}
+      {isError && <Alert severity="error">Error! Cannot get details for this recipe.</Alert>}
       {!isLoading && !isError && (
         <Box className={classes.content}>
           <Typography variant="h6">Name:</Typography>
@@ -58,8 +51,7 @@ export const RecipeDetails = () => {
               {data?.ingredients?.map((ingredient) => (
                 <TableRow
                   key={ingredient.name}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {ingredient.name}
                   </TableCell>

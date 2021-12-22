@@ -13,11 +13,7 @@ import classes from "./AddIngredientModal.module.css";
 import { useQuery } from "react-query";
 import { getIngredients } from "../../HttpRequests/IngredientRequests";
 
-export const AddIngredientModal = ({
-  showModal,
-  handleShowModal,
-  handleAddIngredient,
-}) => {
+export const AddIngredientModal = ({ showModal, handleShowModal, handleAddIngredient }) => {
   const [units, setUnits] = useState(["g", "kg", "ml", "l", "kom"]);
 
   const [ingredientValues, setIngredientValues] = useState({
@@ -31,11 +27,7 @@ export const AddIngredientModal = ({
     unitPrice: 0,
   });
 
-  const {
-    data: ingredients,
-    isError,
-    isLoading,
-  } = useQuery(["ingredients"], getIngredients);
+  const { data: ingredients, isError, isLoading } = useQuery(["ingredients"], getIngredients);
 
   const handleFormChange = (e) => {
     setIngredientValues((prevState) => {
@@ -59,10 +51,7 @@ export const AddIngredientModal = ({
       });
       if (value?.normativeUnit === "g" || value?.normativeUnit === "kg") {
         setUnits(["kg", "g"]);
-      } else if (
-        value?.normativeUnit === "l" ||
-        value?.normativeUnit === "ml"
-      ) {
+      } else if (value?.normativeUnit === "l" || value?.normativeUnit === "ml") {
         setUnits(["l", "ml"]);
       } else {
         setUnits(["kom"]);
@@ -94,11 +83,7 @@ export const AddIngredientModal = ({
 
   return (
     <div>
-      <Modal
-        handleShowModal={handleShowModal}
-        open={showModal}
-        modalTitle="Create"
-      >
+      <Modal handleShowModal={handleShowModal} open={showModal} modalTitle="Create">
         <form className={classes.form}>
           <div className={classes.formElementsContainer}>
             {!isError && !isLoading && (
@@ -107,9 +92,7 @@ export const AddIngredientModal = ({
                 onChange={handleAutoComplete}
                 options={autoCompleteOptions}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
-                renderInput={(params) => (
-                  <TextField {...params} label="Search for an ingredient" />
-                )}
+                renderInput={(params) => <TextField {...params} label="Search for an ingredient" />}
               />
             )}
 
@@ -119,8 +102,7 @@ export const AddIngredientModal = ({
                 name="unitType"
                 value={ingredientValues.unitType}
                 label="Select a measurement unit"
-                onChange={handleFormChange}
-              >
+                onChange={handleFormChange}>
                 {units?.map((unit) => {
                   return (
                     <MenuItem key={unit} value={unit}>
