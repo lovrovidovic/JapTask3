@@ -14,7 +14,6 @@ export const getRecipes = async ({ pageParam = 0, queryKey }) => {
 export const getRecipeDetails = async ({ queryKey }) => {
   const recipeId = queryKey[1];
   const response = await axios.get(`recipes/${recipeId}`);
-  console.log(response?.data.data);
   return response?.data.data;
 };
 

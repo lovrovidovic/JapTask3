@@ -27,7 +27,6 @@ export const createIngredient = async (data) => {
 };
 
 export const updateIngredient = async (data) => {
-  console.log("data", data);
   return await axios.put("/ingredients", data);
 };
 

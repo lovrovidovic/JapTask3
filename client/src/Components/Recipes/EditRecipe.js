@@ -81,7 +81,6 @@ export const EditRecipe = () => {
     setNewIngredients((prevState) => {
       return [...prevState, newIngredient];
     });
-    console.log(newIngredients);
   };
 
   const deleteIngredient = (id, ingredients, setFieldValue) => {

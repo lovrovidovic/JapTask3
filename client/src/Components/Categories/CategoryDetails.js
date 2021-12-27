@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Header } from "../Shared/Header";
 import { useParams } from "react-router-dom";
-import { Form, Formik, ErrorMessage } from "formik";
-import { TextField, Button, Typography, Alert } from "@mui/material";
+import { Form, Formik } from "formik";
+import { Typography, Alert } from "@mui/material";
 import { useQuery, useMutation } from "react-query";
 import { getCategoryDetails, updateCategory } from "../../HttpRequests/CategoryRequests";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import { SuccessToaster } from "../Shared/SuccessToaster";
 import { CategorySchema } from "../../validationSchemas/ValidationSchemas";
 import classes from "./AddCategory.module.css";
+import { Button } from "../Shared/Button";
+import { InputField } from "../Shared/InputField";
 
 export const CategoryDetails = () => {
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
@@ -32,7 +34,7 @@ export const CategoryDetails = () => {
     createdAt: data?.createdAt,
     modifiedAt: data?.modifiedAt,
   };
-
+  console.log(initialValues);
   return (
     <>
       <Header title="Category details" />
@@ -52,39 +54,18 @@ export const CategoryDetails = () => {
           initialValues={initialValues}
           onSubmit={(values) => submitCategory.mutate({ id: categoryId, name: values.name })}
           validationSchema={CategorySchema}>
-          {({ values, handleChange }) => (
+          {({ values }) => (
             <Form>
               <div className={classes.form}>
-                <TextField
-                  label="Name: "
-                  variant="standard"
-                  name="name"
-                  value={values.name}
-                  onChange={handleChange}
-                />
-                <ErrorMessage name="name" />
-                <TextField
-                  label="Created at: "
-                  variant="standard"
-                  name="createdAt"
-                  value={values.createdAt}
-                  disabled
-                />
-                <TextField
-                  label="Modified at: "
-                  variant="standard"
-                  name="modifiedAt"
-                  value={values.modifiedAt}
-                  disabled
-                />
+                <InputField label="Name:" name="name" />
+                <Typography sx={{ marginTop: 2 }}>{`Created at: ${values.createdAt}`}</Typography>
+                <Typography sx={{ margin: 2 }}>{`Modified at: ${values.modifiedAt}`}</Typography>
                 Recipes:
-                {data?.recipes?.map((recipe) => {
-                  return <Typography key={recipe.name}>{recipe.name}</Typography>;
+                {data?.recipes?.map((recipe, index) => {
+                  return <Typography key={index}>{recipe.name}</Typography>;
                 })}
-                <div className="detailsButtons">
-                  <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
-                    Submit
-                  </Button>
+                <div className={classes.submitContainer}>
+                  <Button text="Submit" variant="contained" type="submit" />
                 </div>
               </div>
             </Form>

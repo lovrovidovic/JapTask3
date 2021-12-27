@@ -4,7 +4,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import classes from "./Categories.module.css";
-import { Button } from "@mui/material";
 import { Header } from "../Shared/Header";
 import { generateLink, routesConfiguration as routes } from "../../Router/routes";
 import { useInfiniteQuery, useMutation } from "react-query";
@@ -14,6 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { CategoryCard } from "./CategoryCard";
 import { SuccessToaster } from "../Shared/SuccessToaster";
+import { Button } from "../Shared/Button";
 
 export const Categories = () => {
   const history = useHistory();
@@ -88,7 +88,7 @@ export const Categories = () => {
           })}
         </div>
 
-        {hasNextPage ? <Button onClick={() => fetchNextPage()}>Load more</Button> : ""}
+        {hasNextPage ? <Button text="Load more" onClick={() => fetchNextPage()} /> : ""}
       </div>
       <SuccessToaster
         open={successAlertOpen}

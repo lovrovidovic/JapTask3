@@ -8,6 +8,10 @@
     justify-content: center;
 }
 
+.submitContainer{
+    margin: 30px 0;
+}
+
 .categoriesList{
     width: 100%;
 }

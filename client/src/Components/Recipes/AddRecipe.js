@@ -39,7 +39,6 @@ export const AddRecipe = () => {
 
   const submitRecipe = useMutation(createRecipe, {
     onMutate: (variables) => {
-      console.log(variables);
       variables.recipeIngredient = recipeIngredients.map(
         ({ normativePrice, normativeQuantity, normativeUnit, ...attributes }) => attributes
       );
