@@ -6,11 +6,11 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
 import { generateLink, routesConfiguration as routes } from "../../Router/routes";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { saveToken } from "../../Redux/Actions/auth/auth";
 import useIsLoggedIn from "../../Hooks/useIsLoggedIn";
+import { Button } from "./Button";
 
 export const Header = ({ title }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -44,24 +44,27 @@ export const Header = ({ title }) => {
           <Box sx={{ display: { xs: "none", md: "flex" }, mr: 3 }}>
             <Button
               onClick={() => history.push(generateLink(routes.CATEGORIES))}
-              sx={{ color: "white", display: "block" }}>
-              Categories
-            </Button>
+              sx={{ color: "white", display: "block" }}
+              text="Categories"
+            />
 
             {isLoggedIn ? (
               <Button
                 onClick={() => history.push(generateLink(routes.INGREDIENTS))}
-                sx={{ color: "white", display: "block" }}>
-                Ingredients
-              </Button>
+                sx={{ color: "white", display: "block" }}
+                text="Ingredients"
+              />
             ) : (
               <></>
             )}
           </Box>
 
-          <Button variant="outlined" color="inherit" onClick={logoutHandler}>
-            {isLoggedIn ? "Logout" : "Login"}
-          </Button>
+          <Button
+            variant="outlined"
+            color="inherit"
+            onClick={logoutHandler}
+            text={isLoggedIn ? "Logout" : "Login"}
+          />
         </Toolbar>
       </AppBar>
     </Box>

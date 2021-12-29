@@ -6,7 +6,6 @@ import { Search } from "../Shared/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import classes from "./Recipes.module.css";
@@ -15,6 +14,7 @@ import { deleteRecipe, getRecipes } from "../../HttpRequests/RecipeRequests";
 import useIsLoggedIn from "../../Hooks/useIsLoggedIn";
 import { RecipeCard } from "./RecipeCard";
 import { SuccessToaster } from "../Shared/SuccessToaster";
+import { Button } from "../Shared/Button";
 
 export const Recipes = () => {
   const params = useParams();
@@ -100,7 +100,7 @@ export const Recipes = () => {
           })}
         </div>
 
-        {hasNextPage ? <Button onClick={() => fetchNextPage()}>Load more</Button> : ""}
+        {hasNextPage ? <Button onClick={() => fetchNextPage()} text="Load more" /> : ""}
       </div>
       <SuccessToaster
         open={successAlertOpen}

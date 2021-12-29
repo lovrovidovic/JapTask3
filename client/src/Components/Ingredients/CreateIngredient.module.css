@@ -1,11 +1,11 @@
-.form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: auto;
-    justify-content: space-between;
-    height: 100%;
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  justify-content: space-between;
+  height: 100%;
 }
-.container{
-    height: 50vh;
+.container {
+  height: 50vh;
 }

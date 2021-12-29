@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { AddIngredientModal } from "../Ingredients/AddIngredientModal";
 import {
-  TextField,
   FormControl,
   MenuItem,
   Select,
@@ -13,7 +12,6 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Button,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useQuery, useMutation } from "react-query";
@@ -24,6 +22,8 @@ import { SuccessToaster } from "../Shared/SuccessToaster";
 import { Header } from "../Shared/Header";
 import classes from "./AddRecipe.module.css";
 import { RecipeSchema } from "../../validationSchemas/ValidationSchemas";
+import { Button } from "../Shared/Button";
+import { InputField } from "../Shared/InputField";
 
 export const EditRecipe = () => {
   const params = useParams();
@@ -137,39 +137,20 @@ export const EditRecipe = () => {
                 </FormControl>
                 <ErrorMessage name="categoryId" />
 
-                <TextField
-                  label="Name: "
-                  variant="standard"
-                  name="name"
-                  value={values.name}
-                  onChange={handleChange}
-                />
-                <ErrorMessage name="name" />
+                <InputField label="Name:" name="name" />
 
-                <TextField
-                  label="Recommended price: "
-                  variant="standard"
-                  name="recommendedPrice"
-                  value={values.recommendedPrice}
-                  onChange={handleChange}
-                />
-                <ErrorMessage name="recommendedPrice" />
+                <InputField label="Recommended price:" name="recommendedPrice" />
 
-                <TextField
-                  sx={{ m: 1, width: "40%" }}
-                  label="Description: "
-                  variant="standard"
+                <InputField
+                  label="Description:"
                   name="description"
                   multiline
                   minRows={2}
-                  value={values.description}
-                  onChange={handleChange}
+                  sx={{ m: 1, width: "40%" }}
                 />
-                <ErrorMessage name="description" />
 
-                <Button sx={{ margin: "30px 0" }} onClick={handleShowModal}>
-                  Add ingredient
-                </Button>
+                <Button sx={{ my: 3 }} onClick={handleShowModal} text="Add ingredient" />
+
                 <Table sx={{ maxWidth: 800 }} size="small">
                   <TableHead sx={{ backgroundColor: "darkgrey" }}>
                     <TableRow>
@@ -251,9 +232,7 @@ export const EditRecipe = () => {
                   </Table>
                 )}
                 <div className="detailsButtons">
-                  <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
-                    Submit
-                  </Button>
+                  <Button sx={{ my: 3 }} variant="contained" type="submit" text="Submit" />
                 </div>
               </div>
             </Form>

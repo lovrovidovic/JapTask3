@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { Button, Typography, Box, CircularProgress } from "@mui/material";
+import { Typography, Box, CircularProgress } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import classes from "./Login.module.css";
@@ -10,6 +10,7 @@ import { useMutation } from "react-query";
 import { login } from "../../HttpRequests/LoginRequests";
 import { saveToken } from "../../Redux/Actions/auth/auth";
 import { Header } from "../Shared/Header";
+import { Button } from "../Shared/Button";
 
 export default function Login() {
   const history = useHistory();
@@ -58,11 +59,12 @@ export default function Login() {
             </Typography>
           )}
           <Button
+            sx={{ my: 1 }}
             onClick={() => {
               submitLogin.mutate(values);
-            }}>
-            Log in
-          </Button>
+            }}
+            text="Log in"
+          />
         </form>
         {submitLogin.isLoading && (
           <Box sx={{ display: "flex" }}>

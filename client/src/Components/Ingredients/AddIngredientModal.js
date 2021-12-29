@@ -1,17 +1,10 @@
 import React, { useState } from "react";
 import { Modal } from "../Shared/Modal";
-import {
-  TextField,
-  FormControl,
-  MenuItem,
-  Select,
-  InputLabel,
-  Button,
-  Autocomplete,
-} from "@mui/material";
+import { TextField, FormControl, MenuItem, Select, InputLabel, Autocomplete } from "@mui/material";
 import classes from "./AddIngredientModal.module.css";
 import { useQuery } from "react-query";
 import { getIngredients } from "../../HttpRequests/IngredientRequests";
+import { Button } from "../Shared/Button";
 
 export const AddIngredientModal = ({ showModal, handleShowModal, handleAddIngredient }) => {
   const [units, setUnits] = useState(["g", "kg", "ml", "l", "kom"]);
@@ -102,7 +95,8 @@ export const AddIngredientModal = ({ showModal, handleShowModal, handleAddIngred
                 name="unitType"
                 value={ingredientValues.unitType}
                 label="Select a measurement unit"
-                onChange={handleFormChange}>
+                onChange={handleFormChange}
+              >
                 {units?.map((unit) => {
                   return (
                     <MenuItem key={unit} value={unit}>
@@ -121,7 +115,7 @@ export const AddIngredientModal = ({ showModal, handleShowModal, handleAddIngred
             onChange={handleFormChange}
           />
 
-          <Button onClick={submitHandler}>Submit</Button>
+          <Button onClick={submitHandler} text="Submit" />
         </form>
       </Modal>
     </div>

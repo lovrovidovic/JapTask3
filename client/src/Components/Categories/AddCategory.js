@@ -30,13 +30,12 @@ export const AddCategory = () => {
           submitCategory.mutate(values);
           resetForm();
         }}
-        validationSchema={CategorySchema}>
+        validationSchema={CategorySchema}
+      >
         <Form>
           <div className={classes.form}>
             <InputField label="Name:" name="name" />
-            <div className={classes.submitContainer}>
-              <Button variant="contained" type="submit" text="Submit" />
-            </div>
+            <Button sx={{ my: 3 }} variant="contained" type="submit" text="Submit" />
           </div>
         </Form>
       </Formik>

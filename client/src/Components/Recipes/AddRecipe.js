@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Header } from "../Shared/Header";
 import { AddIngredientModal } from "../Ingredients/AddIngredientModal";
 import {
-  TextField,
   FormControl,
   MenuItem,
   Select,
@@ -13,7 +12,6 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Button,
   Alert,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -25,6 +23,8 @@ import { createRecipe } from "../../HttpRequests/RecipeRequests";
 import { Form, Formik, ErrorMessage } from "formik";
 import { RecipeSchema } from "../../validationSchemas/ValidationSchemas";
 import { SuccessToaster } from "../Shared/SuccessToaster";
+import { Button } from "../Shared/Button";
+import { InputField } from "../Shared/InputField";
 
 export const AddRecipe = () => {
   const [showModal, setShowModal] = useState(false);
@@ -122,39 +122,19 @@ export const AddRecipe = () => {
                 )}
                 <ErrorMessage name="categoryId" />
 
-                <TextField
-                  label="Name: "
-                  variant="standard"
-                  name="name"
-                  value={values.name}
-                  onChange={handleChange}
-                />
-                <ErrorMessage name="name" />
+                <InputField label="Name:" name="name" />
 
-                <TextField
-                  label="Recommended Price: "
-                  variant="standard"
-                  name="recommendedPrice"
-                  value={values.recommendedPrice}
-                  onChange={handleChange}
-                />
-                <ErrorMessage name="recommendedPrice" />
+                <InputField label="Recommended Price:" name="recommendedPrice" />
 
-                <TextField
-                  label="Description: "
-                  variant="standard"
+                <InputField
+                  label="Description:"
                   name="description"
-                  value={values.description}
-                  onChange={handleChange}
                   multiline
                   minRows={2}
-                  style={{ width: "30%" }}
+                  sx={{ width: "30%" }}
                 />
-                <ErrorMessage name="description" />
 
-                <Button sx={{ margin: "30px 0" }} onClick={handleShowModal}>
-                  Add ingredient
-                </Button>
+                <Button sx={{ mt: 3 }} onClick={handleShowModal} text="Add ingredient" />
 
                 {recipeIngredients?.length > 0 && (
                   <Table sx={{ maxWidth: 800 }} size="small">
@@ -193,9 +173,7 @@ export const AddRecipe = () => {
                     </TableBody>
                   </Table>
                 )}
-                <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
-                  Submit
-                </Button>
+                <Button variant="contained" sx={{ my: 3 }} type="submit" text="Submit" />
               </div>
             </div>
           </Form>

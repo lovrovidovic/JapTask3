@@ -88,7 +88,11 @@ export const Categories = () => {
           })}
         </div>
 
-        {hasNextPage ? <Button text="Load more" onClick={() => fetchNextPage()} /> : ""}
+        {hasNextPage ? (
+          <Button sx={{ mb: 3 }} text="Load more" onClick={() => fetchNextPage()} />
+        ) : (
+          ""
+        )}
       </div>
       <SuccessToaster
         open={successAlertOpen}

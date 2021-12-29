@@ -53,7 +53,8 @@ export const CategoryDetails = () => {
           enableReinitialize
           initialValues={initialValues}
           onSubmit={(values) => submitCategory.mutate({ id: categoryId, name: values.name })}
-          validationSchema={CategorySchema}>
+          validationSchema={CategorySchema}
+        >
           {({ values }) => (
             <Form>
               <div className={classes.form}>
@@ -64,9 +65,7 @@ export const CategoryDetails = () => {
                 {data?.recipes?.map((recipe, index) => {
                   return <Typography key={index}>{recipe.name}</Typography>;
                 })}
-                <div className={classes.submitContainer}>
-                  <Button text="Submit" variant="contained" type="submit" />
-                </div>
+                <Button sx={{ my: 3 }} text="Submit" variant="contained" type="submit" />
               </div>
             </Form>
           )}

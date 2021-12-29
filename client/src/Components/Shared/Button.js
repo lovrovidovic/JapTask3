@@ -1,9 +1,9 @@
 import React from "react";
 import { Button as MaterialButton } from "@mui/material";
 
-export const Button = ({ onClick, text, variant, type, size }) => {
+export const Button = ({ text, ...props }) => {
   return (
-    <MaterialButton onClick={onClick} variant={variant} type={type} size={size}>
+    <MaterialButton {...props}>
       {text}
     </MaterialButton>
   );

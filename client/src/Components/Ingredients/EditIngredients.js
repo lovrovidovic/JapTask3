@@ -3,12 +3,13 @@ import { Header } from "../Shared/Header";
 import { useParams } from "react-router-dom";
 import { Form, Formik, ErrorMessage } from "formik";
 import { useQuery, useMutation } from "react-query";
-import { TextField, Button } from "@mui/material";
 import { getIngredientDetails, updateIngredient } from "../../HttpRequests/IngredientRequests";
 import { Select } from "../Shared/Select";
 import { SuccessToaster } from "../Shared/SuccessToaster";
 import { IngredientSchema } from "../../validationSchemas/ValidationSchemas";
 import classes from "./CreateIngredient.module.css";
+import { Button } from "../Shared/Button";
+import { InputField } from "../Shared/InputField";
 
 export const EditIngredient = () => {
   const params = useParams();
@@ -48,32 +49,11 @@ export const EditIngredient = () => {
           {({ values, handleChange }) => (
             <Form>
               <div className={classes.form}>
-                <TextField
-                  label="Name: "
-                  variant="standard"
-                  name="name"
-                  value={values.name}
-                  onChange={handleChange}
-                />
-                <ErrorMessage name="name" />
+                <InputField name="name" label="Name: " />
 
-                <TextField
-                  label="Normative quantity: "
-                  variant="standard"
-                  name="normativeQuantity"
-                  value={values.normativeQuantity}
-                  onChange={handleChange}
-                />
-                <ErrorMessage name="normativeQuantity" />
+                <InputField name="normativeQuantity" label="Normative quantity: " />
 
-                <TextField
-                  label="Normative price: "
-                  variant="standard"
-                  name="normativePrice"
-                  value={values.normativePrice}
-                  onChange={handleChange}
-                />
-                <ErrorMessage name="normativePrice" />
+                <InputField name="normativePrice" label="Normative price: " />
 
                 <Select
                   label="Unit type: "
@@ -84,11 +64,7 @@ export const EditIngredient = () => {
                 />
                 <ErrorMessage name="normativeUnit" />
 
-                <div className="detailsButtons">
-                  <Button variant="contained" sx={{ margin: "30px 0" }} type="submit">
-                    Submit
-                  </Button>
-                </div>
+                <Button sx={{ my: 3 }} variant="contained" type="submit" text="Submit" />
               </div>
             </Form>
           )}
