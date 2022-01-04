@@ -129,16 +129,7 @@ namespace Recipes.Services.Services
 
         public async Task<bool> CreateIngredientAsync(RequestCreateIngredient request)
         {
-            var ingredient = new Ingredient
-            {
-                CreatedAt = DateTime.Now,
-                CreatedBy = request.UserId,
-                ModifiedAt = DateTime.Now,
-                Name = request.Name,
-                NormativePrice = request.NormativePrice,
-                NormativeQuantity = request.NormativeQuantity,
-                NormativeUnit = request.NormativeUnit,
-            };
+            var ingredient = _mapper.Map<Ingredient>(request);
             ingredient.UnitPrice = _calculationService.CalculateIngredientUnitCost(ingredient);
 
             await _recipesDbContext.Ingredients.AddAsync(ingredient);
@@ -155,15 +146,10 @@ namespace Recipes.Services.Services
                 return false;
             }
 
-            ingredient.Name = request.Name;
-            ingredient.ModifiedAt = DateTime.Now;
-            ingredient.NormativePrice = request.NormativePrice;
-            ingredient.NormativeQuantity = request.NormativeQuantity;
-            ingredient.NormativeUnit = request.NormativeUnit;
+            _mapper.Map(request, ingredient);
             ingredient.UnitPrice = _calculationService.CalculateIngredientUnitCost(ingredient);
 
             await _recipesDbContext.SaveChangesAsync();
-
             return true;
         }
 

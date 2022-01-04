@@ -50,34 +50,14 @@ namespace Recipes.Services.Services
         {
             var response = new ServiceResponse<ResponseGetCategoryDetails>();
             var category = await _recipesDbContext.Categories.Include(x => x.Recipes).FirstOrDefaultAsync(x => x.Id == id);
-            //TODO use Mapper
 
-            List<GetRecipeOfCategoryDto> recipes = new();
-            if (category.Recipes != null)
-            {
-                recipes = category.Recipes.Select(x => new GetRecipeOfCategoryDto { Name = x.Name, }).ToList();
-            }
-            
-            response.Data = new ResponseGetCategoryDetails
-            {
-                Name = category.Name,
-                Recipes = recipes,
-                CreatedAt = category.CreatedAt,
-                CreatedBy = category.CreatedBy,
-                ModifiedAt = category.ModifiedAt
-            };
+            response.Data = _mapper.Map<ResponseGetCategoryDetails>(category);
             return response;
         }
 
         public async Task<bool> CreateCategoryAsync(RequestCreateCategory request)
         {
-            var category = new Category
-            {
-                Name = request.Name,
-                CreatedAt = DateTime.Now,
-                ModifiedAt = DateTime.Now,
-                CreatedBy = request.UserId
-            };
+            var category = _mapper.Map<Category>(request);
 
             await _recipesDbContext.Categories.AddAsync(category);
             await _recipesDbContext.SaveChangesAsync();

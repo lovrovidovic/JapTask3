@@ -10,7 +10,7 @@ namespace Recipes.Core.Validators
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.NormativePrice).NotEmpty();
             RuleFor(x => x.NormativeQuantity).NotEmpty();
-            RuleFor(x => x.NormativeUnit).NotEmpty();
+            RuleFor(x => x.NormativeUnit).NotNull();
         }
     }
 }
