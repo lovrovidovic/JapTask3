@@ -202,9 +202,7 @@ export const Ingredients = () => {
               <TableRow
                 key={ingredient?.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  {ingredient.name}
-                </TableCell>
+                <TableCell>{ingredient.name}</TableCell>
                 <TableCell>{ingredient.normativePrice}</TableCell>
                 <TableCell>{ingredient.normativeQuantity}</TableCell>
                 <TableCell>{ingredient.normativeUnit}</TableCell>

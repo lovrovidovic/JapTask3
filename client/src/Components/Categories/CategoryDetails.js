@@ -34,7 +34,6 @@ export const CategoryDetails = () => {
     createdAt: data?.createdAt,
     modifiedAt: data?.modifiedAt,
   };
-  console.log(initialValues);
   return (
     <>
       <Header title="Category details" />
@@ -53,8 +52,7 @@ export const CategoryDetails = () => {
           enableReinitialize
           initialValues={initialValues}
           onSubmit={(values) => submitCategory.mutate({ id: categoryId, name: values.name })}
-          validationSchema={CategorySchema}
-        >
+          validationSchema={CategorySchema}>
           {({ values }) => (
             <Form>
               <div className={classes.form}>
