@@ -1,0 +1,93 @@
+version: '3.7'
+
+networks:
+  recipes-dev:
+    driver: bridge
+
+services:
+  api:
+    container_name: api
+    image: recipesapi
+    build:
+      context: ./services/
+      dockerfile: Recipes.Api/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 5000:80
+    environment:
+      - "ElasticConfiguration: Uri=http://elasticsearch:9200"
+      - "ConnectionStrings: DBConnection=Server=db;Port=5432;Database=recipesFinal;User Id=postgres;Password=postgres;"
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - recipes-dev
+
+  db:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - 5433:5432
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=recipesFinal
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - recipes-dev
+
+  react:
+    container_name: react
+    image: recipesclient
+    build:
+      context: ./client/
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_SECRET: "ThisIsMySuperSecretKeyThatNoOneKnows"
+        REACT_APP_API_BASE_URL: "http://localhost:5000/api"
+    volumes:
+      - react-app:/client/src:/app
+      - react-app:/app/node_modules
+    ports:
+      - 3001:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - recipes-dev
+    stdin_open: true
+
+  elasticsearch:
+   container_name: elasticsearch
+   image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+   ports:
+    - 9200:9200
+   volumes:
+    - elasticsearch-data:/usr/share/elasticsearch/data
+   environment:
+    - xpack.monitoring.enabled=true
+    - xpack.watcher.enabled=false
+    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    - discovery.type=single-node
+   networks:
+    - recipes-dev
+
+  kibana:
+   container_name: kibana
+   image: docker.elastic.co/kibana/kibana:7.16.2
+   ports:
+    - 5601:5601
+   depends_on:
+    - elasticsearch
+   environment:
+    - ELASTICSEARCH_URL=http://elasticsearch:9200
+   networks:
+    - recipes-dev
+
+volumes:
+  db_volume:
+  react-app:
+  elasticsearch-data:
